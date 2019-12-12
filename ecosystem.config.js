@@ -21,7 +21,7 @@ module.exports = {
       key : '/home/jay/.ssh/id_rsa',
       user : 'jay',
       ref  : 'origin/master',
-      repo : 'git@gitlab.com:TacticalTechJay/doritoboi_public.git',
+      repo : 'git@github.com:TacticalTechJay/DoritoBot-Full-Code.git',
       path : '.',
       'post-deploy' : 'npm install && pm2 reload ecosystem.config.js --env production'
     }

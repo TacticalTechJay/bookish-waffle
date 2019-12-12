@@ -1,0 +1,29 @@
+module.exports = {
+    name: 'eval',
+    description: '?',
+    guildOnly: false,
+    testing: false,
+    cooldown: 0,
+    async execute(message, args, client, dbl) {
+        if (message.author.id !== '127888387364487168') return;
+		const clean = text => {
+			if (typeof (text) === 'string') {
+				return text.replace(/`/g, '`' + String.fromCharCode(8203)).replace(/@/g, '@' + String.fromCharCode(8203));
+			}
+			else {
+				return text;
+			}
+		};
+		try {
+			const code = args.join(' ');
+			let evaled = await eval(code);
+			if (typeof evaled !== 'string') {
+				evaled = require('util').inspect(evaled, false, 1);
+			}
+			message.channel.send(`\`\`\`js\n${clean(evaled)}\`\`\``);
+		}
+		catch (err) {
+			message.channel.send(`\`ERROR\` \`\`\`xl\n${clean(err)}\n\`\`\``);
+		}
+    }
+}

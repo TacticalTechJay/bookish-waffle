@@ -1,0 +1,29 @@
+module.exports = {
+  apps : [{
+    name: 'BOT',
+    script: './index.js',
+
+    // Options reference: https://pm2.io/doc/en/runtime/reference/ecosystem-file/
+    instances: 1,
+    autorestart: true,
+    watch: false,
+    max_memory_restart: '1G',
+    env: {
+      NODE_ENV: 'development'
+    },
+    env_production: {
+      NODE_ENV: 'production'
+    }
+  }],
+
+  deploy : {
+    production : {
+      key : '/home/jay/.ssh/id_rsa',
+      user : 'jay',
+      ref  : 'origin/master',
+      repo : 'git@gitlab.com:TacticalTechJay/doritoboi_public.git',
+      path : '.',
+      'post-deploy' : 'npm install && pm2 reload ecosystem.config.js --env production'
+    }
+  }
+};

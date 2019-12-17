@@ -25,7 +25,7 @@ module.exports = {
 				.then(message.reply(`${member.user.tag} has been kicked by ${message.author.tag} for the following reason: No reason given.`));
 		}
 		member.kick({reason: reason})
-			.then(() => member.send(`You have been kicked for the following reason: ${reason}`))
+			.then(() => member.send(`You have been kicked from ${message.guild.id} for the following reason: ${reason}`))
 			.catch(error => message.reply(`Sorry, I couldn't kick this user for a quite specific reason... Report this to the creator of this bot: ${error}`));
 		return message.reply(`${member.user.tag} has been kicked by ${message.author.tag} for the following reason: ${reason}`);
 	},

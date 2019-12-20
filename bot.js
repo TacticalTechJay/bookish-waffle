@@ -31,7 +31,18 @@ client.fetchSongs = async (string, amount) => {
 }
 client.db = require('quick.db');
 client.nekos = new (require('nekos.life'))().sfw;
-
+client.pushStats = async (Token) => {
+	const body = {
+		'users': client.users.size,
+		'servers': client.guilds.size,
+		'shards': client.shard.count
+	}
+	const res = await fetch(`https://abstractlist.net/api/bot/${client.user.id}/stats`, {
+	    method: 'post',
+	    body: JSON.stringify(body),
+	    headers: { 'Content-type': 'application/json', 'Authorization': Token }});
+	return await res.json();
+}
 const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
 
 for (const file of commandFiles) {
@@ -55,10 +66,10 @@ client.on('ready', async () => {
 		user: client.user.id,
 		shards: client.shard.count
 	});
+	console.log(ADLToken);
 	try {
 		setInterval(async () => {
 			const body = {
-				'token': ADLToken,
 				'users': client.users.size,
 				'servers': client.guilds.size,
 				'shards': client.shard.count
@@ -66,7 +77,7 @@ client.on('ready', async () => {
 			const res = await fetch(`https://abstractlist.net/api/bot/${client.user.id}/stats`, {
 				method: 'post',
 				body: JSON.stringify(body),
-				headers: { 'Content-type': 'application/json' }
+				headers: { 'Content-type': 'application/json', 'Authorization': ADLToken }
 			});
 			console.log((await res.json()));
 		}, 1800000)
@@ -116,7 +127,7 @@ client.on('message', message => {
 
 	if (!command) return;
 	if (command.testing && message.author.id != 127888387364487168) {
-		return message.reply(`${command.name} is currently being tested and is not fully functional so it is disabled.`);
+		return message.reply(`${command.name} is currently in its testing stage.`);
 	}
 
 	if (command.guildOnly && message.channel.type !== 'text') {
@@ -139,7 +150,7 @@ client.on('message', message => {
 
 	const now = Date.now();
 	const timestamps = cooldowns.get(command.name);
-	const cooldownAmount = (command.cooldown || 1) * 1000;
+	const cooldownAmount = (command.cooldown || 3) * 1000;
 
 	if (!timestamps.has(message.author.id)) {
 		timestamps.set(message.author.id, now);

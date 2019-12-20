@@ -21,7 +21,7 @@ module.exports = {
 		if(!reason) reason = 'No reason provided';
 		if (!member) return message.channel.send('You need to provide a user ID or a mention.');
 		message.guild.members.ban(member, reason)
-			.then(() => member.send(`You have been banned from ${message.guild.name} for the following reason: ${reason}`))
+			.then(m => m.send(`You have been banned from ${message.guild.name} for the following reason: ${reason}`))
 			.catch(error => message.channel.send(`Woops! There was a problem banning this person. Be sure to report this error to the bot maker: ${error}`));
 		message.channel.send(`${member.user.tag} has been banned by ${message.author.tag} for: ${reason}`);
 	},

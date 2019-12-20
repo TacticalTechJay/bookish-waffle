@@ -40,6 +40,7 @@ module.exports = {
             return message.channel.send(embed);
          }
         else {
+	    console.log(user);
             const embed = new MessageEmbed()
                 .setColor(0x12db37)
                 .setTitle(`${user.user.username}#${user.user.discriminator} (${user.id})`)
@@ -48,8 +49,8 @@ module.exports = {
                 .addField('Presence', user.presence.status, true)
                 .addField('Created Date', user.user.createdAt.toString().slice(0, -41), true)
                 .addField('Created Time', user.user.createdAt.toString().slice(16), true)
-                .addField('Joined Date', user.joinedAt.toString().slice(0, -41), true)
-                .addField('Joined Time', user.joinedAt.toString().slice(16), true)
+                .addField('Joined Date', `${user.joinedAt ? user.joinedAt.toString().slice(0, -41) : 'N/A'}`, true)
+                .addField('Joined Time', `${user.joinedAt ? user.joinedAt.toString().slice(16) : 'N/A'}`, true)
                 .setColor(0x679f28)
                 .setThumbnail(user.user.displayAvatarURL());
             return message.channel.send(embed);

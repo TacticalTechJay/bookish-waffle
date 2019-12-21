@@ -51,14 +51,16 @@ for (const file of commandFiles) {
 	client.commands.set(command.name, command);
 }
 delete client.nekosUnSafe.neko;
+delete client.nekosUnSafe.avatar;
 Object.entries(client.nekosUnSafe).map(x => {
 	client.commands.set(x[0].toLowerCase(), {
 		name: x[0].toLowerCase(),
 		description: 'Just your average lewd',
 		category: 'nsfw',
 		cooldown: 5,
-		async execute(message) {
-			if (!message.channel.nsfw) return message.channel.send('Nope. It\'s lewd.')
+		async execute(message, args, client, dbl) {
+			if (!(await dbl.hasVoted(message.author.id))) return message.channel.send('Woah there! This command is only for voters only! Vote on DBL to use this command. Vote here!\n' + `https://top.gg/bot/${client.user.id}/vote`)
+			if (!message.channel.nsfw) return message.channel.send('Nope. It\'s lewd.');
 			message.channel.send(new (require('discord.js').MessageEmbed)().setImage((await x[1]()).url))
 		}
 	});

@@ -6,18 +6,21 @@ module.exports = {
     guildOnly: false,
     args: false,
     async execute(message, args, client) {
-        const { url } = await client.nekos.neko();
-        const e = await client.nekos.nekoGif();
+        let url = await client.nekosSafe.neko();
+        const unsafe = require('nekos.life');
+        const UnSafe = (new unsafe()).nsfw;
+        const e = await client.nekosSafe.nekoGif();
         const { MessageEmbed } = require('discord.js');
         if (message.channel.nsfw) {
+            url = await UnSafe.neko();
             const embed = new MessageEmbed()
                 .setTitle('Here is your neko!')
-                .setImage(Math.random() > .5 ? url : e.url);
+                .setImage(Math.random() > .5 ? url.url : e.url);
             return message.channel.send(embed)
         }
         const embed = new MessageEmbed()
             .setTitle('Here is your neko!')
-            .setImage(url);
+            .setImage(url.url);
         message.channel.send(embed);
     }
 }

@@ -30,7 +30,8 @@ client.fetchSongs = async (string, amount) => {
 	return res2.tracks;
 }
 client.db = require('quick.db');
-client.nekos = new (require('nekos.life'))().sfw;
+client.nekosSafe = new (require('nekos.life'))().sfw;
+client.nekosUnSafe = new (require('nekos.life'))().nsfw;
 client.pushStats = async (Token) => {
 	const body = {
 		'users': client.users.size,
@@ -49,6 +50,19 @@ for (const file of commandFiles) {
 	const command = require(`./commands/${file}`);
 	client.commands.set(command.name, command);
 }
+delete client.nekosUnSafe.neko;
+Object.entries(client.nekosUnSafe).map(x => {
+	client.commands.set(x[0].toLowerCase(), {
+		name: x[0].toLowerCase(),
+		description: 'Just your average lewd',
+		category: 'nsfw',
+		cooldown: 5,
+		async execute(message) {
+			if (!message.channel.nsfw) return message.channel.send('Nope. It\'s lewd.')
+			message.channel.send(new (require('discord.js').MessageEmbed)().setImage((await x[1]()).url))
+		}
+	});
+  });
 const cooldowns = new Discord.Collection();
 
 client.on('ready', async () => {
@@ -66,7 +80,6 @@ client.on('ready', async () => {
 		user: client.user.id,
 		shards: client.shard.count
 	});
-	console.log(ADLToken);
 	try {
 		setInterval(async () => {
 			const body = {

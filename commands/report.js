@@ -1,7 +1,7 @@
-const { ksoftapi } = require('../config.json')
+const { ksoftapi } = require('../config.json');
 module.exports = {
     name: 'report',
-    description: 'Report a user and ban them from a global ban list so others know the risks before it may be too late.',
+    description: 'Report a user and ban them through a global ban list so others know the risks before it may be too late.',
     category: 'moderation',
     guildOnly: true,
     args: true,
@@ -32,7 +32,7 @@ module.exports = {
             body: params
         }).catch(e => { return message.channel.send(e.message); });
         console.log(res);
-        message.guild.members.ban(target, reason).then(m => m.send(`You have been banned from ${message.guild.name} and reported for the following reason: ${reason}`)).catch(e => message.channel.send('Something went wrong. Do not worry! I reported the user, you may need to ban the user yourself.'));
-        return message.channel.send(`I have successfully banned ${target} for the following reason: ${reason}`);
+        message.guild.members.ban(target, reason).then(m => m.send(`You have been banned from ${message.guild.name} and reported for the following reason: ${reason}`)).catch(() => message.channel.send('Something went wrong. Do not worry! I reported the user, you may need to ban the user yourself.'));
+        return message.channel.send(`I have successfully banned and reported ${target} for the following reason: ${reason}`);
     }
 }

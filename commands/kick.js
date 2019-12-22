@@ -4,7 +4,7 @@ module.exports = {
 	category: 'moderation',
 	guildOnly: true,
 	args: true,
-	usage: '<MemberMention/UserID>',
+	usage: '<Mention/UserID>',
 	execute(message, args) {
 		const member = message.mentions.members.first() || message.guild.members.get(args[0]) || message.guild.members.find(m => m.nickname.startsWith(args[0]))
 		if (!member) {

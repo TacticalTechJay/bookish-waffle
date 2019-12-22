@@ -4,7 +4,7 @@ module.exports = {
 	category: 'moderation',
 	guildOnly: true,
 	args: true,
-	usage: '<MemberMention/UserID>',
+	usage: '<Mention/UserID>',
 	cooldown: 5,
 	async execute(message, args, client) {
 		const member = message.mentions.members.first() || message.guild.members.get(args[0]) || await client.users.fetch(args[0]);

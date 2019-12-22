@@ -58,9 +58,10 @@ Object.entries(client.nekosUnSafe).map(x => {
 		description: 'Just your average lewd',
 		category: 'nsfw',
 		cooldown: 5,
+		voterOnly: true,
+		donatorOnly: true,
 		async execute(message, args, client, dbl) {
-			if (!(await dbl.hasVoted(message.author.id))) return message.channel.send('Woah there! This command is only for voters only! Vote on DBL to use this command. Vote here!\n' + `https://top.gg/bot/${client.user.id}/vote`)
-			if (!message.channel.nsfw) return message.channel.send('Nope. It\'s lewd.');
+			if (!message.channel.nsfw) return message.channel.send('Nope. It\'s lewd. (Use the command in an nsfw channel.)');
 			message.channel.send(new (require('discord.js').MessageEmbed)().setImage((await x[1]()).url))
 		}
 	});
@@ -134,7 +135,7 @@ client.on('voiceStateUpdate', (oldState, newState) => {
 })
 
 client.on('message', message => {
-	if (!message.content.startsWith(prefix) || message.author.bot) return;
+	if (!message.content.toLowerCase().startsWith(prefix) || message.author.bot) return;
 	const args = message.content.slice(prefix.length).split(/ +/);
 	const commandName = args.shift().toLowerCase();
 	const command = client.commands.get(commandName) ||
@@ -144,6 +145,7 @@ client.on('message', message => {
 	if (command.testing && message.author.id != 127888387364487168) {
 		return message.reply(`${command.name} is currently in its testing stage.`);
 	}
+	if (command.voterOnly && !(await dbl.hasVoted(message.author.id))) return message.channel.send('Woah there! This command is only for voters only! Vote on DBL to use this command. Vote here!\n' + `https://top.gg/bot/${client.user.id}/vote`);
 
 	if (command.guildOnly && message.channel.type !== 'text') {
 		return message.reply('I can\'t execute that command inside DMs!');

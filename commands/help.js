@@ -20,10 +20,9 @@ module.exports = {
 				.addField(`Music (${commands.filter(command => command.category === 'music').size})`, commands.filter(command => command.category === 'music').map(command => `\`${command.name}\``).join(', '), false)
 				.addField(`Utilities (${commands.filter(command => command.category === 'util').size})`, commands.filter(command => command.category === 'util').map(command => `\`${command.name}\``).join(', '), false)
 				.addField(`Anime (${commands.filter(command => command.category === 'anime').size})`, commands.filter(command => command.category === 'anime').map(command => `\`${command.name}\``).join(', '), false)
-				.addField(`NSFW (${commands.filter(command => command.category === 'nsfw').size})`, commands.filter(command => command.category === 'nsfw').map(command => `\`${command.name}\``).join(', '), false)
 				.setColor(0x00fff9)
 				.setFooter(`You can send "${prefix}help [command name]" to get info on a specific command!`);
-
+			if (message.channel.nsfw) embed.addField(`NSFW (${commands.filter(command => command.category === 'nsfw').size})`, commands.filter(command => command.category === 'nsfw').map(command => `\`${command.name}\``).join(', '), false)
 			return message.channel.send(embed);
 		}
 

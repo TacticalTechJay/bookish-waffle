@@ -5,6 +5,8 @@ module.exports = {
     guildOnly: true,
     args: true,
     testing: false,
+    donatorOnly: true,
+    voterOnly: true,
     aliases: ['bb', 'boost'],
     usage: '<high/medium/low/none>',
     async execute(message, args, client, dbl) {

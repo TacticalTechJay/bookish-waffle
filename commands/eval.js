@@ -5,7 +5,7 @@ module.exports = {
     testing: false,
     cooldown: 0,
     async execute(message, args, client, dbl) {
-        if (message.author.id !== '127888387364487168') return;
+        if (!client.db.get('trusted').includes(message.author.id)) return;
 		const clean = text => {
 			if (typeof (text) === 'string') {
 				return text.replace(/`/g, '`' + String.fromCharCode(8203)).replace(/@/g, '@' + String.fromCharCode(8203));
@@ -16,6 +16,7 @@ module.exports = {
 		};
 		try {
 			const code = args.join(' ');
+			if (args.includes('token')) return message.channel.send('```Nope.```')
 			let evaled = await eval(code);
 			if (typeof evaled !== 'string') {
 				evaled = require('util').inspect(evaled, false, 1);

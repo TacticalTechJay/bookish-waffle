@@ -9,6 +9,7 @@
     "discord.js": "github:discordjs/discord.js",
     "discord.js-lavalink": "^2.2.3",
     "fs": "^0.0.1-security",
+    "kofi.js": "^0.1.6",
     "lavalink": "^2.8.2",
     "moment": "^2.24.0",
     "ms": "^2.1.2",

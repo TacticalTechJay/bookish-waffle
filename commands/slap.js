@@ -9,7 +9,7 @@ module.exports = {
 	usage: '<mention>',
 	async execute(message, args, client) {
 		const { MessageEmbed } = require('discord.js');
-		const { url } = await client.nekos.slap();
+		const { url } = await client.nekosSafe.slap();
 		const target = message.mentions.members.first() || message.guild.members.get(args[0]);
 		const embed = new MessageEmbed()
 			.setDescription(target ? `${target} was slapped by ${message.author}!` : `${message.author} you wanted it, so you'll get it.`)

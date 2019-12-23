@@ -6,7 +6,7 @@ module.exports = {
     guildOnly: false,
     args: false,
     async execute(message, args, client) {
-        const { url } = await client.nekos.foxGirl();
+        const { url } = await client.nekosSafe.foxGirl();
         const { MessageEmbed } = require('discord.js');
         const embed = new MessageEmbed()
             .setTitle('Here is your fox girl!')

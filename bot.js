@@ -2,11 +2,16 @@ const fs = require('fs');
 const Discord = require('discord.js');
 const { prefix, token, nodes, dblToken, ADLToken } = require('./config.json');
 const client = new Discord.Client({ disableEveryone: true });
-const { exec } = require('child_process');
 const { PlayerManager } = require('discord.js-lavalink');
 const DBL = require('dblapi.js');
 const dbl = new DBL(dblToken, client);
 const fetch = require('node-fetch');
+const { KoFi } = require('kofi.js');
+const kofi = new KoFi('/notdonation', 4200); 
+
+kofi.start(() => {
+	console.log('Started on port 4200');
+})
 
 dbl.on('error', e => {
 	console.error(e);
@@ -67,7 +72,14 @@ Object.entries(client.nekosUnSafe).map(x => {
 	});
   });
 const cooldowns = new Discord.Collection();
-
+kofi.on('donation', donation => {
+	const amount = parseInt(donation.amount);
+	const id = parseInt(donation.message);
+	console.log(donation);
+	if (amount < 5) return;
+	if (!donation.message) return;
+	client.db.push('donor', `member_${id}`);
+})
 client.on('ready', async () => {
 
 	console.log('Ready!');
@@ -134,18 +146,20 @@ client.on('voiceStateUpdate', (oldState, newState) => {
 	}
 })
 
-client.on('message', message => {
+client.on('message', async (message) => {
 	if (!message.content.toLowerCase().startsWith(prefix) || message.author.bot) return;
 	const args = message.content.slice(prefix.length).split(/ +/);
 	const commandName = args.shift().toLowerCase();
 	const command = client.commands.get(commandName) ||
 		client.commands.find(cmd => cmd.aliases && cmd.aliases.includes(commandName));
-
+	const voted = await dbl.hasVoted(message.author.id);
 	if (!command) return;
 	if (command.testing && message.author.id != 127888387364487168) {
 		return message.reply(`${command.name} is currently in its testing stage.`);
 	}
-	if (command.voterOnly && !(await dbl.hasVoted(message.author.id))) return message.channel.send('Woah there! This command is only for voters only! Vote on DBL to use this command. Vote here!\n' + `https://top.gg/bot/${client.user.id}/vote`);
+	if (command.voterOnly && !command.donatorOnly && !voted) return message.channel.send('Woah there! This command is for voters only! Vote on DBL to use this command. Vote here!\n<https://top.gg/bot/628802763123589160/vote>');
+	if (command.donatorOnly && !command.voterOnly && !client.db.get('donor').includes(`memeber_${message.author.id}`)) return message.channel.send(`Woah there! This command is for donators only! Donate more than $5 on KoFi to use these commands (Be sure to include your user ID! \`${message.author.id}\`). Donation link: <https://www.ko-fi.com/earthchandiscord>`)
+	if (command.voterOnly && command.donatorOnly && !voted && !client.db.get('donor').includes(`memeber_${message.author.id}`)) return message.channel.send(`Woah there! This command is only for voters/donators! Vote on Discord Bot List to use this command or donate more than $5 on KoFi with your user ID included in the message \`${message.author.id}\`\nDonation link: <https://www.ko-fi.com/earthchandiscord>\nVote link: <https://top.gg/bot/628802763123589160/vote>`)
 
 	if (command.guildOnly && message.channel.type !== 'text') {
 		return message.reply('I can\'t execute that command inside DMs!');
@@ -190,23 +204,6 @@ client.on('message', message => {
 	}
 	catch (error) {
 		console.error(error);
-		message.reply(`there was an error trying to execute that command! Report this to the dorito maker: \`${error}\``);
-	}
-});
-
-client.on('message', message => {
-	const args = message.content.split(' ').slice(1);
-	if (message.content.startsWith('plana exec')) {
-		if (message.author.id !== '127888387364487168') return;
-		if (!args[0]) return message.channel.send('```COMMAND REQUIRED```');
-		try {
-			exec(args.join(' '), (err, stdout, stderr) => {
-				if (stderr) return message.channel.send({ embed: { description: stderr } });
-				message.channel.send({ embed: { description: stdout } });
-			});
-		}
-		catch (err) {
-			console.log(err);
-		}
+		message.reply(`there was an error trying to execute that command! Report this to the creator of this bot: \`${error}\``);
 	}
 });

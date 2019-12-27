@@ -42,11 +42,14 @@ client.pushStats = async (Token) => {
 		'users': client.users.size,
 		'servers': client.guilds.size,
 		'shards': client.shard.count
-	}
+	};
 	const res = await fetch(`https://abstractlist.net/api/bot/${client.user.id}/stats`, {
-	    method: 'post',
-	    body: JSON.stringify(body),
-	    headers: { 'Content-type': 'application/json', 'Authorization': Token }});
+		method: 'post',
+		body: JSON.stringify(body),
+		headers: {
+			'Content-type': 'application/json', 'Authorization': Token
+		}
+	});
 	return await res.json();
 }
 const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
@@ -65,9 +68,9 @@ Object.entries(client.nekosUnSafe).map(x => {
 		cooldown: 5,
 		voterOnly: true,
 		donatorOnly: true,
-		async execute(message, args, client, dbl) {
+		async execute(message) {
 			if (!message.channel.nsfw) return message.channel.send('Nope. It\'s lewd. (Use the command in an nsfw channel.)');
-			message.channel.send(new (require('discord.js').MessageEmbed)().setImage((await x[1]()).url))
+			message.channel.send(new (require('discord.js').MessageEmbed)().setImage((await x[1]()).url));
 		}
 	});
   });
@@ -75,9 +78,10 @@ const cooldowns = new Discord.Collection();
 kofi.on('donation', donation => {
 	const amount = parseInt(donation.amount);
 	const id = parseInt(donation.message);
-	console.log(donation);
-	if (amount < 5) return;
-	if (!donation.message) return;
+	client.db.push('donations', donation);
+	if (amount < 3) return;
+	if (!donation.message || isNaN(id)) return;
+	if (!client.db.get('donor').includes(`member_${id}`)) return;
 	client.db.push('donor', `member_${id}`);
 })
 client.on('ready', async () => {
@@ -101,14 +105,14 @@ client.on('ready', async () => {
 				'users': client.users.size,
 				'servers': client.guilds.size,
 				'shards': client.shard.count
-			}
+			};
 			const res = await fetch(`https://abstractlist.net/api/bot/${client.user.id}/stats`, {
 				method: 'post',
 				body: JSON.stringify(body),
 				headers: { 'Content-type': 'application/json', 'Authorization': ADLToken }
 			});
 			console.log((await res.json()));
-		}, 1800000)
+		}, 1800000);
 	} catch(e) {
 		console.error(e);
 	}
@@ -153,17 +157,13 @@ client.on('message', async (message) => {
 	const command = client.commands.get(commandName) ||
 		client.commands.find(cmd => cmd.aliases && cmd.aliases.includes(commandName));
 	const voted = await dbl.hasVoted(message.author.id);
-	if (!command) return;
-	if (command.testing && message.author.id != 127888387364487168) {
-		return message.reply(`${command.name} is currently in its testing stage.`);
-	}
-	if (command.voterOnly && !command.donatorOnly && !voted) return message.channel.send('Woah there! This command is for voters only! Vote on DBL to use this command. Vote here!\n<https://top.gg/bot/628802763123589160/vote>');
-	if (command.donatorOnly && !command.voterOnly && !client.db.get('donor').includes(`memeber_${message.author.id}`)) return message.channel.send(`Woah there! This command is for donators only! Donate more than $5 on KoFi to use these commands (Be sure to include your user ID! \`${message.author.id}\`). Donation link: <https://www.ko-fi.com/earthchandiscord>`)
-	if (command.voterOnly && command.donatorOnly && !voted && !client.db.get('donor').includes(`memeber_${message.author.id}`)) return message.channel.send(`Woah there! This command is only for voters/donators! Vote on Discord Bot List to use this command or donate more than $5 on KoFi with your user ID included in the message \`${message.author.id}\`\nDonation link: <https://www.ko-fi.com/earthchandiscord>\nVote link: <https://top.gg/bot/628802763123589160/vote>`)
 
-	if (command.guildOnly && message.channel.type !== 'text') {
-		return message.reply('I can\'t execute that command inside DMs!');
-	}
+	if (!command) return;
+	if (command.testing && message.author.id != 127888387364487168) return message.reply(`${command.name} is currently in its testing stage.`);
+	if (command.voterOnly && !command.donatorOnly && !voted) return message.channel.send('Woah there! This command is for voters only! Vote on DBL to use this command. Vote here!\n<https://top.gg/bot/628802763123589160/vote>');
+	if (command.donatorOnly && !command.voterOnly && !client.db.get('donor').includes(`memeber_${message.author.id}`)) return message.channel.send(`Woah there! This command is for donators only! Donate more than one cup of coffee on KoFi to use these commands (Be sure to include your user ID: \`${message.author.id}\`). Donation link: <https://www.ko-fi.com/earthchandiscord>`)
+	if (command.voterOnly && command.donatorOnly && !voted && !client.db.get('donor').includes(`memeber_${message.author.id}`)) return message.channel.send(`Woah there! This command is only for voters/donators! Vote on Discord Bot List to use this command or donate more than just a cup off coffee on KoFi with your user ID in the message (\`${message.author.id}\`) included in the message.\nDonation link: <https://www.ko-fi.com/earthchandiscord>\nVote link: <https://top.gg/bot/628802763123589160/vote>`)
+	if (command.guildOnly && message.channel.type !== 'text') return message.reply('I can\'t execute that command inside DMs!');
 
 	if (command.args && !args.length) {
 		let reply = `You didn't provide any arguments, ${message.author}!`;
@@ -175,9 +175,7 @@ client.on('message', async (message) => {
 		return message.channel.send(reply);
 	}
 
-	if (!cooldowns.has(command.name)) {
-		cooldowns.set(command.name, new Discord.Collection());
-	}
+	if (!cooldowns.has(command.name)) cooldowns.set(command.name, new Discord.Collection());
 
 	const now = Date.now();
 	const timestamps = cooldowns.get(command.name);

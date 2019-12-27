@@ -16,11 +16,12 @@ module.exports = {
 		};
 		try {
 			const code = args.join(' ');
-			if (args.includes('token')) return message.channel.send('```Nope.```')
+			if (args.includes('token')) return message.channel.send('```Nope.```');
 			let evaled = await eval(code);
 			if (typeof evaled !== 'string') {
 				evaled = require('util').inspect(evaled, false, 1);
 			}
+			if (evaled.includes(client.token)) return message.channel.send('```Nice try FBI.```');
 			message.channel.send(`\`\`\`js\n${clean(evaled)}\`\`\``);
 		}
 		catch (err) {

@@ -18,11 +18,7 @@ module.exports = {
             .addField('Server Creation Date', message.guild.createdAt.toString().slice(0, 25), true)
             .addField('Server Users', `${message.guild.members.size} total users\n${message.guild.members.filter(m => !m.user.bot).size} members\n${message.guild.members.filter(m => m.user.bot).size} bots`, true)
             .addField('Channels', `${message.guild.channels.filter(c => c.type == 'category').size} categories\n${message.guild.channels.filter(c => c.type == 'voice').size} voice channels\n${message.guild.channels.filter(c => c.type == 'text').size} text channels`, true)
-        if (message.guild.roles.map(r => r).join(' | ').length > 1024) {
-            embed.addField(`Roles (${message.guild.roles.size})`, message.guild.roles.map(r => r).slice(0, 20).join(' | '));
-            return message.channel.send(embed);
-        } 
-        embed.addField(`Roles (${message.guild.roles.size})`, message.guild.roles.map(r => r).join(' | '));
+	    .addField(`Roles (${message.guild.roles.size})`, message.guild.roles.map(x => x.toString()).join(' ').substring(0, 1024).replace(/\s\S+[^>]$/, ''));
         message.channel.send(embed);
     }
 }

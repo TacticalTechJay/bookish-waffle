@@ -4,9 +4,9 @@ module.exports = {
 	name: 'help',
 	description: 'List all of my commands or info about a specific command.',
 	category: 'general',
-	aliases: ['commands'],
-	usage: '[command name]',
-	cooldown: 5,
+	aliases: ['commands', 'cmds'],
+	usage: '[commandName]',
+	cooldown: 3,
 	execute(message, args, client) {
 		const { MessageEmbed } = require('discord.js');
 		const data = [];

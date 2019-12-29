@@ -9,6 +9,7 @@ module.exports = {
     donatorOnly: true,
     async execute(message, args, client) {
         if (!message.channel.nsfw) return message.channel.send('Nope. It\'s lewd. (Use this command in an nsfw channel.)');
+	if (message.guild.id == '620424864221757481') return message.channel.send('No gay shit dude.')
         const r = await fetch('https://api.ksoft.si/images/rand-reddit/yaoi', {
             headers: {
                 'Authorization': `Bearer ${config.ksoftapi}`

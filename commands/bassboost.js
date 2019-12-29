@@ -20,8 +20,8 @@ module.exports = {
         function node(band, gain) {
             return { band, gain }
         }
-        const presets = { high: 0.25, medium: 0.15, low: 0.05, none: -0.10 }
-        if (args[0].toLowerCase() == 'high' || args[0].toLowerCase() == 'medium' || args[0].toLowerCase() == 'low' || args[0].toLowerCase() == 'none') {
+        const presets = { highaf: 1.5, high: 0.25, medium: 0.15, low: 0.05, none: -0.10 }
+        if (args[0].toLowerCase() == 'highaf' || args[0].toLowerCase() == 'high' || args[0].toLowerCase() == 'medium' || args[0].toLowerCase() == 'low' || args[0].toLowerCase() == 'none') {
             let bands = [node(0, presets[args[0].toLowerCase()]), node(1, presets[args[0].toLowerCase()]), node(2, presets[args[0].toLowerCase()])]
             message.channel.send('Set bassboost level to `' + args[0].toLowerCase() + '`.')
             return player.node.send({ op: "equalizer", guildId: message.guild.id, bands })

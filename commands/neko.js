@@ -12,7 +12,12 @@ module.exports = {
         const e = await client.nekosSafe.nekoGif();
         const { MessageEmbed } = require('discord.js');
         if (message.channel.nsfw) {
-            url = await UnSafe.neko();
+            const fetch = require('node-fetch');
+            const config = require('../config.json');
+            const res = await fetch('https://api.ksoft.si/images/random-image?tag=neko&nsfw=true', {
+                headers: { 'Authorization': `Bearer ${config.ksoftapi}` }
+            });
+            url = await res.json();
             const embed = new MessageEmbed()
                 .setTitle('Here is your neko!')
                 .setImage(Math.random() > .5 ? url.url : e.url);

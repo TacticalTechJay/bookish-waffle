@@ -15,7 +15,7 @@ module.exports = {
             .addField('Partner Status', message.guild.partnered ? 'Partnered' : 'Not partnered', true)
             .addField('Boost Count', message.guild.premiumSubscriptionCount, true)
             .addField('Boost Level', message.guild.premiumTier, true)
-            .addField('Server Creation Date', message.guild.createdAt.toString().slice(0, 25), true)
+            .addField('Server Creation Date', require('moment')(message.guild.createdAt).calendar(), true)
             .addField('Server Users', `${message.guild.members.size} total users\n${message.guild.members.filter(m => !m.user.bot).size} members\n${message.guild.members.filter(m => m.user.bot).size} bots`, true)
             .addField('Channels', `${message.guild.channels.filter(c => c.type == 'category').size} categories\n${message.guild.channels.filter(c => c.type == 'voice').size} voice channels\n${message.guild.channels.filter(c => c.type == 'text').size} text channels`, true)
 	    .addField(`Roles (${message.guild.roles.size})`, message.guild.roles.map(x => x.toString()).join(' ').substring(0, 1024).replace(/\s\S+[^>]$/, ''));

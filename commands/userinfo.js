@@ -17,8 +17,8 @@ module.exports = {
                 .addField('Bot', user.user.bot ? 'Yes': 'No', true)
                 .addField('Nickname', user.nickname ? user.nickname : 'No nickname', true)
                 .addField('Presence', user.presence.status, true)
-                .addField('Created Date', user.user.createdAt.toString(), true)
-                .addField('Joined Date', user.joinedAt.toString(), true)
+                .addField('Created Date', require('moment')(user.user.createdAt).calendar(), true)
+                .addField('Joined Date', require('moment')(user.joinedAt).calendar(), true)
                 .setColor(0x679f28)
                 .setThumbnail(user.user.displayAvatarURL());
             return message.channel.send(embed);
@@ -30,7 +30,7 @@ module.exports = {
                 .setColor(0x0cecf7)
                 .setTitle(`${user.username}#${user.discriminator} (${user.id})`)
                 .addField('Bot', user.bot ? 'Yes': 'No', true)
-                .addField('Created Date', user.createdAt.toString(), true)
+                .addField('Created Date', require('moment')(user.createdAt).calendar(), true)
                 .setColor(0x5ea6db)
                 .setThumbnail(user.displayAvatarURL());
             message.channel.send('Not much can be found except this. This user was not in guild:')
@@ -43,8 +43,8 @@ module.exports = {
                 .addField('Bot', user.user.bot ? 'Yes' : 'No', true)
                 .addField('Nickname', user.nickname ? user.nickname : 'No nickname', true)
                 .addField('Presence', user.presence.status, true)
-                .addField('Created Date', user.user.createdAt.toString(), true)
-                .addField('Joined Date', `${user.joinedAt ? user.joinedAt.toString() : 'N/A'}`, true)
+                .addField('Created Date', require('moment')(user.user.createdAt).calendar(), true)
+                .addField('Joined Date', `${user.joinedAt ? require('moment')(user.joinedAt).calendar() : 'N/A'}`, true)
                 .setColor(0x679f28)
                 .setThumbnail(user.user.displayAvatarURL());
             return message.channel.send(embed);

@@ -17,8 +17,8 @@ module.exports = {
                 .addField('Bot', user.user.bot ? 'Yes': 'No', true)
                 .addField('Nickname', user.nickname ? user.nickname : 'No nickname', true)
                 .addField('Presence', user.presence.status, true)
-                .addField('Created Date', require('moment')(user.user.createdAt).calendar(), true)
-                .addField('Joined Date', require('moment')(user.joinedAt).calendar(), true)
+                .addField('Created Date', require('moment')(user.user.createdAt).format('MMMM Do[,] YYYY'), true)
+                .addField('Joined Date', require('moment')(user.joinedAt).format('MMMM Do[,] YYYY'), true)
                 .setColor(0x679f28)
                 .setThumbnail(user.user.displayAvatarURL());
             return message.channel.send(embed);
@@ -30,7 +30,7 @@ module.exports = {
                 .setColor(0x0cecf7)
                 .setTitle(`${user.username}#${user.discriminator} (${user.id})`)
                 .addField('Bot', user.bot ? 'Yes': 'No', true)
-                .addField('Created Date', require('moment')(user.createdAt).calendar(), true)
+                .addField('Created Date', require('moment')(user.createdAt).format('MMMM Do[,] YYYY'), true)
                 .setColor(0x5ea6db)
                 .setThumbnail(user.displayAvatarURL());
             message.channel.send('Not much can be found except this. This user was not in guild:')
@@ -43,8 +43,8 @@ module.exports = {
                 .addField('Bot', user.user.bot ? 'Yes' : 'No', true)
                 .addField('Nickname', user.nickname ? user.nickname : 'No nickname', true)
                 .addField('Presence', user.presence.status, true)
-                .addField('Created Date', require('moment')(user.user.createdAt).calendar(), true)
-                .addField('Joined Date', `${user.joinedAt ? require('moment')(user.joinedAt).calendar() : 'N/A'}`, true)
+                .addField('Created Date', require('moment')(user.user.createdAt).format('MMMM Do[,] YYYY'), true)
+                .addField('Joined Date', `${user.joinedAt ? require('moment')(user.joinedAt).format('MMMM Do[,] YYYY') : 'N/A'}`, true)
                 .setColor(0x679f28)
                 .setThumbnail(user.user.displayAvatarURL());
             return message.channel.send(embed);

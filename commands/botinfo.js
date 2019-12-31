@@ -6,6 +6,7 @@ module.exports = {
     guildOnly: true,
     args: false,
     testing: false,
+    aliases: ['bi'],
     async execute(message, nothing, client) {
         const amount = await client.shard.broadcastEval('this.guilds.size');
         const amount2 = await amount.reduce((prev, val) => prev + val, 0);

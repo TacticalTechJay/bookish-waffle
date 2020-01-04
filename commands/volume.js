@@ -5,7 +5,7 @@ module.exports = {
   args: false,
   guildOnly: true,
   testing: false,
-  usage: '[1-150]',
+  usage: '[0-150]',
   async execute(message, args, client) {
     const Player = client.manager.get(message.guild.id)
     const queue = client.queue.get(message.guild.id)
@@ -14,7 +14,7 @@ module.exports = {
     if (message.member.voice.channel !== message.guild.me.voice.channel) return message.channel.send('You are not in the same voice channel as me.')
     if (!args[0]) return message.channel.send(`The current volume is **${Player.state.volume}**. :smiley:`)
     if (isNaN(args[0])) return message.channel.send('Please use actual numbers rather than nonexistent ones.')
-    if (args[0] < 1 || args[0] > 150) {
+    if (args[0] < 0 || args[0] > 150) {
       return message.channel.send('Volume needs to be between 0 and 150.')
     }
     Player.volume(args[0])

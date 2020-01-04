@@ -72,20 +72,22 @@ for (const file of commandFiles) {
 }
 delete client.nekosUnSafe.neko;
 delete client.nekosUnSafe.avatar;
-Object.entries(client.nekosUnSafe).map(x => {
-	client.commands.set(x[0].toLowerCase(), {
-		name: x[0].toLowerCase(),
-		description: 'Just your average lewd',
-		category: 'nsfw',
-		cooldown: 5,
-		voterOnly: true,
-		donatorOnly: true,
-		async execute(message) {
-			if (!message.channel.nsfw) return message.channel.send('Nope. It\'s lewd. (Use the command in an nsfw channel.)');
-			message.channel.send(new (require('discord.js').MessageEmbed)().setImage((await x[1]()).url));
-		}
+if (process.env.MODE === 0) {
+	Object.entries(client.nekosUnSafe).map(x => {
+		client.commands.set(x[0].toLowerCase(), {
+			name: x[0].toLowerCase(),
+			description: 'Just your average lewd',
+				category: 'nsfw',
+			cooldown: 5,
+			voterOnly: true,
+			donatorOnly: true,
+			async execute(message) {
+				if (!message.channel.nsfw) return message.channel.send('Nope. It\'s lewd. (Use the command in an nsfw channel.)');
+				message.channel.send(new (require('discord.js').MessageEmbed)().setImage((await x[1]()).url));
+			}
+		});
 	});
-  });
+}
 const cooldowns = new Discord.Collection();
 client.on('ready', async () => {
 

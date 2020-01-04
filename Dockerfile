@@ -12,6 +12,7 @@ COPY . /home/container/earth-chan
 
 ENV MODE 0
 ENV PREFIX plana
+ENV VERSION v1.2.0
 
 # Start me!
 CMD ["node", "index.js"]

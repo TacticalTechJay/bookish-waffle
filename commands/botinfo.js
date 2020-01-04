@@ -19,7 +19,7 @@ module.exports = {
             .addField('❤ Total Guilds', amount2, true)
             .addField('💎 Shard ID', message.guild.shardID, true)
             .addField('👑 Creator', `${creator.username + '#' + creator.discriminator}`, true)
-            .addField('Version', 'v1.0.0', true)
+            .addField('Version', process.env.VERSION, true)
             .addField('📚 Libary', `Discord.js ${Discord.version}`, true)
             .addField('🖥 OS', require('os').type(), true)
             .addField('👍 Vote', `[DBL Upvote](https://top.gg/bot/${BOTID}/vote)`, true)

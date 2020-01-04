@@ -9,8 +9,7 @@ module.exports = {
     voterOnly: true,
     aliases: ['bb', 'boost'],
     usage: '<high/medium/low/none>',
-    async execute(message, args, client, dbl) {
-        if (!(await dbl.hasVoted(message.author.id))) return message.channel.send('Woah there! This command is only for voters only! Vote on DBL to use this command. Vote here!\n' + `https://top.gg/bot/${client.user.id}/vote`);
+    async execute(message, args, client) {
         let player = await client.manager.get(message.guild.id)
         let queue = await client.queue.get(message.guild.id)
         if (!player || !queue) return message.channel.send('There are no songs in the queue. How would I bassboost what\'s playing if it is `null`? 🤔')

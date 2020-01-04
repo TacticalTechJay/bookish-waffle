@@ -39,7 +39,7 @@ module.exports = {
             });
             const res2 = await res.json()
             if (!res2) throw 'NO RESPONSE';
-            if (!res2.tracks) return 'NO TRACKS';
+            if (!res2.tracks) throw 'NO TRACKS';
             return res2;
         }
         async function createQueue(client, guild) {

@@ -1,21 +1,33 @@
 const fs = require('fs');
 const Discord = require('discord.js');
-const { prefix, token, nodes, dblToken, ADLToken } = require('./config.json');
+let { token, prefix, nodes, dblToken, ADLToken } = require('./config.json');
 const client = new Discord.Client({ disableEveryone: true });
 const { PlayerManager } = require('discord.js-lavalink');
-const DBL = require('dblapi.js');
-const dbl = new DBL(dblToken, client);
 const fetch = require('node-fetch');
 const { KoFi } = require('kofi.js');
-const kofi = new KoFi('/notdonation', 4200); 
+const DBL = require('dblapi.js');
+const dbl = new DBL(dblToken, client);
 
-kofi.start(() => {
-	console.log('Started on port 4200');
-})
+if (process.env.MODE == 0) {
+	const kofi = new KoFi('/notdonation', 4200);
+	prefix = `${process.env.PREFIX} `;
+	kofi.start(() => {
+		console.log('Started on port 4200');
+	});
+	dbl.on('error', e => {
+		console.error(e);
+	});
+	kofi.on('donation', donation => {
+		const amount = parseInt(donation.amount);
+		const id = parseInt(donation.message);
+		client.db.push('donations', donation);
+		if (amount < 3) return;
+		if (!donation.message || isNaN(id)) return;
+		if (!client.db.get('donor').includes(`member_${id}`)) return;
+		client.db.push('donor', `member_${id}`);
+	});
+}
 
-dbl.on('error', e => {
-	console.error(e);
-});
 
 client.queue = new Map();
 client.commands = new Discord.Collection();
@@ -28,12 +40,12 @@ client.fetchSongs = async (string, amount) => {
 		console.error(err);
 		throw err;
 	});
-	const res2 = await res.json()
+	const res2 = await res.json();
 	if (!res2) throw 'NO RESPONSE';
 	if (!res2.tracks) return 'NO TRACKS';
 	res2.tracks.length = parseInt(amount);
 	return res2.tracks;
-}
+};
 client.db = require('quick.db');
 client.nekosSafe = new (require('nekos.life'))().sfw;
 client.nekosUnSafe = new (require('nekos.life'))().nsfw;
@@ -51,7 +63,7 @@ client.pushStats = async (Token) => {
 		}
 	});
 	return await res.json();
-}
+};
 const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
 
 for (const file of commandFiles) {
@@ -75,19 +87,10 @@ Object.entries(client.nekosUnSafe).map(x => {
 	});
   });
 const cooldowns = new Discord.Collection();
-kofi.on('donation', donation => {
-	const amount = parseInt(donation.amount);
-	const id = parseInt(donation.message);
-	client.db.push('donations', donation);
-	if (amount < 3) return;
-	if (!donation.message || isNaN(id)) return;
-	if (!client.db.get('donor').includes(`member_${id}`)) return;
-	client.db.push('donor', `member_${id}`);
-})
 client.on('ready', async () => {
 
 	console.log('Ready!');
-	client.user.setActivity('plana help for help.')
+	client.user.setActivity(`${prefix}help for help.`)
 		.then(presence => console.log(`Activity is ${presence.activity ? presence.activity.name : 'none'}`))
 		.catch(console.error);
 	client.lavalink = {
@@ -106,25 +109,36 @@ client.on('ready', async () => {
 				'servers': client.guilds.size,
 				'shards': client.shard.count
 			};
-			const res = await fetch(`https://abstractlist.net/api/bot/${client.user.id}/stats`, {
+			await fetch(`https://abstractlist.net/api/bot/${client.user.id}/stats`, {
 				method: 'post',
 				body: JSON.stringify(body),
 				headers: { 'Content-type': 'application/json', 'Authorization': ADLToken }
 			});
-			console.log((await res.json()));
 		}, 1800000);
 	} catch(e) {
 		console.error(e);
 	}
 });
-client.login(token);
+client.login(process.env.DISCORD_TOKEN)
 client.on('error', console.log);
 client.on('disconnect', console.log);
 client.on('guildCreate', g => {
-	console.log(`Obtained guild: ${g.name} | ${g.id} | ${g.members.filter(m => !m.user.bot).size}`);
+	const embed = new Discord.MessageEmbed()
+		.setTitle('Guild added.')
+		.addField('Guild Name', g.name)
+		.addField('Guild ID', g.id)
+		.addField('Guild Onwer', g.owner.user.username)
+		.addField('Guild Members (Excluding bots)', g.members.filter(m => !m.user.bot).size);
+	return client.channels.get('661669168009052200').send(embed);
 });
 client.on('guildDelete', g => {
-    console.log(`Lost guild: ${g.name} | ${g.id} | ${g.members.filter(m => !m.user.bot).size}`);
+	const embed = new Discord.MessageEmbed()
+		.setTitle('Guild removed.')
+		.addField('Guild Name', g.name)
+		.addField('Guild ID', g.id)
+		.addField('Guild Onwer', g.owner.user.username)
+		.addField('Guild Members (Excluding bots)', g.members.filter(m => !m.user.bot).size);
+	return client.channels.get('661669168009052200').send(embed);
 });
 client.on('voiceStateUpdate', (oldState, newState) => {
 	if (newState.member == newState.guild.me) {
@@ -156,13 +170,15 @@ client.on('message', async (message) => {
 	const commandName = args.shift().toLowerCase();
 	const command = client.commands.get(commandName) ||
 		client.commands.find(cmd => cmd.aliases && cmd.aliases.includes(commandName));
-	const voted = await dbl.hasVoted(message.author.id);
 
 	if (!command) return;
+	if (typeof dbl !== 'undefined') {
+		const voted = await dbl.hasVoted(message.author.id);
+		if (command.voterOnly && !command.donatorOnly && !voted) return message.channel.send('Woah there! This command is for voters only! Vote on DBL to use this command. Vote here!\n<https://top.gg/bot/628802763123589160/vote>');
+		if (command.donatorOnly && !command.voterOnly && !client.db.get('donor').includes(`member_${message.author.id}`)) return message.channel.send(`Woah there! This command is for donators only! Donate more than one cup of coffee on KoFi to use these commands (Be sure to include your user ID: \`${message.author.id}\`). Donation link: <https://www.ko-fi.com/earthchandiscord>`);
+		if (command.voterOnly && command.donatorOnly && !voted && !client.db.get('donor').includes(`member_${message.author.id}`)) return message.channel.send(`Woah there! This command is only for voters/donators! Vote on Discord Bot List to use this command or donate more than just a cup off coffee on KoFi with your user ID in the message (\`${message.author.id}\`) included in the message.\nDonation link: <https://www.ko-fi.com/earthchandiscord>\nVote link: <https://top.gg/bot/628802763123589160/vote>`);
+	};
 	if (command.testing && message.author.id != 127888387364487168) return message.reply(`${command.name} is currently in its testing stage.`);
-	if (command.voterOnly && !command.donatorOnly && !voted) return message.channel.send('Woah there! This command is for voters only! Vote on DBL to use this command. Vote here!\n<https://top.gg/bot/628802763123589160/vote>');
-	if (command.donatorOnly && !command.voterOnly && !client.db.get('donor').includes(`member_${message.author.id}`)) return message.channel.send(`Woah there! This command is for donators only! Donate more than one cup of coffee on KoFi to use these commands (Be sure to include your user ID: \`${message.author.id}\`). Donation link: <https://www.ko-fi.com/earthchandiscord>`)
-	if (command.voterOnly && command.donatorOnly && !voted && !client.db.get('donor').includes(`member_${message.author.id}`)) return message.channel.send(`Woah there! This command is only for voters/donators! Vote on Discord Bot List to use this command or donate more than just a cup off coffee on KoFi with your user ID in the message (\`${message.author.id}\`) included in the message.\nDonation link: <https://www.ko-fi.com/earthchandiscord>\nVote link: <https://top.gg/bot/628802763123589160/vote>`)
 	if (command.guildOnly && message.channel.type !== 'text') return message.reply('I can\'t execute that command inside DMs!');
 
 	if (command.args && !args.length) {
@@ -198,7 +214,7 @@ client.on('message', async (message) => {
 	}
 
 	try {
-		command.execute(message, args, client, dbl);
+		command.execute(message, args, client);
 	}
 	catch (error) {
 		console.error(`${message.guild.id} | ${command.name}:\n${error}`);

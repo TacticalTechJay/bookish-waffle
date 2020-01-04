@@ -16,7 +16,6 @@ module.exports = {
 		};
 		try {
 			const code = args.join(' ');
-			if (args.includes('token')) return message.channel.send('```Nope.```');
 			let evaled = await eval(code);
 			if (typeof evaled !== 'string') {
 				evaled = require('util').inspect(evaled, false, 0);

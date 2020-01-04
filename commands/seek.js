@@ -15,7 +15,7 @@ module.exports = {
             args.shift();
             let amount = player.state.position + require('ms')(args.join(' '))
             let test = require('ms')(args.join(' '));
-            if (!test) return message.channel.send('Improper format of amount!\nIt should be like this: `plana seek forward 1m 24s`');
+            if (typeof test !== 'number') return message.channel.send('Improper format of amount!\nIt should be like this: `plana seek forward 1m 24s`');
             if (amount > queue.songs[0].info.length) return message.channel.send('That is too far!')
             player.seek(amount);
             return message.channel.send(`Going forward with specified amount: ${args.join(' ')}`);
@@ -23,13 +23,14 @@ module.exports = {
             args.shift();
             let amount = player.state.position - require('ms')(args.join(' '));
             let test = require('ms')(args.join(' '));
-            if (!test) return message.channel.send('Improper format of amount!\nIt should be like this: `plana seek backward 1m 24s`');
+            if (typeof test !== 'number') return message.channel.send('Improper format of amount!\nIt should be like this: `plana seek backward 1m 24s`');
             if (amount < 0) return message.channel.send('That is too far!');
             player.seek(amount);
             return message.channel.send(`Going backwards with specified amount: ${args.join(' ')}`);
         }
         let amount = require('ms')(args.join(' '));
-        if (!amount) return message.channel.send('Your specified amount was invalid. Try this:\n`plana seek 1m 30s`');
+        if (typeof amount !== 'number') return message.channel.send('Your specified amount was invalid. Try this:\n`plana seek 1m 30s`');
+	if (amount <= -1 || amount >= ++queue.songs[0].info.length) return message.channel.send('Your specified point was out of reach! Try going within the limits');
         player.seek(amount);
         return message.channel.send(`I have went to point ${args.join(' ')}`);
     }

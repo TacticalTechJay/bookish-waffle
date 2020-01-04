@@ -11,9 +11,6 @@ module.exports = {
         if (!serverQueue) return message.channel.send('The queue is empty! I think it is about time to add songs, don\'t you think?');
         var queue = JSON.parse(JSON.stringify(serverQueue));
         queue.songs.shift();
-        return message.channel.send(`
-    __**Song queue:**__\n${queue.songs.map(song => `${i++} **-** ${song.info.title}`).join('\n')}
-    **Now playing:** ${serverQueue.songs[0].info.title}
-        `);
+        return message.channel.send(`__**Song queue:**__\n${queue.songs.map(song => `${i++} **-** ${song.info.title}`).join('\n')}\n**Now playing:** ${serverQueue.songs[0].info.title}`);
     }
 };

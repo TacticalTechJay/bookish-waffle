@@ -13,6 +13,7 @@
     "kofi.js": "^0.1.6",
     "lavalink": "^2.8.2",
     "moment": "^2.24.0",
+    "mongoose": "^5.8.4",
     "ms": "^2.1.2",
     "nekos.life": "^2.0.4",
     "node-fetch": "^2.6.0",

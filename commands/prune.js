@@ -17,12 +17,12 @@ module.exports = {
 		let deleteCount = parseInt(args[0], 10);
 
 		if(!deleteCount || deleteCount < 1 || deleteCount > 99) {
-			return message.reply('please do provide a number between 1 and 100 for the number of messages to delete.');
+			return message.reply('please do provide a number between 1 and 99 for the number of messages to delete.');
 		}
 		message.channel.messages.fetch({ limit: ++deleteCount })
 			.then(function(list) {
-				message.channel.bulkDelete(list);
+				message.channel.bulkDelete(list)
+					.catch(error => message.reply(`Couldn't delete message because of: ${error}`));
 			})
-			.catch(error => message.reply(`Couldn't delete message because of: ${error}`));
 	},
 };

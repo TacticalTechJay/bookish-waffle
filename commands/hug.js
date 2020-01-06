@@ -19,6 +19,7 @@ module.exports = {
         const embed = new MessageEmbed()
             .setDescription(target ? `${target} was hugged by ${message.author}!` : `${message.author} seems lonely. How about I help with this!`)
             .setImage(url);
+        console.log(embed);
         message.channel.send(embed);
     }
 }

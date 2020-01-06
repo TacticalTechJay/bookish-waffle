@@ -16,10 +16,8 @@ module.exports = {
             headers: { 'Authorization': `Bearer ${config.ksoftapi}` }
         });
         const { url } = await res.json();
-        const embed = new MessageEmbed()
-            .setDescription(target ? `${target} was hugged by ${message.author}!` : `${message.author} seems lonely. How about I help with this!`)
-            .setImage(url);
+        const embed = new MessageEmbed().setImage(url);
         console.log(embed);
-        message.channel.send(embed);
+        message.channel.send(target ? `${target} was hugged by ${message.author}!` : `${message.author} seems lonely. How about I help with this!`. embed);
     }
 }

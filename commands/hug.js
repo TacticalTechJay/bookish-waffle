@@ -16,6 +16,6 @@ module.exports = {
             headers: { 'Authorization': `Bearer ${config.ksoftapi}` }
         });
         const { url } = await res.json();
-        message.channel.send({content: target ? `${target} was hugged by ${message.author}!` : `${message.author} seems lonely. How about I help with this!`, files: [url]});
+        message.channel.send({content: `${target ? `${target} was hugged by ${message.author}!` : `${message.author} seems lonely. How about I help with this!`}`, files: [url]});
     }
 }

@@ -130,7 +130,8 @@ client.on('guildCreate', g => {
 		.addField('Guild Name', g.name)
 		.addField('Guild ID', g.id)
 		.addField('Guild Onwer', g.owner.user.username)
-		.addField('Guild Members (Excluding bots)', g.members.filter(m => !m.user.bot).size);
+		.addField('Guild Members (Excluding bots)', g.members.filter(m => !m.user.bot).size)
+		.setColor('GREEN');
 	return client.channels.get('661669168009052200').send(embed);
 });
 client.on('guildDelete', g => {
@@ -139,7 +140,8 @@ client.on('guildDelete', g => {
 		.addField('Guild Name', g.name)
 		.addField('Guild ID', g.id)
 		.addField('Guild Onwer', g.owner.user.username)
-		.addField('Guild Members (Excluding bots)', g.members.filter(m => !m.user.bot).size);
+		.addField('Guild Members (Excluding bots)', g.members.filter(m => !m.user.bot).size)
+		.setColor('RED');
 	return client.channels.get('661669168009052200').send(embed);
 });
 client.on('voiceStateUpdate', (oldState, newState) => {

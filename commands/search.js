@@ -4,7 +4,7 @@ module.exports = {
     category: 'music',
 	guildOnly: true,
 	testing: false,
-	cooldown: 10,
+	cooldown: 5,
     args: true,
     usage: '<SearchTerm>',
 	async execute(message, args, client) {

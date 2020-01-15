@@ -6,15 +6,15 @@ const { PlayerManager } = require('discord.js-lavalink');
 const fetch = require('node-fetch');
 const { KoFi } = require('kofi.js');
 const DBL = require('dblapi.js');
-const dbl = new DBL(dblToken, client);
 
 if (process.env.MODE == 0) {
 	const kofi = new KoFi('/notdonation', 4200);
+	client.dbl = new DBL(dblToken, client);
 	prefix = `${process.env.PREFIX} `;
 	kofi.start(() => {
 		console.log('Started on port 4200');
 	});
-	dbl.on('error', e => {
+	client.dbl.on('error', e => {
 		console.error(e);
 	});
 	kofi.on('donation', donation => {
@@ -130,7 +130,8 @@ client.on('guildCreate', g => {
 		.addField('Guild Name', g.name)
 		.addField('Guild ID', g.id)
 		.addField('Guild Onwer', g.owner.user.username)
-		.addField('Guild Members (Excluding bots)', g.members.filter(m => !m.user.bot).size);
+		.addField('Guild Members (Excluding bots)', g.members.filter(m => !m.user.bot).size)
+		.setColor('GREEN');
 	return client.channels.get('661669168009052200').send(embed);
 });
 client.on('guildDelete', g => {
@@ -139,7 +140,8 @@ client.on('guildDelete', g => {
 		.addField('Guild Name', g.name)
 		.addField('Guild ID', g.id)
 		.addField('Guild Onwer', g.owner.user.username)
-		.addField('Guild Members (Excluding bots)', g.members.filter(m => !m.user.bot).size);
+		.addField('Guild Members (Excluding bots)', g.members.filter(m => !m.user.bot).size)
+		.setColor('RED');
 	return client.channels.get('661669168009052200').send(embed);
 });
 client.on('voiceStateUpdate', (oldState, newState) => {
@@ -174,8 +176,8 @@ client.on('message', async (message) => {
 		client.commands.find(cmd => cmd.aliases && cmd.aliases.includes(commandName));
 
 	if (!command) return;
-	if (typeof dbl !== 'undefined') {
-		const voted = await dbl.hasVoted(message.author.id);
+	if (typeof client.dbl !== 'undefined') {
+		const voted = await client.dbl.hasVoted(message.author.id);
 		if (command.voterOnly && !command.donatorOnly && !voted) return message.channel.send('Woah there! This command is for voters only! Vote on DBL to use this command. Vote here!\n<https://top.gg/bot/628802763123589160/vote>');
 		if (command.donatorOnly && !command.voterOnly && !client.db.get('donor').includes(`member_${message.author.id}`)) return message.channel.send(`Woah there! This command is for donators only! Donate more than one cup of coffee on KoFi to use these commands (Be sure to include your user ID: \`${message.author.id}\`). Donation link: <https://www.ko-fi.com/earthchandiscord>`);
 		if (command.voterOnly && command.donatorOnly && !voted && !client.db.get('donor').includes(`member_${message.author.id}`)) return message.channel.send(`Woah there! This command is only for voters/donators! Vote on Discord Bot List to use this command or donate more than just a cup off coffee on KoFi with your user ID in the message (\`${message.author.id}\`) included in the message.\nDonation link: <https://www.ko-fi.com/earthchandiscord>\nVote link: <https://top.gg/bot/628802763123589160/vote>`);
@@ -219,7 +221,7 @@ client.on('message', async (message) => {
 		command.execute(message, args, client);
 	}
 	catch (error) {
-		console.error(`${message.guild.id} | ${command.name}:\n${error}`);
+		console.error(`${message.guild.id} | ${command.name}:\n${error.stack}`);
 		message.reply(`there was an error trying to execute that command! Report this to the creator of this bot: \`${error}\``);
 	}
 });

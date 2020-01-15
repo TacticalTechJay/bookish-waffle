@@ -5,7 +5,7 @@ module.exports = {
     args: true,
     guildOnly: true,
     testing: false,
-    cooldown: 10,
+    cooldown: 5,
     aliases: ['p'],
     usage: '<SongURL/SearchString>',
     async execute(message, args, client) {

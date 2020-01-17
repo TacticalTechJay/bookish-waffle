@@ -66,7 +66,7 @@ module.exports = {
                         .setColor(0x2daa4b)
                         .setThumbnail(`https://img.youtube.com/vi/${thu}/0.jpg`)
                         .setDescription(`
-            Title: [${song.tracks[0].info.title}](${song.tracks[0].info.uri})\nAuthor: ${song.tracks[0].info.author}
+            Title: [${song.tracks[0].info.title}](${song.tracks[0].info.uri})\nAuthor: ${song.tracks[0].info.author}\nLength: ${require('moment').utc(song.tracks[0].info.length).format('H:mm:ss')}
             `);
                     message.channel.send(em);
                 }
@@ -78,7 +78,7 @@ module.exports = {
                         .setColor(0x2697ff)
                         .setThumbnail(`https://img.youtube.com/vi/${thu}/0.jpg`)
                         .setDescription(`
-            Title: [${song.tracks[0].info.title}](${song.tracks[0].info.uri})\nAuthor: ${song.tracks[0].info.author}
+            Title: [${song.tracks[0].info.title}](${song.tracks[0].info.uri})\nAuthor: ${song.tracks[0].info.author}\nLength: ${require('moment').utc(song.tracks[0].info.length).format('H:mm:ss')}
             `);
                     message.channel.send(em);
                 }

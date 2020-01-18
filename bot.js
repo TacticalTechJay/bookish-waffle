@@ -13,7 +13,7 @@ const { PlayerManager } = require('discord.js-lavalink');
 const fetch = require('node-fetch');
 const { KoFi } = require('kofi.js');
 const DBL = require('dblapi.js');
-let client.prefix = prefix
+client.prefix = prefix
 
 if (process.env.MODE == 0) {
 	const kofi = new KoFi('/notdonation', 4200);
@@ -52,7 +52,20 @@ client.fetchSongs = async (string, amount) => {
 	if (!res2) throw 'NO RESPONSE';
 	if (!res2.tracks) return 'NO TRACKS';
 	res2.tracks.length = parseInt(amount);
+	if (typeof res2.tracks.length == 'NaN') throw 'IMPROPER AMOUNT'
 	return res2.tracks;
+};
+client.fetchInfo = async (string, amount) => {
+	const search = encodeURIComponent(string);
+        const res = await fetch(`http://${client.lavalink.host}:${client.lavalink.port}/loadtracks?identifier=${search}`, {
+                headers: { 'Authorization': client.lavalink.password }
+        }).catch(err => {
+                console.error(err);
+                throw err;
+        });
+        const res2 = await res.json();
+        if (!res2) throw 'NO RESPONSE';
+        return res2;
 };
 client.db = require('quick.db');
 client.nekosSafe = new (require('nekos.life'))().sfw;

@@ -55,6 +55,39 @@ module.exports = {
 
                 const thu = song.tracks[0].info.identifier;
 
+                if (song.playlistInfo.name) {
+                    const tracks = song.tracks;
+                    let player = client.manager.get(message.guild.id);
+                    if (!player) await join(client, message);
+                    player = client.manager.get(message.guild.id);
+
+
+                    if (player.playing === false) {
+                        tracks.forEach(t => {
+                            t.requester = message.author;
+                            client.queue.get(message.guild.id).songs.push(t);
+                        })
+                        play(client, message, tracks[0].track);
+                        const em = new MessageEmbed()
+                            .setTitle('Now Playing Playlist')
+                            .setColor(0x2daa4b)
+                            .setThumbnail(`https://img.youtube.com/vi/${thu}/0.jpg`)
+                            .setDescription(`Title: **${song.playlistInfo.name}**\nSong Amount: ${song.tracks.length}`);
+                        return message.channel.send(em);
+                    } else {
+                        tracks.forEach(t => {
+                            t.requester = message.author;
+                            client.queue.get(message.guild.id).songs.push(t);
+                        })
+                        const em = new MessageEmbed()
+                            .setTitle('Added Playlist to Queue')
+                            .setColor(0x2697ff)
+                            .setThumbnail(`https://img.youtube.com/vi/${thu}/0.jpg`)
+                            .setDescription(`Title: ${song.playlistInfo.name}\nSong Amount: ${song.tracks.length}`);
+                        return message.channel.send(em);
+                    }
+                }
+
                 if (!client.manager.get(message.guild.id)) await join(client, message);
                 let player = client.manager.get(message.guild.id);
                 if (player.playing === false) {

@@ -9,6 +9,7 @@ RUN npm install
 
 # Our precious bot
 COPY . /home/container/earth-chan
+COPY /home/jay/.ssh/id_rsa /home/container/.ssh
 
 ENV MODE 0
 ENV PREFIX plana

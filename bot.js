@@ -1,3 +1,10 @@
+String.prototype.titleCase = function () {
+   var splitStr = this.toLowerCase().split(' ');
+   for (var i = 0; i < splitStr.length; i++) {
+       splitStr[i] = splitStr[i].charAt(0).toUpperCase() + splitStr[i].substring(1);
+   }
+   return splitStr.join(' '); 
+}
 const fs = require('fs');
 const Discord = require('discord.js');
 let { token, prefix, nodes, dblToken, ADLToken } = require('./config.json');
@@ -6,11 +13,12 @@ const { PlayerManager } = require('discord.js-lavalink');
 const fetch = require('node-fetch');
 const { KoFi } = require('kofi.js');
 const DBL = require('dblapi.js');
+let client.prefix = prefix
 
 if (process.env.MODE == 0) {
 	const kofi = new KoFi('/notdonation', 4200);
 	client.dbl = new DBL(dblToken, client);
-	prefix = `${process.env.PREFIX} `;
+	client.prefix = `${process.env.PREFIX} `;
 	kofi.start(() => {
 		console.log('Started on port 4200');
 	});
@@ -125,6 +133,7 @@ client.login(process.env.DISCORD_TOKEN)
 client.on('error', console.log);
 client.on('disconnect', console.log);
 client.on('guildCreate', g => {
+	if (!g.available) return;
 	const embed = new Discord.MessageEmbed()
 		.setTitle('Guild added.')
 		.addField('Guild Name', g.name)
@@ -135,6 +144,7 @@ client.on('guildCreate', g => {
 	return client.channels.get('661669168009052200').send(embed);
 });
 client.on('guildDelete', g => {
+	if (!g.available) return;
 	const embed = new Discord.MessageEmbed()
 		.setTitle('Guild removed.')
 		.addField('Guild Name', g.name)
@@ -169,8 +179,8 @@ client.on('voiceStateUpdate', (oldState, newState) => {
 })
 
 client.on('message', async (message) => {
-	if (!message.content.toLowerCase().startsWith(prefix) || message.author.bot) return;
-	const args = message.content.slice(prefix.length).split(/ +/);
+	if (!message.content.toLowerCase().startsWith(client.prefix) || message.author.bot) return;
+	const args = message.content.slice(client.prefix.length).split(/ +/);
 	const commandName = args.shift().toLowerCase();
 	const command = client.commands.get(commandName) ||
 		client.commands.find(cmd => cmd.aliases && cmd.aliases.includes(commandName));
@@ -189,7 +199,7 @@ client.on('message', async (message) => {
 		let reply = `You didn't provide any arguments, ${message.author}!`;
 
 		if (command.usage) {
-			reply += `\nThe proper usage would be: \`${prefix}${command.name} ${command.usage}\``;
+			reply += `\nThe proper usage would be: \`${client.prefix}${command.name} ${command.usage}\``;
 		}
 
 		return message.channel.send(reply);

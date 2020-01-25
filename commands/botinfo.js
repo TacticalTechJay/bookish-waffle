@@ -15,7 +15,7 @@ module.exports = {
         const embed = new Discord.MessageEmbed()
             .setColor(0x0099ff)
             .setTitle(`${client.user.username}!`)
-            .setDescription(`Hello! This is just some average bot that has the most basic functions like playing music or kicking users. If you wish to invite me, just use \`${client.prefix}invite\`(or click below) to add me!`)
+            .setDescription('Hello! This is just some average bot that has the most basic functions like playing music or kicking users. If you wish to invite me, just use `plana invite` (or click below) to add me!')
             .addField('❤ Total Guilds', amount2, true)
             .addField('💎 Shard ID', message.guild.shardID, true)
             .addField('👑 Creator', `${creator.username + '#' + creator.discriminator}`, true)

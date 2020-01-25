@@ -9,6 +9,7 @@ module.exports = {
         const player = client.manager.get(message.guild.id);
         const queue = client.queue.get(message.guild.id);
         if (!player || !queue) return message.channel.send('You need to be playing music to use this command');
+	if (!message.member.voice.channel) return message.channel.send('You need to be in a voice channel.')
         if (message.member.voice.channel !== message.guild.me.voice.channel) return message.channel.send('You need to be in the same voice channel as me!');
         if (!args[0]) return message.channel.send('You need to specify on whether you are going to seek forwards or backwards!');
         if (args[0].toLowerCase() == 'forwards' || args[0].toLowerCase() == 'forward') {

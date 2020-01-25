@@ -7,7 +7,7 @@ String.prototype.titleCase = function () {
 }
 const fs = require('fs');
 const Discord = require('discord.js');
-let { token, prefix, nodes, dblToken, ADLToken } = require('./config.json');
+let { token, prefix, nodes, dblToken, ADLToken, mongo } = require('./config.json');
 const client = new Discord.Client({ disableEveryone: true });
 const { PlayerManager } = require('discord.js-lavalink');
 const fetch = require('node-fetch');
@@ -67,7 +67,17 @@ client.fetchInfo = async (string, amount) => {
         if (!res2) throw 'NO RESPONSE';
         return res2;
 };
+
+
 client.db = require('quick.db');
+client.mongoose = require('mongoose');
+client.mongoose.connect("mongodb://jay:1234@localhost:27017/planet", {useNewUrlParser: true, useUnifiedTopology: true});
+client.mongoose.connection.on('error', console.error.bind(console, "connection error:"));
+client.mongoose.connection.once('open', function() {
+	console.log('Connection successful with MongoDB!')
+});
+client.mongoose.UserModel = require('./Schema/UserSchema.js');
+
 client.nekosSafe = new (require('nekos.life'))().sfw;
 client.nekosUnSafe = new (require('nekos.life'))().nsfw;
 client.pushStats = async (Token) => {
@@ -113,7 +123,7 @@ const cooldowns = new Discord.Collection();
 client.on('ready', async () => {
 
 	console.log('Ready!');
-	client.user.setActivity(`${prefix}help for help.`)
+	client.user.setActivity(`${client.prefix}help for help.`)
 		.then(presence => console.log(`Activity is ${presence.activity ? presence.activity.name : 'none'}`))
 		.catch(console.error);
 	client.lavalink = {

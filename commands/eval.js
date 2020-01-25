@@ -18,7 +18,11 @@ module.exports = {
 			const code = args.join(' ');
 			let evaled = await eval(code);
 			if (typeof evaled !== 'string') {
+<<<<<<< HEAD
 				evaled = require('util').inspect(evaled, false, 1);
+=======
+				evaled = require('util').inspect(evaled, {depth: 0});
+>>>>>>> 3fd5ae6ce773aec981b55a273e29e4f6aa8488c7
 			}
 			if (evaled.includes(client.token)) return message.channel.send('```Nice try FBI.```');
 			message.channel.send(`\`\`\`js\n${clean(evaled)}\`\`\``);

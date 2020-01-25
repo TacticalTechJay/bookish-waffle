@@ -1,0 +1,18 @@
+{
+    "token": "Main Bot's Token",
+    "beta_token": "Beta Bot's Token",
+    "prefix": "Choice of prefix.",
+    "nodes":[
+        {
+            "host": "IP Address",
+            "password": "Lavalink Password",
+            "port": "numerical port"
+        }],
+   "dblToken": "Top.gg Token" ,
+   "ksoftapi": "Ksoft Api Token",
+   "ADLToken": "Abstract Discord List Token",
+   "mongo": {
+       "user": "UserName",
+       "pwd": "PassWord"
+   }
+}

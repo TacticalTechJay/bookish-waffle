@@ -20,6 +20,7 @@ module.exports = {
         const embed = new (require('discord.js').MessageEmbed)()
             .setTitle(choice.title)
             .setImage(choice.image_url)
+	    .setURL(choice.source)
             .setFooter(`From ${choice.subreddit} | Posted by ${choice.author}`);
         message.channel.send(embed);
     }

@@ -1,8 +1,8 @@
 const { ksoftapi } = require('../config.json')
 module.exports = {
     name: 'meme',
-    description: 'Dank memer but 99% better because of a cooldown freedom.',
-    aliases: ['maymay', 'dankmaymay', 'meemee'],
+    description: 'Dank memer but 99% better because of a lower cooldown.',
+    aliases: ['maymay', 'dankmaymay', 'meemee', 'memes'],
     guildOnly: true,
     args: false,
     cooldown: 3,

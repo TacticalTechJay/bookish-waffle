@@ -27,7 +27,7 @@ module.exports = {
             .addField('Source Code', '[Click here](https://github.com/TacticalTechJay/bookish-waffle)', true)
             .addField('📞 Support Server', '[It is here!](https://discord.gg/PMbESdB)', true)
             .addField('☁ Hosted by', '[GalaxyGate](https://billing.galaxygate.net/aff.php?aff=59)', true)
-            .addField('Donations', '[Ko-fi](https://www.ko-fi.com/earthchandiscord)', true);
+            .addField('Donations', '[Ko-fi](https://www.ko-fi.com/earthchandiscord) | [Patreon](https://www.patreon.com/earthchandiscord)', true);
         message.channel.send(embed);
     }
 };

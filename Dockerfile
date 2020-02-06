@@ -1,4 +1,4 @@
-FROM node:11
+FROM node:13
 
 RUN mkdir -p /home/container/earth-chan
 WORKDIR /home/container/earth-chan
@@ -12,7 +12,7 @@ COPY . /home/container/earth-chan
 
 ENV MODE 0
 ENV PREFIX plana
-ENV VERSION v1.2.0
+ENV VERSION v1.2.3
 
 # Start me!
 CMD ["node", "index.js"]

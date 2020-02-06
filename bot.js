@@ -70,8 +70,9 @@ client.fetchInfo = async (string, amount) => {
 
 
 client.db = require('quick.db');
+client.qsaves = new client.db.table('qsaves');
 client.mongoose = require('mongoose');
-client.mongoose.connect("mongodb://jay:1234@localhost:27017/planet", {useNewUrlParser: true, useUnifiedTopology: true});
+client.mongoose.connect("mongodb://jay:1234@localhost:27017/test", {useNewUrlParser: true, useUnifiedTopology: true});
 client.mongoose.connection.on('error', console.error.bind(console, "connection error:"));
 client.mongoose.connection.once('open', function() {
 	console.log('Connection successful with MongoDB!')
@@ -103,12 +104,12 @@ for (const file of commandFiles) {
 }
 delete client.nekosUnSafe.neko;
 delete client.nekosUnSafe.avatar;
-if (process.env.MODE === 0) {
+if (process.env.MODE == 0) {
 	Object.entries(client.nekosUnSafe).map(x => {
 		client.commands.set(x[0].toLowerCase(), {
 			name: x[0].toLowerCase(),
 			description: 'Just your average lewd',
-				category: 'nsfw',
+			category: 'nsfw',
 			cooldown: 5,
 			voterOnly: true,
 			donatorOnly: true,
@@ -151,6 +152,7 @@ client.on('ready', async () => {
 	} catch(e) {
 		console.error(e);
 	}
+	
 });
 client.login(process.env.DISCORD_TOKEN)
 client.on('error', console.log);
@@ -233,13 +235,17 @@ client.on('message', async (message) => {
 	const now = Date.now();
 	const timestamps = cooldowns.get(command.name);
 	const cooldownAmount = (command.cooldown || 3) * 1000;
+	const cooldownDonAmount = ((command.cooldown-2 < 0 ? null : command.cooldown-2) || 1) * 1000;
 
 	if (!timestamps.has(message.author.id)) {
 		timestamps.set(message.author.id, now);
-		setTimeout(() => timestamps.delete(message.author.id), cooldownAmount);
+		if (client.db.get('donor').includes(`member_${message.author}`)) setTimeout(() => timestamps.delete(message.author.id), cooldownDonAmount)
+		else setTimeout(() => timestamps.delete(message.author.id), cooldownAmount)
 	}
 	else {
-		const expirationTime = timestamps.get(message.author.id) + cooldownAmount;
+		let expirationTime;
+		if (client.db.get('donor').includes(`member_${message.author.id}`)) expirationTime = timestamps.get(message.author.id) + cooldownDonAmount
+		else expirationTime = timestamps.get(message.author.id) + cooldownAmount
 
 		if (now < expirationTime) {
 			const timeLeft = (expirationTime - now) / 1000;
@@ -258,3 +264,219 @@ client.on('message', async (message) => {
 		message.reply(`there was an error trying to execute that command! Report this to the creator of this bot: \`${error}\``);
 	}
 });
+
+// START MUSIC RELATED FUNCTIONS 
+client.getSongs = async (string, client) => {
+	const fetch = require('node-fetch');
+	const res = await fetch(`http://${client.lavalink.host}:${client.lavalink.port}/loadtracks?identifier=${string}`, {
+		headers: { 'Authorization': client.lavalink.password }
+	}).catch(err => {
+		console.error(err)
+		return null;
+	});
+	const res2 = await res.json()
+	if (!res2) throw 'NO RESPONSE';
+	if (!res2.tracks) throw 'NO TRACKS';
+	return res2;
+}
+client.createQueue = (client, guild) => {
+	client.queue.set(guild, {
+		songs: [],
+		looping: false
+	});
+}
+client.askWhich = async (song, message) => {
+	let i = 0;
+	song.tracks.length = 10;
+	let em1 = new Discord.MessageEmbed()
+		.setTitle("Pick a song!")
+				.setDescription(song.tracks.map(t => `**${++i}** - ${Discord.Util.escapeMarkdown(t.info.title)} by ${Discord.Util.escapeMarkdown(t.info.author)}`).join('\n'))
+				.setFooter('Say "cancel" to cancel the selection!');
+	message.channel.send(em1).then(m => a = m);
+	return await message.channel.awaitMessages(message2 => message2.content > 0 && message2.content < 10 && message.author == message2.author || message2.content.toLowerCase().startsWith(`${client.prefix}search`) || message2.content.toLowerCase() == 'cancel', {
+		max: 1,
+		time: 15000,
+		errors: ['time']
+	})
+}
+client.getSong = (string, message, client, isSearch) => {
+	client.getSongs(string, client).then(async song => {
+		if (!song) return message.channel.send('No tracks were found');
+		if (!client.queue.get(message.guild.id)) createQueue(client, message.guild.id);
+
+		let thu = song.tracks[0].info.identifier
+
+		if (song.playlistInfo.name) {
+			const tracks = song.tracks;
+			let player = client.manager.get(message.guild.id);
+			if (!player) await client.join(client, message);
+			player = client.manager.get(message.guild.id);
+
+
+			if (player.playing === false) {
+				tracks.forEach(t => {
+					t.requester = message.author;
+					client.queue.get(message.guild.id).songs.push(t);
+				})
+				client.play(client, message, tracks[0].track);
+				const em = new Discord.MessageEmbed()
+					.setTitle('Now Playing Playlist')
+					.setColor(0x2daa4b)
+					.setThumbnail(`https://img.youtube.com/vi/${thu}/0.jpg`)
+					.setDescription(`Title: **${song.playlistInfo.name}**\nSong Amount: ${song.tracks.length}`);
+				return message.channel.send(em);
+			} else {
+				tracks.forEach(t => {
+					t.requester = message.author;
+					client.queue.get(message.guild.id).songs.push(t);
+				})
+				const em = new Discord.MessageEmbed()
+					.setTitle('Added Playlist to Queue')
+					.setColor(0x2697ff)
+					.setThumbnail(`https://img.youtube.com/vi/${thu}/0.jpg`)
+					.setDescription(`Title: ${song.playlistInfo.name}\nSong Amount: ${song.tracks.length}`);
+				return message.channel.send(em);
+			}
+		}
+
+
+		if (!client.manager.get(message.guild.id)) await client.join(client, message);
+		let player = client.manager.get(message.guild.id);
+		
+		if (player.playing === false) {
+			if (isSearch) {
+				return client.askWhich(song, message).then(async response => {
+					if (response.first().content.toLowerCase() == `${client.prefix}search`) return;
+					if (response.first().content.toLowerCase() == 'cancel') {
+						message.channel.messages.fetch(a.id).then(m => m.delete());
+						client.queue.delete(message.guild.id);
+						client.manager.leave(message.guild.id);
+						return message.channel.send('Cancelled. Gone. Reduced to atoms.')
+					}
+					const r = response.first().content - 1;
+					client.play(client, message, song.tracks[r].track);
+					thu = song.tracks[r].info.identifier;
+					message.channel.messages.fetch(a.id).then(m => m.delete());
+					song.tracks[r].requester = message.author;
+					client.queue.get(message.guild.id).songs.push(song.tracks[r]);
+					const em = new Discord.MessageEmbed()
+						.setTitle('Now Playing:')
+						.setColor(0x2daa4b)
+						.setThumbnail(`https://img.youtube.com/vi/${thu}/0.jpg`)
+						.setDescription(`
+						Title: [${song.tracks[r].info.title}](${song.tracks[r].info.uri})\nAuthor: ${song.tracks[r].info.author}
+						`);
+					return message.channel.send(em);
+				}).catch(e => {
+					if (e.size == 0) {
+						message.channel.messages.get(a.id).delete();
+						client.queue.delete(message.guild.id);
+						client.manager.leave(message.guild.id);
+						return message.channel.send('There was no response.');
+					}
+					console.error(e);
+				});
+			}
+			song.tracks[0].requester = message.author;
+			client.play(client, message, song.tracks[0].track);
+			client.queue.get(message.guild.id).songs.push(song.tracks[0]);
+			const em = new Discord.MessageEmbed()
+				.setTitle('Now Playing:')
+				.setColor(0x2daa4b)
+				.setThumbnail(`https://img.youtube.com/vi/${thu}/0.jpg`)
+				.setDescription(`
+			Title: [${song.tracks[0].info.title}](${song.tracks[0].info.uri})\nAuthor: ${song.tracks[0].info.author}\nLength: ${require('moment').utc(song.tracks[0].info.length).format('H:mm:ss')}
+			`);
+			return message.channel.send(em);
+		}
+		else {
+			if (isSearch) {
+				client.askWhich(song, message).then(async response => {
+					if (response.first().content.toLowerCase() == `${client.prefix}search`) return;
+					if (response.first().content.toLowerCase() == 'cancel') {
+						message.channel.messages.fetch(a.id).then(m => m.delete());
+						return message.channel.send('Cancelled. Gone. Reduced to atoms.')
+					}
+					let r = response.first().content - 1;
+					thu = song.tracks[r].info.identifier;
+					message.channel.messages.fetch(a.id).then(m => m.delete());
+					song.tracks[response.first().content - 1].requester = message.author;
+					client.queue.get(message.guild.id).songs.push(song.tracks[response.first().content - 1]);
+					let em = new Discord.MessageEmbed()
+						.setTitle('Added To Queue:')
+						.setColor(0x2697ff)
+						.setThumbnail(`https://img.youtube.com/vi/${thu}/0.jpg`)
+						.setDescription(`
+						Title: [${song.tracks[response.first().content - 1].info.title}](${song.tracks[response.first().content - 1].info.uri})\nAuthor: ${song.tracks[response.first().content - 1].info.author}
+						`);
+					return message.channel.send(em);    
+				}).catch(e => {
+					if (e.size == 0) {
+						message.channel.messages.get(a.id).delete();
+						return message.channel.send('There was no response')
+					};
+					console.error(e);
+				})
+			}
+			song.tracks[0].requester = message.author;
+			client.queue.get(message.guild.id).songs.push(song.tracks[0]);
+			const em = new Discord.MessageEmbed()
+				.setTitle('Added To Queue:')
+				.setColor(0x2697ff)
+				.setThumbnail(`https://img.youtube.com/vi/${thu}/0.jpg`)
+				.setDescription(`
+				Title: [${song.tracks[0].info.title}](${song.tracks[0].info.uri})\nAuthor: ${song.tracks[0].info.author}\nLength: ${require('moment').utc(song.tracks[0].info.length).format('H:mm:ss')}
+				`);
+			return message.channel.send(em);
+		}
+	}).catch(err => {
+		console.log(Object.keys(err));
+		return message.channel.send('There was an error. ' + err);
+	});
+}
+client.play = (client, message, track) => {
+	try {
+		const queue = client.queue.get(message.guild.id);
+		let player = client.manager.get(message.guild.id);
+		player.play(track);
+		player.once('end', async data => {
+
+			if (queue.looping == true) return client.play(client, message, queue.songs[0].track)
+			queue.songs.shift();
+
+			if (!queue.songs.length) {
+				return client.leave(client, message);
+			}
+			const thu = queue.songs[0].info.identifier;
+			client.play(client, message, queue.songs[0].track);
+			const em = new Discord.MessageEmbed()
+				.setTitle('Now Playing:')
+				.setColor(0x2daa4b)
+				.setThumbnail(`https://img.youtube.com/vi/${thu}/0.jpg`)
+				.setDescription(`
+	Title: [${queue.songs[0].info.title}](${queue.songs[0].info.uri})\nAuthor: ${queue.songs[0].info.author}
+	`);
+			return message.channel.send(em);
+
+		});
+	}
+	catch (err) {
+		console.log(err);
+	}
+}
+client.join = async(client, message) => {
+	await client.manager.join({
+		guild: message.guild.id,
+		channel: message.member.voice.channel.id,
+		host: client.lavalink.host
+	}, {
+		selfdeaf: true
+	});
+	console.log(`A player has spawned in ${message.guild.name} (${message.guild.id})`);
+}
+client.leave = async(client, message) => {
+	client.queue.delete(message.guild.id);
+	message.channel.send('It appears as though there are no tracks playing. :thinking:');
+	console.log(`A player has despawned in ${message.guild.name} (${message.guild.id})`);
+	return await client.manager.leave(message.guild.id);
+}

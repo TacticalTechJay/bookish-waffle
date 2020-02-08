@@ -72,7 +72,7 @@ client.fetchInfo = async (string, amount) => {
 client.db = require('quick.db');
 client.qsaves = new client.db.table('qsaves');
 client.mongoose = require('mongoose');
-client.mongoose.connect("mongodb://jay:1234@localhost:27017/test", {useNewUrlParser: true, useUnifiedTopology: true});
+client.mongoose.connect(`mongodb://jay:1234@${mongo.ip}:27017/test`, {useNewUrlParser: true, useUnifiedTopology: true});
 client.mongoose.connection.on('error', console.error.bind(console, "connection error:"));
 client.mongoose.connection.once('open', function() {
 	console.log('Connection successful with MongoDB!')
@@ -125,7 +125,7 @@ client.on('ready', async () => {
 
 	console.log('Ready!');
 	client.user.setActivity(`${client.prefix}help for help.`)
-		.then(presence => console.log(`Activity is ${presence.activity ? presence.activity.name : 'none'}`))
+		.then(presence => console.log(`Activity is ${presence.activities[0] ? presence.activities[0].name : 'none'}`))
 		.catch(console.error);
 	client.lavalink = {
 		host: nodes[0].host,
@@ -152,10 +152,10 @@ client.on('ready', async () => {
 	} catch(e) {
 		console.error(e);
 	}
-	
+
 });
-client.login(process.env.DISCORD_TOKEN)
-client.on('error', console.log);
+client.login(process.env.DISCORD_TOKEN);
+client.on('error', console.error);
 client.on('disconnect', console.log);
 client.on('guildCreate', g => {
 	if (!g.available) return;
@@ -285,7 +285,8 @@ client.createQueue = (client, guild) => {
 		looping: false
 	});
 }
-client.askWhich = async (song, message) => {
+client.askWhich = async (song, message, isSearch) => {
+	if (!isSearch) return;
 	let i = 0;
 	song.tracks.length = 10;
 	let em1 = new Discord.MessageEmbed()
@@ -344,8 +345,8 @@ client.getSong = (string, message, client, isSearch) => {
 		let player = client.manager.get(message.guild.id);
 		
 		if (player.playing === false) {
-			if (isSearch) {
-				return client.askWhich(song, message).then(async response => {
+				client.askWhich(song, message, isSearch).then(async response => {
+					if (!response) return;
 					if (response.first().content.toLowerCase() == `${client.prefix}search`) return;
 					if (response.first().content.toLowerCase() == 'cancel') {
 						message.channel.messages.fetch(a.id).then(m => m.delete());
@@ -368,7 +369,7 @@ client.getSong = (string, message, client, isSearch) => {
 						`);
 					return message.channel.send(em);
 				}).catch(e => {
-					if (e.size == 0) {
+					if (!e) {
 						message.channel.messages.get(a.id).delete();
 						client.queue.delete(message.guild.id);
 						client.manager.leave(message.guild.id);
@@ -376,58 +377,60 @@ client.getSong = (string, message, client, isSearch) => {
 					}
 					console.error(e);
 				});
-			}
-			song.tracks[0].requester = message.author;
-			client.play(client, message, song.tracks[0].track);
-			client.queue.get(message.guild.id).songs.push(song.tracks[0]);
-			const em = new Discord.MessageEmbed()
-				.setTitle('Now Playing:')
-				.setColor(0x2daa4b)
-				.setThumbnail(`https://img.youtube.com/vi/${thu}/0.jpg`)
-				.setDescription(`
-			Title: [${song.tracks[0].info.title}](${song.tracks[0].info.uri})\nAuthor: ${song.tracks[0].info.author}\nLength: ${require('moment').utc(song.tracks[0].info.length).format('H:mm:ss')}
-			`);
-			return message.channel.send(em);
-		}
-		else {
-			if (isSearch) {
-				client.askWhich(song, message).then(async response => {
-					if (response.first().content.toLowerCase() == `${client.prefix}search`) return;
-					if (response.first().content.toLowerCase() == 'cancel') {
-						message.channel.messages.fetch(a.id).then(m => m.delete());
-						return message.channel.send('Cancelled. Gone. Reduced to atoms.')
-					}
-					let r = response.first().content - 1;
-					thu = song.tracks[r].info.identifier;
-					message.channel.messages.fetch(a.id).then(m => m.delete());
-					song.tracks[response.first().content - 1].requester = message.author;
-					client.queue.get(message.guild.id).songs.push(song.tracks[response.first().content - 1]);
-					let em = new Discord.MessageEmbed()
-						.setTitle('Added To Queue:')
-						.setColor(0x2697ff)
-						.setThumbnail(`https://img.youtube.com/vi/${thu}/0.jpg`)
-						.setDescription(`
-						Title: [${song.tracks[response.first().content - 1].info.title}](${song.tracks[response.first().content - 1].info.uri})\nAuthor: ${song.tracks[response.first().content - 1].info.author}
-						`);
-					return message.channel.send(em);    
-				}).catch(e => {
-					if (e.size == 0) {
-						message.channel.messages.get(a.id).delete();
-						return message.channel.send('There was no response')
-					};
-					console.error(e);
-				})
-			}
-			song.tracks[0].requester = message.author;
-			client.queue.get(message.guild.id).songs.push(song.tracks[0]);
-			const em = new Discord.MessageEmbed()
-				.setTitle('Added To Queue:')
-				.setColor(0x2697ff)
-				.setThumbnail(`https://img.youtube.com/vi/${thu}/0.jpg`)
-				.setDescription(`
+			if (!isSearch) {
+				song.tracks[0].requester = message.author;
+				client.play(client, message, song.tracks[0].track);
+				client.queue.get(message.guild.id).songs.push(song.tracks[0]);
+				const em = new Discord.MessageEmbed()
+					.setTitle('Now Playing:')
+					.setColor(0x2daa4b)
+					.setThumbnail(`https://img.youtube.com/vi/${thu}/0.jpg`)
+					.setDescription(`
 				Title: [${song.tracks[0].info.title}](${song.tracks[0].info.uri})\nAuthor: ${song.tracks[0].info.author}\nLength: ${require('moment').utc(song.tracks[0].info.length).format('H:mm:ss')}
 				`);
-			return message.channel.send(em);
+				return message.channel.send(em);
+			}
+		}
+		else {
+			client.askWhich(song, message, isSearch).then(async response => {
+				if (!response) return;
+				if (response.first().content.toLowerCase() == `${client.prefix}search`) return;
+				if (response.first().content.toLowerCase() == 'cancel') {
+					message.channel.messages.fetch(a.id).then(m => m.delete());
+					return message.channel.send('Cancelled. Gone. Reduced to atoms.')
+				}
+				let r = response.first().content - 1;
+				thu = song.tracks[r].info.identifier;
+				message.channel.messages.fetch(a.id).then(m => m.delete());
+				song.tracks[response.first().content - 1].requester = message.author;
+				client.queue.get(message.guild.id).songs.push(song.tracks[response.first().content - 1]);
+				let em = new Discord.MessageEmbed()
+					.setTitle('Added To Queue:')
+					.setColor(0x2697ff)
+					.setThumbnail(`https://img.youtube.com/vi/${thu}/0.jpg`)
+					.setDescription(`
+					Title: [${song.tracks[response.first().content - 1].info.title}](${song.tracks[response.first().content - 1].info.uri})\nAuthor: ${song.tracks[response.first().content - 1].info.author}
+					`);
+				return message.channel.send(em);    
+			}).catch(e => {
+				if (e.size == 0) {
+					message.channel.messages.get(a.id).delete();
+					return message.channel.send('There was no response')
+				};
+				console.error(e);
+			})
+			if (!isSearch) {
+				song.tracks[0].requester = message.author;
+				client.queue.get(message.guild.id).songs.push(song.tracks[0]);
+				const em = new Discord.MessageEmbed()
+					.setTitle('Added To Queue:')
+					.setColor(0x2697ff)
+					.setThumbnail(`https://img.youtube.com/vi/${thu}/0.jpg`)
+					.setDescription(`
+					Title: [${song.tracks[0].info.title}](${song.tracks[0].info.uri})\nAuthor: ${song.tracks[0].info.author}\nLength: ${require('moment').utc(song.tracks[0].info.length).format('H:mm:ss')}
+					`);
+				return message.channel.send(em);
+			}
 		}
 	}).catch(err => {
 		console.log(Object.keys(err));
@@ -472,6 +475,7 @@ client.join = async(client, message) => {
 	}, {
 		selfdeaf: true
 	});
+	await client.manager.get(message.guild.id).volume(50);
 	console.log(`A player has spawned in ${message.guild.name} (${message.guild.id})`);
 }
 client.leave = async(client, message) => {

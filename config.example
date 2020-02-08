@@ -13,6 +13,7 @@
    "ADLToken": "Abstract Discord List Token",
    "mongo": {
        "user": "UserName",
+       "ip": "ip",
        "pwd": "PassWord"
    }
 }

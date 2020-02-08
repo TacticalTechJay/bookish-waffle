@@ -23,8 +23,8 @@ module.exports = {
                     return message.channel.send('Added to queue!')
                 } else if (r.first().content.toLowerCase() == 'no') return message.channel.send('Got it!')
             } catch (e) {
-                if (!e) return message.channel.send('There was no response.');
-                console.error(e);
+                if (e.size == 0) return message.channel.send('There was no response.');
+                return console.error(e);
             }
         } else if (!queue && !client.manager.get(message.guild.id)) {
             let qconstruct = {

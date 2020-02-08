@@ -25,7 +25,7 @@ module.exports = {
                     return message.channel.send('Saved! <:tickYes:315009125694177281>');
                 } else if (r.first().content.toLowerCase() == 'no') return message.channel.send('Won\'t save.');     
             } catch (e) {
-                if (!e) return message.channel.send('No response was provided.')
+                if (e.size == 0) return message.channel.send('No response was provided.')
                 return console.error(e);
             }
         }

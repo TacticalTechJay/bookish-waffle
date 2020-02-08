@@ -26,7 +26,7 @@ module.exports = {
                 } else if (r.first().content.toLowerCase() == 'no') return message.channel.send('Won\'t save.');     
             } catch (e) {
                 if (!e) return message.channel.send('No response was provided.')
-                console.error(e);
+                return console.error(e);
             }
         }
         queue.songs.forEach(s => client.qsaves.set(`g${message.guild.id}me${message.author.id}`, s));

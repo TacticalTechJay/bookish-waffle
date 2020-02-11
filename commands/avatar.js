@@ -13,7 +13,7 @@ module.exports = {
         if (!args[0]) {
             const embed = new MessageEmbed()
             .setTitle(`${message.author.username}'s Avatar`)
-            .setImage(message.author.displayAvatarURL({size:2048}))
+            .setImage(message.author.displayAvatarURL({ size: 2048, dynamic: true }))
             .setColor(0x36bdfc);
             return message.channel.send(embed);
         }
@@ -21,7 +21,7 @@ module.exports = {
         const embed = new MessageEmbed()
             .setTitle(`${user.username}'s Avatar`)
             .setColor(0x36bdfc)
-            .setImage(user.displayAvatarURL({size: 2048}));
+            .setImage(user.displayAvatarURL({size: 2048, dynamic: true}));
         message.channel.send(embed);
     }
 }

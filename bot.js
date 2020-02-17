@@ -83,8 +83,8 @@ client.nekosSafe = new (require('nekos.life'))().sfw;
 client.nekosUnSafe = new (require('nekos.life'))().nsfw;
 client.pushStats = async (Token) => {
 	const body = {
-		'users': client.users.size,
-		'servers': client.guilds.size,
+		'users': client.users.cache.size,
+		'servers': client.guilds.cache.size,
 		'shards': client.shard.count
 	};
 	const res = await fetch(`https://abstractlist.net/api/bot/${client.user.id}/stats`, {
@@ -140,7 +140,7 @@ client.on('ready', async () => {
 		setInterval(async () => {
 			const body = {
 				'users': client.users.size,
-				'servers': client.guilds.size,
+				'servers': client.guilds.cache.size,
 				'shards': client.shard.count
 			};
 			await fetch(`https://abstractlist.net/api/bot/${client.user.id}/stats`, {
@@ -235,7 +235,7 @@ client.on('message', async (message) => {
 	const now = Date.now();
 	const timestamps = cooldowns.get(command.name);
 	const cooldownAmount = (command.cooldown || 3) * 1000;
-	const cooldownDonAmount = ((command.cooldown-2 < 0 ? null : command.cooldown-2) || 1) * 1000;
+	const cooldownDonAmount = ((command.cooldown-2 < 0 ? 1 : command.cooldown-2)) * 1000;
 
 	if (!timestamps.has(message.author.id)) {
 		timestamps.set(message.author.id, now);
@@ -433,7 +433,7 @@ client.getSong = (string, message, client, isSearch) => {
 			}
 		}
 	}).catch(err => {
-		console.log(Object.keys(err));
+		console.log(err);
 		return message.channel.send('There was an error. ' + err);
 	});
 }

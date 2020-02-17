@@ -10,7 +10,7 @@ module.exports = {
 	async execute(message, args, client) {
 		const { MessageEmbed } = require('discord.js');
 		const { url } = await client.nekosSafe.slap();
-		const target = message.mentions.members.first() || message.guild.members.get(args[0]);
+		const target = message.mentions.members.first() || message.guild.members.cache.get(args[0]);
 		message.channel.send({ content: `${target ? `${target} was slapped by ${message.author}!` : `${message.author} you wanted it, so you'll get it.`}`, embed: { image: { url: url } } } );
 	}
 }

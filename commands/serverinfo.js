@@ -17,9 +17,9 @@ module.exports = {
             .addField('Boost Count', message.guild.premiumSubscriptionCount, true)
             .addField('Boost Level', message.guild.premiumTier, true)
             .addField('Server Creation Date', require('moment')(message.guild.createdAt).format('MMMM Do[,] YYYY'), true)
-            .addField('Server Users', `${message.guild.members.size} total users\n${message.guild.members.filter(m => !m.user.bot).size} members\n${message.guild.members.filter(m => m.user.bot).size} bots`, true)
-            .addField('Channels', `${message.guild.channels.filter(c => c.type == 'category').size} categories\n${message.guild.channels.filter(c => c.type == 'voice').size} voice channels\n${message.guild.channels.filter(c => c.type == 'text').size} text channels`, true)
-	    .addField(`Roles (${message.guild.roles.size})`, message.guild.roles.map(x => x.toString()).join(' ').substring(0, 1024).replace(/\s\S+[^>]$/, ''));
+            .addField('Server Users', `${message.guild.members.cache.size} total users\n${message.guild.members.cache.filter(m => !m.user.bot).size} members\n${message.guild.members.cache.filter(m => m.user.bot).size} bots`, true)
+            .addField('Channels', `${message.guild.channels.cache.filter(c => c.type == 'category').size} categories\n${message.guild.channels.cache.filter(c => c.type == 'voice').size} voice channels\n${message.guild.channels.cache.filter(c => c.type == 'text').size} text channels`, true)
+	    .addField(`Roles (${message.guild.roles.cache.size})`, message.guild.roles.cache.map(x => x.toString()).join(' ').substring(0, 1024).replace(/\s\S+[^>]$/, ''));
         message.channel.send(embed);
     }
 }

@@ -6,7 +6,7 @@ module.exports = {
 	args: true,
 	usage: '<Mention/UserID>',
 	execute(message, args) {
-		const member = message.mentions.members.first() || message.guild.members.get(args[0]) || message.guild.members.find(m => m.nickname.startsWith(args[0]))
+		const member = message.mentions.members.first() || message.guild.members.cache.get(args[0]) || message.guild.members.cache.find(m => m.nickname.startsWith(args[0]))
 		if (!member) {
 			return message.channel.send('Could not find the member. Try using their ID.');
 		}

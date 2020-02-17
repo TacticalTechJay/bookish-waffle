@@ -19,7 +19,7 @@ module.exports = {
                 .addField('Presence', user.presence.status, true)
                 .addField('Created Date', require('moment')(user.user.createdAt).format('MMMM Do[,] YYYY'), true)
                 .addField('Joined Date', require('moment')(user.joinedAt).format('MMMM Do[,] YYYY'), true)
-		.addField(`Roles (${--message.member.roles.size})`, message.member.roles ? message.member.roles.map(x => x.toString()).join(' ').substring(0, 1024).replace(/\s\S+[^>]$/, '') : 'None')
+		.addField(`Roles (${--message.member.roles.cache.size})`, message.member.roles.cache ? message.member.roles.cache.map(x => x.toString()).join(' ').substring(0, 1024).replace(/\s\S+[^>]$/, '') : 'None')
                 .setColor(0x679f28)
                 .setThumbnail(user.user.displayAvatarURL());
             return message.channel.send(embed);
@@ -46,7 +46,7 @@ module.exports = {
                 .addField('Presence', user.presence.status, true)
                 .addField('Created Date', require('moment')(user.user.createdAt).format('MMMM Do[,] YYYY'), true)
                 .addField('Joined Date', `${user.joinedAt ? require('moment')(user.joinedAt).format('MMMM Do[,] YYYY') : 'N/A'}`, true)
-		.addField(`Roles (${--user.roles.size})`, user.roles ? user.roles.map(x => x.toString()).join(' ').substring(0, 1024).replace(/\s\S+[^>]$/, '') : 'None')
+		.addField(`Roles (${--user.roles.cache.size})`, user.roles.cache ? user.roles.cache.map(x => x.toString()).join(' ').substring(0, 1024).replace(/\s\S+[^>]$/, '') : 'None')
                 .setColor(0x679f28)
                 .setThumbnail(user.user.displayAvatarURL());
             return message.channel.send(embed);

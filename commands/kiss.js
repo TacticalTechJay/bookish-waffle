@@ -11,7 +11,7 @@ module.exports = {
     async execute(message, args, client) {
         const fetch = require('node-fetch');
         const { MessageEmbed } = require('discord.js');
-        const target = message.mentions.members.first() || message.guild.members.get(args[0]);
+        const target = message.mentions.members.first() || message.guild.members.cache.get(args[0]);
         const res = await fetch('https://api.ksoft.si/images/random-image?tag=kiss', {
             headers: { 'Authorization': `Bearer ${config.ksoftapi}` }
         });

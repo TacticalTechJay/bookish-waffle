@@ -8,20 +8,17 @@ module.exports = {
     cooldown: 3,
     async execute(message) {
         const fetch = require('node-fetch');
-        const res = await fetch('https://api.ksoft.si/images/rand-reddit/dankmemes?remove_nsfw=true&span=week', {
+        let choice = ['dankmemes', 'memes', 'me_irl', 'meirl', 'crappydesign', 'hmm'][Math.floor(Math.random() * 6)]
+        console.log(choice);
+        const res = await fetch(`https://api.ksoft.si/images/rand-reddit/${choice}?remove_nsfw=true&span'=week'`, {
             headers: { 'Authorization': `Bearer ${ksoftapi}` }
         });
         const r = await res.json();
-        const res2 = await fetch('https://api.ksoft.si/images/rand-reddit/dankmemes?remove_nsfw=true&span=week', {
-            headers: { 'Authorization': `Bearer ${ksoftapi}` }
-        });
-        const r2 = await res2.json();
-        let choice = [r, r2][Math.floor(Math.random() * 2)]
         const embed = new (require('discord.js').MessageEmbed)()
-            .setTitle(choice.title)
-            .setImage(choice.image_url)
-	    .setURL(choice.source)
-            .setFooter(`From ${choice.subreddit} | Posted by ${choice.author}`);
+            .setTitle(r.title)
+            .setImage(r.image_url)
+	        .setURL(r.source)
+            .setFooter(`From ${r.subreddit} | Posted by ${r.author}`);
         message.channel.send(embed);
     }
 }

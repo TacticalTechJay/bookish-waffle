@@ -7,6 +7,10 @@ module.exports = {
     usage: '<String>',
     execute(message, args, client) {
         const speech = args.join(' ');
+            if (!speech) {
+                return message.channel.send("no args were provided.");
+            }
+        
         if (speech.toLowerCase().includes("nigga") || speech.toLowerCase().includes("porn")) return message.channel.send('**I\'d say all the things you would like but not that.**');
         return message.channel.send(speech);
     }

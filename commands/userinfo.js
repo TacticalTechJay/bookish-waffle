@@ -24,7 +24,7 @@ module.exports = {
                 .setThumbnail(user.user.displayAvatarURL());
             return message.channel.send(embed);
         }
-        let user = await message.mentions.members.first() || await message.guild.members.get(args[0]);
+        let user = await message.mentions.members.first() || await message.guild.members.cache.get(args[0]);
         if (!user) { 
             user = await client.users.fetch(args[0]);
             const embed = new MessageEmbed()

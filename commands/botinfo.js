@@ -8,7 +8,7 @@ module.exports = {
     testing: false,
     aliases: ['bi'],
     async execute(message, nothing, client) {
-        const amount = await client.shard.broadcastEval('this.guilds.size');
+        const amount = await client.shard.broadcastEval('this.guilds.cache.size');
         const amount2 = await amount.reduce((prev, val) => prev + val, 0);
         let creator = await client.users.fetch('127888387364487168');
         let BOTID = client.user.id;

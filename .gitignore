@@ -7,3 +7,4 @@ config.json
 node_modules/
 json.sqlite
 marslogs.txt
+portainer-stack-agent.yml

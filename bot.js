@@ -166,7 +166,7 @@ client.on('guildCreate', g => {
 		.addField('Guild Onwer', g.owner.user.username)
 		.addField('Guild Members (Excluding bots)', g.members.cache.filter(m => !m.user.bot).size)
 		.setColor('GREEN');
-	return client.channels.get('661669168009052200').send(embed);
+	return client.channels.cache.get('661669168009052200').send(embed);
 });
 client.on('guildDelete', g => {
 	if (!g.available) return;
@@ -177,7 +177,7 @@ client.on('guildDelete', g => {
 		.addField('Guild Onwer', g.owner.user.username)
 		.addField('Guild Members (Excluding bots)', g.members.cache.filter(m => !m.user.bot).size)
 		.setColor('RED');
-	return client.channels.get('661669168009052200').send(embed);
+	return client.channels.cache.get('661669168009052200').send(embed);
 });
 client.on('voiceStateUpdate', (oldState, newState) => {
 	if (newState.member == newState.guild.me) {

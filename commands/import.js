@@ -8,7 +8,7 @@ module.exports = {
     async execute(message, args, client) {
         const queue = client.queue.get(message.guild.id);
         const qsave = client.qsaves.get(`g${message.guild.id}me${message.author.id}`);
-        if (!qsave) return message.channel.send('There is no queue that you have saved.');
+        if (!qsave) return message.channel.send('You currently have no saved queue.');
         if (queue) {
             const filter = m2 => m2.content.toLowerCase() == 'yes' || m2.content.toLowerCase() == 'no' && m2.author.equals(message.author) && !m2.content.startsWith(client.prefix)
             try {

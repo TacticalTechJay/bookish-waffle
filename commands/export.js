@@ -20,10 +20,9 @@ module.exports = {
                     errors: ['time']
                 })
                 if (r.first().content.toLowerCase() == 'yes') {
-                    await client.qsaves.delete(`g${message.guild.id}me${message.author.id}`);
-                    await queue.songs.map(s => client.qsaves.set(`g${message.guild.id}me${message.author.id}`, s));
+                    await client.qsaves.set(`g${message.guild.id}me${message.author.id}`, queue.songs);
                     return message.channel.send('Saved! <:tickYes:315009125694177281>');
-                } else if (r.first().content.toLowerCase() == 'no') return message.channel.send('Won\'t save.');     
+                } else if (r.first().content.toLowerCase() == 'no') return message.channel.send('Canceled.');     
             } catch (e) {
                 if (e.size == 0) return message.channel.send('No response was provided.')
                 return console.error(e);

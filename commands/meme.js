@@ -4,6 +4,7 @@ module.exports = {
     description: 'Dank memer but 99% better because of a lower cooldown.',
     aliases: ['maymay', 'dankmaymay', 'meemee', 'memes'],
     guildOnly: true,
+    category: 'util',
     args: false,
     cooldown: 3,
     async execute(message) {

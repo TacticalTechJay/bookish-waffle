@@ -2,12 +2,13 @@ module.exports = {
 	name: 'roleinfo',
 	description: 'Get the role\'s info',
 	usage: '<RoleName/RoleMention>',
+	category: 'util',
 	aliases: ['ri'],
 	async execute (message, args, client) {
-		const target = message.mentions.roles.first() || message.guild.roles.find(c => c.name == args.join(' ')) || message.member.roles.highest;
+		const target = message.mentions.roles.first() || message.guild.roles.cache.find(c => c.name == args.join(' ')) || message.member.roles.highest;
 		const embed = new (require('discord.js').MessageEmbed)()
 			.setTitle(`RoleInfo for ${target.name} (${target.id})`)
-			.addField('Created', require('moment').utc(target.createdAt).format('LLL'), true)
+			.addField('Created Time & Date', require('moment').utc(target.createdAt).format('LLL'), true)
 			.setColor(target.color)
 			.addField('Position', target.position, true)
 			.addField('Members', target.members.size, true)

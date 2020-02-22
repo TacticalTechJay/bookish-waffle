@@ -13,7 +13,7 @@ module.exports = {
         if (message.guild.me.voice.channel) {
             if (message.member.voice.channel.id !== message.guild.me.voice.channel.id) return message.channel.send('No.');
         }
-		if (!message.member.guild.me.hasPermission(['SPEAK', 'CONNECT', 'VIEW_CHANNEL'])) return message.channel.send('I do not have the required permissions to play music');
+		if (!message.guild.me.hasPermission(['SPEAK', 'CONNECT', 'VIEW_CHANNEL'])) return message.channel.send('I do not have the required permissions to play music');
 		if (!message.member.voice.channel.permissionsFor(message.guild.me).has(['SPEAK', 'CONNECT', 'VIEW_CHANNEL'])) return message.channel.send('I do not have the required permisssions to play music');
         const player = await client.manager.get(message.guild.id);
         if (!player) {

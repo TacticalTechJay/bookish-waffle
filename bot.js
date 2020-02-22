@@ -303,7 +303,7 @@ client.askWhich = async (song, message, isSearch) => {
 client.getSong = (string, message, client, isSearch) => {
 	client.getSongs(string, client).then(async song => {
 		if (!song) return message.channel.send('No tracks were found');
-		if (!client.queue.get(message.guild.id)) createQueue(client, message.guild.id);
+		if (!client.queue.get(message.guild.id)) client.createQueue(client, message.guild.id);
 
 		let thu = song.tracks[0].info.identifier
 

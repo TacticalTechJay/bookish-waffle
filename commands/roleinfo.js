@@ -12,8 +12,9 @@ module.exports = {
 			.setColor(target.color)
 			.addField('Position', target.position, true)
 			.addField('Members', target.members.size, true)
-			.addField('Hoisted', target.hoist ? 'Yes' : 'No', true)
-			.addField('Managed', target.managed ? 'Yes' : 'No', true)
+			.addField('Is Hoisted', target.hoist ? 'Yes' : 'No', true)
+			.addField('Is Managed', target.managed ? 'Yes' : 'No', true)
+			.addField('Color', `#${target.color.toString(16)}`, true)
 			.addField('Permissions', `\`\`\`${target.permissions.toArray().join('\n')}\`\`\``)
 		message.channel.send(embed).catch(e => console.error(`RoleInfo: ${e}`))
 	}

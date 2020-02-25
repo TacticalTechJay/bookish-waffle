@@ -18,7 +18,7 @@ module.exports = {
             .setColor(0x36bdfc);
             return message.channel.send(embed);
         }
-        const user = await message.mentions.users.first() || await client.users.get(args[0]) ||await client.fetchUser(args[0]);
+        const user = await message.mentions.users.first() || await client.users.cache.get(args[0]) ||await client.fetchUser(args[0]);
         const embed = new MessageEmbed()
             .setTitle(`${user.username}'s Avatar`)
             .setColor(0x36bdfc)

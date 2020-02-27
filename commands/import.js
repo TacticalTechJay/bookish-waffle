@@ -14,29 +14,32 @@ module.exports = {
             const filter = m2 => m2.content.toLowerCase() == 'yes' || m2.content.toLowerCase() == 'no' && m2.author.id == message.author.id && !m2.content.startsWith(client.prefix);
             if (message.guild.me.voice.channel !== message.member.voice.channel) return message.channel.send('You need to be in the same voice channel as me to use this command.');
             try {
-                message.channel.send('Are you sure you want to add your saved queue to this current one?\n**Yes** or **No**')                  
+                message.channel.send('Are you sure you want to add your saved queue to this current one?\n**Yes** or **No**');
                 const r = await message.channel.awaitMessages(filter, {
                     max: 1,
                     time: 15000,
                     errors: ['time']
-                })
+                });
                 if (r.first().content.toLowerCase() == 'yes') {
                     qsave.map(s => queue.songs.push(s));
-                    return message.channel.send('Added to queue!')
-                } else if (r.first().content.toLowerCase() == 'no') return message.channel.send('Cancelled.')
-            } catch (e) {
+                    return message.channel.send('Added to queue!');
+                }
+ else if (r.first().content.toLowerCase() == 'no') {return message.channel.send('Cancelled.');}
+            }
+ catch (e) {
                 if (e.size == 0) return message.channel.send('There was no response.');
                 return console.error(e);
             }
-        } else if (!queue && !client.manager.get(message.guild.id)) {
-            let qconstruct = {
+        }
+ else if (!queue && !client.manager.get(message.guild.id)) {
+            const qconstruct = {
                 songs: qsave,
                 looping: false
-            }
+            };
             client.queue.set(message.guild.id, qconstruct);
             client.join(client, message);
             client.play(client, message, client.queue.get(message.guild.id).songs[0].track);
-            return message.channel.send('Set and now playing!')
+            return message.channel.send('Set and now playing!');
         }
     }
-}
+};

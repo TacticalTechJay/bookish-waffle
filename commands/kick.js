@@ -6,7 +6,7 @@ module.exports = {
 	args: true,
 	usage: '<Mention/UserID>',
 	execute(message, args) {
-		const member = message.mentions.members.first() || message.guild.members.cache.get(args[0]) || message.guild.members.cache.find(m => m.nickname.startsWith(args[0]))
+		const member = message.mentions.members.first() || message.guild.members.cache.get(args[0]) || message.guild.members.cache.find(m => m.nickname.startsWith(args[0]));
 		if (!member) {
 			return message.channel.send('Could not find the member. Try using their ID.');
 		}
@@ -24,7 +24,7 @@ module.exports = {
 			return member.kick('No reason given.')
 				.then(message.reply(`${member.user.tag} has been kicked by ${message.author.tag} for the following reason: No reason given.`));
 		}
-		member.kick({reason: reason})
+		member.kick({ reason: reason })
 			.then(() => member.send(`You have been kicked from ${message.guild.id} for the following reason: ${reason}`))
 			.catch(error => message.reply(`Sorry, I couldn't kick this user for a quite specific reason... Report this to the creator of this bot: ${error}`));
 		return message.reply(`${member.user.tag} has been kicked by ${message.author.tag} for the following reason: ${reason}`);

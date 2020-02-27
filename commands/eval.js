@@ -4,7 +4,7 @@ module.exports = {
     guildOnly: false,
     testing: false,
     cooldown: 0,
-    async execute(message, args, client, dbl) {
+    async execute(message, args, client) {
         if (!client.db.get('trusted').includes(message.author.id)) return;
 		const clean = text => {
 			if (typeof (text) === 'string') {
@@ -18,7 +18,7 @@ module.exports = {
 			const code = args.join(' ');
 			let evaled = await eval(code);
 			if (typeof evaled !== 'string') {
-				evaled = require('util').inspect(evaled, {depth: 0});
+				evaled = require('util').inspect(evaled, { depth: 0 });
 			}
 			if (evaled.includes(client.token)) return message.channel.send('```Nice try FBI.```');
 			message.channel.send(`\`\`\`js\n${clean(evaled)}\`\`\``);
@@ -27,4 +27,4 @@ module.exports = {
 			message.channel.send(`\`ERROR\` \`\`\`xl\n${clean(err)}\n\`\`\``);
 		}
     }
-}
+};

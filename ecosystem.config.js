@@ -7,7 +7,7 @@ module.exports = {
     autorestart: true,
     watch: false,
     max_memory_restart: '1G',
-    "exec_mode": "fork",
+    'exec_mode': 'fork',
     env: {
       MODE: 1,
       VERSION: 'Superior'

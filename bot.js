@@ -1,19 +1,20 @@
-String.prototype.titleCase = function () {
-   var splitStr = this.toLowerCase().split(' ');
-   for (var i = 0; i < splitStr.length; i++) {
+String.prototype.titleCase = function() {
+   const splitStr = this.toLowerCase().split(' ');
+   for (let i = 0; i < splitStr.length; i++) {
        splitStr[i] = splitStr[i].charAt(0).toUpperCase() + splitStr[i].substring(1);
    }
-   return splitStr.join(' '); 
-}
+   return splitStr.join(' ');
+};
 const fs = require('fs');
 const Discord = require('discord.js');
-let { token, prefix, nodes, dblToken, ADLToken, mongo } = require('./config.json');
+const { prefix, nodes, dblToken, ADLToken, mongo } = require('./config.json');
 const client = new Discord.Client({ disableEveryone: true, messageCacheMaxSize: 100, messageCacheLifetime: 3600, messageSweepInterval: 7200 });
 const { PlayerManager } = require('discord.js-lavalink');
 const fetch = require('node-fetch');
 const { KoFi } = require('kofi.js');
 const DBL = require('dblapi.js');
-client.prefix = prefix
+let a;
+client.prefix = prefix;
 
 if (process.env.MODE == 0) {
 	const kofi = new KoFi('/notdonation', 4200);
@@ -52,10 +53,10 @@ client.fetchSongs = async (string, amount) => {
 	if (!res2) throw 'NO RESPONSE';
 	if (!res2.tracks) return 'NO TRACKS';
 	res2.tracks.length = parseInt(amount);
-	if (typeof res2.tracks.length == 'NaN') throw 'IMPROPER AMOUNT'
+	if (isNaN(res2.tracks.length)) throw 'IMPROPER AMOUNT';
 	return res2.tracks;
 };
-client.fetchInfo = async (string, amount) => {
+client.fetchInfo = async (string) => {
 	const search = encodeURIComponent(string);
         const res = await fetch(`http://${client.lavalink.host}:${client.lavalink.port}/loadtracks?identifier=${search}`, {
                 headers: { 'Authorization': client.lavalink.password }
@@ -72,10 +73,10 @@ client.fetchInfo = async (string, amount) => {
 client.db = require('quick.db');
 client.qsaves = new client.db.table('qsaves');
 client.mongoose = require('mongoose');
-client.mongoose.connect(`mongodb://jay:1234@${mongo.ip}:27017/test`, {useNewUrlParser: true, useUnifiedTopology: true});
-client.mongoose.connection.on('error', console.error.bind(console, "connection error:"));
+client.mongoose.connect(`mongodb://jay:1234@${mongo.ip}:27017/test`, { useNewUrlParser: true, useUnifiedTopology: true });
+client.mongoose.connection.on('error', console.error.bind(console, 'connection error:'));
 client.mongoose.connection.once('open', function() {
-	console.log('Connection successful with MongoDB!')
+	console.log('Connection successful with MongoDB!');
 });
 client.mongoose.UserModel = require('./Schema/UserSchema.js');
 
@@ -149,7 +150,8 @@ client.on('ready', async () => {
 				headers: { 'Content-type': 'application/json', 'Authorization': ADLToken }
 			});
 		}, 1800000);
-	} catch(e) {
+	}
+ catch(e) {
 		console.error(e);
 	}
 
@@ -188,20 +190,35 @@ client.on('voiceStateUpdate', (oldState, newState) => {
 			try {
 				client.queue.delete(newState.guild.id);
 				console.log(newState.guild.name + ' disconnected the bot and did not have a queue.');
-			} catch (e) {
+			}
+ catch (e) {
 				console.error(e);
 			}
 			try {
 				client.manager.leave(newState.guild.id);
 				console.log(newState.guild.name + ' disconnected the bot and had manager still active.');
-			} catch (e) {
+			}
+ catch (e) {
 				console.error(e);
 			}
 			client.queue.delete(newState.guild.id);
 			return client.manager.get(newState.guild.id);
 		}
 	}
-})
+ else {
+	let timeOut;
+		if (client.channels.cache.get(oldState.channel.id).members.cache.size == 0) return;
+		if (client.channels.cache.get(oldState.channel.id).members.cache.filter(m => !m.user.bot).size < 1 && client.queue.get(newState.guild.id)) {
+			timeOut = setTimeout(() => {
+				client.manager.leave(newState.guild.id);
+			}, 30000);
+		}
+ else if (newState.channel.members.cache.filter(m => !m.user.bot).size >= 1 && client.queue.get(newState.guild.id)) {
+			if (timeOut) return clearTimeout(timeOut);
+			return;
+		}
+	}
+});
 
 client.on('message', async (message) => {
 	if (!message.content.toLowerCase().startsWith(client.prefix) || message.author.bot) return;
@@ -216,7 +233,7 @@ client.on('message', async (message) => {
 		if (command.voterOnly && !command.donatorOnly && !voted) return message.channel.send('Woah there! This command is for voters only! Vote on DBL to use this command. Vote here!\n<https://top.gg/bot/628802763123589160/vote>');
 		if (command.donatorOnly && !command.voterOnly && !client.db.get('donor').includes(`member_${message.author.id}`)) return message.channel.send(`Woah there! This command is for donators only! Donate more than one cup of coffee on KoFi to use these commands (Be sure to include your user ID: \`${message.author.id}\`). Donation link: <https://www.ko-fi.com/earthchandiscord>`);
 		if (command.voterOnly && command.donatorOnly && !voted && !client.db.get('donor').includes(`member_${message.author.id}`)) return message.channel.send(`Woah there! This command is only for voters/donators! Vote on Discord Bot List to use this command or donate more than just a cup off coffee on KoFi with your user ID in the message (\`${message.author.id}\`) included in the message.\nDonation link: <https://www.ko-fi.com/earthchandiscord>\nVote link: <https://top.gg/bot/628802763123589160/vote>`);
-	};
+	}
 	if (command.testing && message.author.id != 127888387364487168) return message.reply(`${command.name} is currently in its testing stage.`);
 	if (command.guildOnly && message.channel.type !== 'text') return message.reply('I can\'t execute that command inside DMs!');
 
@@ -235,17 +252,17 @@ client.on('message', async (message) => {
 	const now = Date.now();
 	const timestamps = cooldowns.get(command.name);
 	const cooldownAmount = (command.cooldown || 3) * 1000;
-	const cooldownDonAmount = ((command.cooldown-2 < 0 ? 1 : command.cooldown-2)) * 1000;
+	const cooldownDonAmount = ((command.cooldown - 2 < 0 ? 1 : command.cooldown - 2)) * 1000;
 
 	if (!timestamps.has(message.author.id)) {
 		timestamps.set(message.author.id, now);
-		if (client.db.get('donor').includes(`member_${message.author}`)) setTimeout(() => timestamps.delete(message.author.id), cooldownDonAmount)
-		else setTimeout(() => timestamps.delete(message.author.id), cooldownAmount)
+		if (client.db.get('donor').includes(`member_${message.author}`)) setTimeout(() => timestamps.delete(message.author.id), cooldownDonAmount);
+		else setTimeout(() => timestamps.delete(message.author.id), cooldownAmount);
 	}
 	else {
 		let expirationTime;
-		if (client.db.get('donor').includes(`member_${message.author.id}`)) expirationTime = timestamps.get(message.author.id) + cooldownDonAmount
-		else expirationTime = timestamps.get(message.author.id) + cooldownAmount
+		if (client.db.get('donor').includes(`member_${message.author.id}`)) expirationTime = timestamps.get(message.author.id) + cooldownDonAmount;
+		else expirationTime = timestamps.get(message.author.id) + cooldownAmount;
 
 		if (now < expirationTime) {
 			const timeLeft = (expirationTime - now) / 1000;
@@ -265,32 +282,31 @@ client.on('message', async (message) => {
 	}
 });
 
-// START MUSIC RELATED FUNCTIONS 
+// START MUSIC RELATED FUNCTIONS
 client.getSongs = async (string, client) => {
-	const fetch = require('node-fetch');
 	const res = await fetch(`http://${client.lavalink.host}:${client.lavalink.port}/loadtracks?identifier=${string}`, {
 		headers: { 'Authorization': client.lavalink.password }
 	}).catch(err => {
-		console.error(err)
+		console.error(err);
 		return null;
 	});
-	const res2 = await res.json()
+	const res2 = await res.json();
 	if (!res2) throw 'NO RESPONSE';
 	if (!res2.tracks) throw 'NO TRACKS';
 	return res2;
-}
+};
 client.createQueue = (client, guild) => {
 	client.queue.set(guild, {
 		songs: [],
 		looping: false
 	});
-}
+};
 client.askWhich = async (song, message, isSearch) => {
 	if (!isSearch) return;
 	let i = 0;
 	song.tracks.length = 10;
-	let em1 = new Discord.MessageEmbed()
-		.setTitle("Pick a song!")
+	const em1 = new Discord.MessageEmbed()
+		.setTitle('Pick a song!')
 				.setDescription(song.tracks.map(t => `**${++i}** - ${Discord.Util.escapeMarkdown(t.info.title)} by ${Discord.Util.escapeMarkdown(t.info.author)}`).join('\n'))
 				.setFooter('Say "cancel" to cancel the selection!');
 	message.channel.send(em1).then(m => a = m);
@@ -298,14 +314,14 @@ client.askWhich = async (song, message, isSearch) => {
 		max: 1,
 		time: 15000,
 		errors: ['time']
-	})
-}
+	});
+};
 client.getSong = (string, message, client, isSearch) => {
 	client.getSongs(string, client).then(async song => {
 		if (!song) return message.channel.send('No tracks were found');
 		if (!client.queue.get(message.guild.id)) client.createQueue(client, message.guild.id);
 
-		let thu = song.tracks[0].info.identifier
+		let thu = song.tracks[0].info.identifier;
 
 		if (song.playlistInfo.name) {
 			const tracks = song.tracks;
@@ -318,7 +334,7 @@ client.getSong = (string, message, client, isSearch) => {
 				tracks.forEach(t => {
 					t.requester = message.author;
 					client.queue.get(message.guild.id).songs.push(t);
-				})
+				});
 				client.play(client, message, tracks[0].track);
 				const em = new Discord.MessageEmbed()
 					.setTitle('Now Playing Playlist')
@@ -326,11 +342,12 @@ client.getSong = (string, message, client, isSearch) => {
 					.setThumbnail(`https://img.youtube.com/vi/${thu}/0.jpg`)
 					.setDescription(`Title: **${song.playlistInfo.name}**\nSong Amount: ${song.tracks.length}`);
 				return message.channel.send(em);
-			} else {
+			}
+ else {
 				tracks.forEach(t => {
 					t.requester = message.author;
 					client.queue.get(message.guild.id).songs.push(t);
-				})
+				});
 				const em = new Discord.MessageEmbed()
 					.setTitle('Added Playlist to Queue')
 					.setColor(0x2697ff)
@@ -342,8 +359,8 @@ client.getSong = (string, message, client, isSearch) => {
 
 
 		if (!client.manager.get(message.guild.id)) await client.join(client, message);
-		let player = client.manager.get(message.guild.id);
-		
+		const player = client.manager.get(message.guild.id);
+
 		if (player.playing === false) {
 				client.askWhich(song, message, isSearch).then(async response => {
 					if (!response) return;
@@ -352,7 +369,7 @@ client.getSong = (string, message, client, isSearch) => {
 						message.channel.messages.fetch(a.id).then(m => m.delete());
 						client.queue.delete(message.guild.id);
 						client.manager.leave(message.guild.id);
-						return message.channel.send('Cancelled. Gone. Reduced to atoms.')
+						return message.channel.send('Cancelled. Gone. Reduced to atoms.');
 					}
 					const r = response.first().content - 1;
 					client.play(client, message, song.tracks[r].track);
@@ -397,28 +414,28 @@ client.getSong = (string, message, client, isSearch) => {
 				if (response.first().content.toLowerCase() == `${client.prefix}search`) return;
 				if (response.first().content.toLowerCase() == 'cancel') {
 					message.channel.messages.fetch(a.id).then(m => m.delete());
-					return message.channel.send('Cancelled. Gone. Reduced to atoms.')
+					return message.channel.send('Cancelled. Gone. Reduced to atoms.');
 				}
-				let r = response.first().content - 1;
+				const r = response.first().content - 1;
 				thu = song.tracks[r].info.identifier;
 				message.channel.messages.fetch(a.id).then(m => m.delete());
 				song.tracks[response.first().content - 1].requester = message.author;
 				client.queue.get(message.guild.id).songs.push(song.tracks[response.first().content - 1]);
-				let em = new Discord.MessageEmbed()
+				const em = new Discord.MessageEmbed()
 					.setTitle('Added To Queue:')
 					.setColor(0x2697ff)
 					.setThumbnail(`https://img.youtube.com/vi/${thu}/0.jpg`)
 					.setDescription(`
 					Title: [${song.tracks[response.first().content - 1].info.title}](${song.tracks[response.first().content - 1].info.uri})\nAuthor: ${song.tracks[response.first().content - 1].info.author}
 					`);
-				return message.channel.send(em);    
+				return message.channel.send(em);
 			}).catch(e => {
 				if (e.size == 0) {
 					message.channel.messages.get(a.id).delete();
-					return message.channel.send('There was no response')
-				};
+					return message.channel.send('There was no response');
+				}
 				console.error(e);
-			})
+			});
 			if (!isSearch) {
 				song.tracks[0].requester = message.author;
 				client.queue.get(message.guild.id).songs.push(song.tracks[0]);
@@ -436,15 +453,15 @@ client.getSong = (string, message, client, isSearch) => {
 		console.log(err);
 		return message.channel.send('There was an error. ' + err);
 	});
-}
+};
 client.play = (client, message, track) => {
 	try {
 		const queue = client.queue.get(message.guild.id);
-		let player = client.manager.get(message.guild.id);
+		const player = client.manager.get(message.guild.id);
 		player.play(track);
-		player.once('end', async data => {
+		player.once('end', async () => {
 
-			if (queue.looping == true) return client.play(client, message, queue.songs[0].track)
+			if (queue.looping == true) return client.play(client, message, queue.songs[0].track);
 			queue.songs.shift();
 
 			if (!queue.songs.length) {
@@ -466,8 +483,8 @@ client.play = (client, message, track) => {
 	catch (err) {
 		console.log(err);
 	}
-}
-client.join = async(client, message) => {
+};
+client.join = async (client, message) => {
 	await client.manager.join({
 		guild: message.guild.id,
 		channel: message.member.voice.channel.id,
@@ -477,10 +494,10 @@ client.join = async(client, message) => {
 	});
 	await client.manager.get(message.guild.id).volume(50);
 	console.log(`A player has spawned in ${message.guild.name} (${message.guild.id})`);
-}
-client.leave = async(client, message) => {
+};
+client.leave = async (client, message) => {
 	client.queue.delete(message.guild.id);
 	message.channel.send('It appears as though there are no tracks playing. :thinking:');
 	console.log(`A player has despawned in ${message.guild.name} (${message.guild.id})`);
 	return await client.manager.leave(message.guild.id);
-}
+};

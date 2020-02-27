@@ -18,7 +18,7 @@ module.exports = {
                 queue.songs.length = 10;
                 message.channel.send(`**Now Playing:** ${serverQueue.songs[0].info.title}\n__**Song queue:**__\n${queue.songs.map(song => `${i++} **-** ${Util.escapeMarkdown(song.info.title)}`).join('\n')}\n**Length:** ${serverQueue.songs.length} songs`);
             }
-            else {console.error(e)};
+            else {console.error(e);}
         });
     }
 };

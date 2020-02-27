@@ -4,6 +4,7 @@
   "description": "NULL",
   "main": "index.js",
   "dependencies": {
+    "@google-cloud/text-to-speech": "^2.2.0",
     "array-move": "^2.2.0",
     "bytes": "^3.1.0",
     "chalk": "^3.0.0",

@@ -13,4 +13,4 @@ module.exports = {
             .setImage(url);
         message.channel.send(embed);
     }
-}
+};

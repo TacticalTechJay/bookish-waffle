@@ -16,4 +16,4 @@ module.exports = {
             .catch((e) => console.error(e));
         message.channel.send(`I have unbanned ${user.tag} for the following reason: ${reason}`);
     }
-}
+};

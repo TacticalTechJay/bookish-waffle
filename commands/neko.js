@@ -18,7 +18,7 @@ module.exports = {
             url = await res.json();
             const embed = new MessageEmbed()
                 .setTitle('Here is your neko!')
-                .setImage(Math.random() > .5 ? url.url : e.url);
+                .setImage(Math.random() > 0.5 ? url.url : e.url);
             return message.channel.send(embed);
         }
         const embed = new MessageEmbed()
@@ -26,4 +26,4 @@ module.exports = {
             .setImage(url.url);
         message.channel.send(embed);
     }
-}
+};

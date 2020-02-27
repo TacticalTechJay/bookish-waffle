@@ -23,6 +23,6 @@ module.exports = {
 			.then(function(list) {
 				message.channel.bulkDelete(list)
 					.catch(error => message.reply(`Couldn't delete message because of: ${error}`));
-			})
+			});
 	},
 };

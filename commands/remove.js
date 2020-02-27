@@ -28,4 +28,4 @@ module.exports = {
         serverQueue.songs.splice(toRemove, 1);
         return message.channel.send('The deed is done.');
     }
-}
+};

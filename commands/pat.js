@@ -8,7 +8,7 @@ module.exports = {
     args: false,
     cooldown: 3,
     usage: '<mention>',
-    async execute(message, args, client) {
+    async execute(message, args) {
         const fetch = require('node-fetch');
         const { MessageEmbed } = require('discord.js');
         const target = message.mentions.members.first() || message.guild.members.cache.get(args[0]);
@@ -21,4 +21,4 @@ module.exports = {
             .setImage(url);
         message.channel.send(embed);
     }
-}
+};

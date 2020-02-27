@@ -10,8 +10,8 @@ module.exports = {
     async execute(message, nothing, client) {
         const amount = await client.shard.broadcastEval('this.guilds.cache.size');
         const amount2 = await amount.reduce((prev, val) => prev + val, 0);
-        let creator = await client.users.fetch('127888387364487168');
-        let BOTID = client.user.id;
+        const creator = await client.users.fetch('127888387364487168');
+        const BOTID = client.user.id;
         const embed = new Discord.MessageEmbed()
             .setColor(0x0099ff)
             .setTitle(`${client.user.username}!`)

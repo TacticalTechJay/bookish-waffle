@@ -8,11 +8,11 @@ module.exports = {
     cooldown: 5,
     execute(message, a, client) {
         const serverQueue = client.queue.get(message.guild.id);
-        if (!serverQueue) return message.channel.send('There is nothing playing that I *can* pause.')
-        if (client.manager.get(message.guild.id).paused) return message.channel.send('The music is still paused.')
-        if (!message.member.voice.channel) return message.channel.send('You need to be in a voice channel to use this command.')
-        if (message.member.voice.channel.id !== message.guild.me.voice.channel.id) return message.channel.send('You need to be in the same voice channel as me to use this command.')
-        client.manager.get(message.guild.id).pause()
-        return message.channel.send('I have paused the music that was playing.')
+        if (!serverQueue) return message.channel.send('There is nothing playing that I *can* pause.');
+        if (client.manager.get(message.guild.id).paused) return message.channel.send('The music is still paused.');
+        if (!message.member.voice.channel) return message.channel.send('You need to be in a voice channel to use this command.');
+        if (message.member.voice.channel.id !== message.guild.me.voice.channel.id) return message.channel.send('You need to be in the same voice channel as me to use this command.');
+        client.manager.get(message.guild.id).pause();
+        return message.channel.send('I have paused the music that was playing.');
     }
 };

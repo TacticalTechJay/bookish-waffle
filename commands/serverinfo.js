@@ -1,4 +1,4 @@
-const { MessageEmbed } = require('discord.js')
+const { MessageEmbed } = require('discord.js');
 module.exports = {
     name: 'serverinfo',
     description: 'Obtain server information.',
@@ -6,13 +6,13 @@ module.exports = {
     aliases: ['si'],
     guildOnly: true,
     args: false,
-    async execute(message, args, client) {
-        let embed = new MessageEmbed()
+    async execute(message) {
+        const embed = new MessageEmbed()
             .setTitle(`${message.guild.name}'s Information`)
             .setThumbnail(message.guild.iconURL())
             .addField('Server Owner', message.guild.owner, true)
             .addField('Server ID', message.guild.id, true)
-	    .addField('Verification Level', ['`None`', '`Low`', '`Medium`', '`(╯°□°）╯︵ ┻━┻`', '`┻━┻ ﾐヽ(ಠ益ಠ)ノ彡┻━┻`'][message.guild.verificationLevel], true)
+            .addField('Verification Level', ['`None`', '`Low`', '`Medium`', '`(╯°□°）╯︵ ┻━┻`', '`┻━┻ ﾐヽ(ಠ益ಠ)ノ彡┻━┻`'][message.guild.verificationLevel], true)
             .addField('Partner Status', message.guild.partnered ? 'Partnered' : 'Not partnered', true)
             .addField('Boost Count', message.guild.premiumSubscriptionCount, true)
             .addField('Boost Level', message.guild.premiumTier, true)
@@ -22,4 +22,4 @@ module.exports = {
 	    .addField(`Roles (${message.guild.roles.cache.size})`, message.guild.roles.cache.map(x => x.toString()).join(' ').substring(0, 1024).replace(/\s\S+[^>]$/, ''));
         message.channel.send(embed);
     }
-}
+};

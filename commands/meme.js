@@ -1,4 +1,4 @@
-const { ksoftapi } = require('../config.json')
+const { ksoftapi } = require('../config.json');
 module.exports = {
     name: 'meme',
     description: 'Dank memer but 99% better because of a lower cooldown.',
@@ -9,7 +9,7 @@ module.exports = {
     cooldown: 3,
     async execute(message) {
         const fetch = require('node-fetch');
-        let choice = ['dankmemes', 'memes', 'me_irl', 'meirl', 'crappydesign', 'hmm'][Math.floor(Math.random() * 6)]
+        const choice = ['dankmemes', 'memes', 'me_irl', 'meirl', 'crappydesign', 'hmm'][Math.floor(Math.random() * 6)];
         console.log(choice);
         const res = await fetch(`https://api.ksoft.si/images/rand-reddit/${choice}?remove_nsfw=true&span'=week'`, {
             headers: { 'Authorization': `Bearer ${ksoftapi}` }
@@ -22,4 +22,4 @@ module.exports = {
             .setFooter(`From ${r.subreddit} | Posted by ${r.author}`);
         message.channel.send(embed);
     }
-}
+};

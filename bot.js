@@ -191,32 +191,33 @@ client.on('voiceStateUpdate', (oldState, newState) => {
 				client.queue.delete(newState.guild.id);
 				console.log(newState.guild.name + ' disconnected the bot and did not have a queue.');
 			}
- catch (e) {
+ 			catch (e) {
 				console.error(e);
 			}
 			try {
 				client.manager.leave(newState.guild.id);
 				console.log(newState.guild.name + ' disconnected the bot and had manager still active.');
 			}
- catch (e) {
+ 			catch (e) {
 				console.error(e);
 			}
 			client.queue.delete(newState.guild.id);
 			return client.manager.get(newState.guild.id);
 		}
 	}
- else {
-	let timeOut;
-		if (client.channels.cache.get(oldState.channel.id).members.cache.size == 0) return;
-		if (client.channels.cache.get(oldState.channel.id).members.cache.filter(m => !m.user.bot).size < 1 && client.queue.get(newState.guild.id)) {
-			timeOut = setTimeout(() => {
-				client.manager.leave(newState.guild.id);
-			}, 30000);
-		}
- else if (newState.channel.members.cache.filter(m => !m.user.bot).size >= 1 && client.queue.get(newState.guild.id)) {
-			if (timeOut) return clearTimeout(timeOut);
-			return;
-		}
+ 	else {
+		// let timeOut;
+		// let channel = newState.channel;
+		// if (!oldState.channel) channel = newState.channel;
+		// if (!client.channels.cache.get(channel.id).members.cache) return;
+		// if (client.channels.cache.get(channel.id).members.cache.filter(m => !m.user.bot).size < 1 && client.queue.get(newState.guild.id)) {
+		// 	return timeOut = setTimeout(() => {
+		// 		client.manager.leave(newState.guild.id);
+		// 	}, 30000);
+		// } else if (newState.channel.members.cache.filter(m => !m.user.bot).size >= 1 && client.queue.get(newState.guild.id)) {
+		// 	if (timeOut) return clearTimeout(timeOut);
+		// 	return;
+		// }
 	}
 });
 
@@ -224,8 +225,7 @@ client.on('message', async (message) => {
 	if (!message.content.toLowerCase().startsWith(client.prefix) || message.author.bot) return;
 	const args = message.content.slice(client.prefix.length).split(/ +/);
 	const commandName = args.shift().toLowerCase();
-	const command = client.commands.get(commandName) ||
-		client.commands.find(cmd => cmd.aliases && cmd.aliases.includes(commandName));
+	const command = client.commands.get(commandName) || client.commands.find(cmd => cmd.aliases && cmd.aliases.includes(commandName));
 
 	if (!command) return;
 	if (typeof client.dbl !== 'undefined') {

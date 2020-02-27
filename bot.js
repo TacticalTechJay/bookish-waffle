@@ -1,9 +1,9 @@
 String.prototype.titleCase = function() {
-   const splitStr = this.toLowerCase().split(' ');
-   for (let i = 0; i < splitStr.length; i++) {
-       splitStr[i] = splitStr[i].charAt(0).toUpperCase() + splitStr[i].substring(1);
-   }
-   return splitStr.join(' ');
+	const splitStr = this.toLowerCase().split(' ');
+	for (let i = 0; i < splitStr.length; i++) {
+		splitStr[i] = splitStr[i].charAt(0).toUpperCase() + splitStr[i].substring(1);
+	}
+	return splitStr.join(' ');
 };
 const fs = require('fs');
 const Discord = require('discord.js');
@@ -58,15 +58,15 @@ client.fetchSongs = async (string, amount) => {
 };
 client.fetchInfo = async (string) => {
 	const search = encodeURIComponent(string);
-        const res = await fetch(`http://${client.lavalink.host}:${client.lavalink.port}/loadtracks?identifier=${search}`, {
-                headers: { 'Authorization': client.lavalink.password }
-        }).catch(err => {
-                console.error(err);
-                throw err;
-        });
-        const res2 = await res.json();
-        if (!res2) throw 'NO RESPONSE';
-        return res2;
+		const res = await fetch(`http://${client.lavalink.host}:${client.lavalink.port}/loadtracks?identifier=${search}`, {
+				headers: { 'Authorization': client.lavalink.password }
+		}).catch(err => {
+				console.error(err);
+				throw err;
+		});
+		const res2 = await res.json();
+		if (!res2) throw 'NO RESPONSE';
+		return res2;
 };
 
 
@@ -191,21 +191,21 @@ client.on('voiceStateUpdate', (oldState, newState) => {
 				client.queue.delete(newState.guild.id);
 				console.log(newState.guild.name + ' disconnected the bot and did not have a queue.');
 			}
- 			catch (e) {
+			catch (e) {
 				console.error(e);
 			}
 			try {
 				client.manager.leave(newState.guild.id);
 				console.log(newState.guild.name + ' disconnected the bot and had manager still active.');
 			}
- 			catch (e) {
+			catch (e) {
 				console.error(e);
 			}
 			client.queue.delete(newState.guild.id);
 			return client.manager.get(newState.guild.id);
 		}
 	}
- 	else {
+	else {
 		// let timeOut;
 		// let channel = newState.channel;
 		// if (!oldState.channel) channel = newState.channel;
@@ -283,7 +283,7 @@ client.on('message', async (message) => {
 });
 
 // START MUSIC RELATED FUNCTIONS
-client.getSongs = async (string, client) => {
+client.getSongs = async (string) => {
 	const res = await fetch(`http://${client.lavalink.host}:${client.lavalink.port}/loadtracks?identifier=${string}`, {
 		headers: { 'Authorization': client.lavalink.password }
 	}).catch(err => {
@@ -295,7 +295,7 @@ client.getSongs = async (string, client) => {
 	if (!res2.tracks) throw 'NO TRACKS';
 	return res2;
 };
-client.createQueue = (client, guild) => {
+client.createQueue = (guild) => {
 	client.queue.set(guild, {
 		songs: [],
 		looping: false
@@ -316,17 +316,17 @@ client.askWhich = async (song, message, isSearch) => {
 		errors: ['time']
 	});
 };
-client.getSong = (string, message, client, isSearch) => {
-	client.getSongs(string, client).then(async song => {
+client.getSong = (string, message, isSearch) => {
+	client.getSongs(string).then(async song => {
 		if (!song) return message.channel.send('No tracks were found');
-		if (!client.queue.get(message.guild.id)) client.createQueue(client, message.guild.id);
+		if (!client.queue.get(message.guild.id)) client.createQueue(message.guild.id);
 
 		let thu = song.tracks[0].info.identifier;
 
 		if (song.playlistInfo.name) {
 			const tracks = song.tracks;
 			let player = client.manager.get(message.guild.id);
-			if (!player) await client.join(client, message);
+			if (!player) await client.join(message);
 			player = client.manager.get(message.guild.id);
 
 
@@ -335,7 +335,7 @@ client.getSong = (string, message, client, isSearch) => {
 					t.requester = message.author;
 					client.queue.get(message.guild.id).songs.push(t);
 				});
-				client.play(client, message, tracks[0].track);
+				client.play(message, tracks[0].track);
 				const em = new Discord.MessageEmbed()
 					.setTitle('Now Playing Playlist')
 					.setColor(0x2daa4b)
@@ -343,7 +343,7 @@ client.getSong = (string, message, client, isSearch) => {
 					.setDescription(`Title: **${song.playlistInfo.name}**\nSong Amount: ${song.tracks.length}`);
 				return message.channel.send(em);
 			}
- else {
+			else {
 				tracks.forEach(t => {
 					t.requester = message.author;
 					client.queue.get(message.guild.id).songs.push(t);
@@ -357,8 +357,7 @@ client.getSong = (string, message, client, isSearch) => {
 			}
 		}
 
-
-		if (!client.manager.get(message.guild.id)) await client.join(client, message);
+		if (!client.manager.get(message.guild.id)) await client.join(message);
 		const player = client.manager.get(message.guild.id);
 
 		if (player.playing === false) {
@@ -396,7 +395,7 @@ client.getSong = (string, message, client, isSearch) => {
 				});
 			if (!isSearch) {
 				song.tracks[0].requester = message.author;
-				client.play(client, message, song.tracks[0].track);
+				client.play(message, song.tracks[0].track);
 				client.queue.get(message.guild.id).songs.push(song.tracks[0]);
 				const em = new Discord.MessageEmbed()
 					.setTitle('Now Playing:')
@@ -454,21 +453,21 @@ client.getSong = (string, message, client, isSearch) => {
 		return message.channel.send('There was an error. ' + err);
 	});
 };
-client.play = (client, message, track) => {
+client.play = (message, track) => {
 	try {
 		const queue = client.queue.get(message.guild.id);
 		const player = client.manager.get(message.guild.id);
 		player.play(track);
 		player.once('end', async () => {
 
-			if (queue.looping == true) return client.play(client, message, queue.songs[0].track);
+			if (queue.looping == true) return client.play(message, queue.songs[0].track);
 			queue.songs.shift();
 
 			if (!queue.songs.length) {
-				return client.leave(client, message);
+				return client.leave(message);
 			}
 			const thu = queue.songs[0].info.identifier;
-			client.play(client, message, queue.songs[0].track);
+			client.play(message, queue.songs[0].track);
 			const em = new Discord.MessageEmbed()
 				.setTitle('Now Playing:')
 				.setColor(0x2daa4b)
@@ -484,7 +483,7 @@ client.play = (client, message, track) => {
 		console.log(err);
 	}
 };
-client.join = async (client, message) => {
+client.join = async (message) => {
 	await client.manager.join({
 		guild: message.guild.id,
 		channel: message.member.voice.channel.id,
@@ -495,7 +494,7 @@ client.join = async (client, message) => {
 	await client.manager.get(message.guild.id).volume(50);
 	console.log(`A player has spawned in ${message.guild.name} (${message.guild.id})`);
 };
-client.leave = async (client, message) => {
+client.leave = async (message) => {
 	client.queue.delete(message.guild.id);
 	message.channel.send('It appears as though there are no tracks playing. :thinking:');
 	console.log(`A player has despawned in ${message.guild.name} (${message.guild.id})`);

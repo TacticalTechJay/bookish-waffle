@@ -322,7 +322,6 @@ client.getSong = (string, message, isSearch) => {
 		if (!client.queue.get(message.guild.id)) client.createQueue(message.guild.id);
 
 		let thu = song.tracks[0].info.identifier;
-
 		if (song.playlistInfo.name) {
 			const tracks = song.tracks;
 			let player = client.manager.get(message.guild.id);

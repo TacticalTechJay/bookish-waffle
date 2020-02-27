@@ -10,7 +10,7 @@
     "chalk": "^3.0.0",
     "dblapi.js": "^2.3.0",
     "discord.js": "github:discordjs/discord.js",
-    "discord.js-lavalink": "^2.2.3",
+    "discord.js-lavalink": "github:TacticalTechJay/discord.js-lavalink",
     "fs": "^0.0.1-security",
     "kofi.js": "^0.1.6",
     "lavalink": "^2.8.2",

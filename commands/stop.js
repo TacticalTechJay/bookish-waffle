@@ -15,7 +15,7 @@ module.exports = {
             client.queue.delete(message.guild.id);
             client.emit('voiceStatusUpdate', ('No need', 'No need'));
         }
- catch(e) {
+        catch(e) {
            console.log(e);
            return message.channel.send('Are you sure there is a queue?');
         }

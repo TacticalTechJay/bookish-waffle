@@ -16,6 +16,7 @@ module.exports = {
             if (e.message == 'Invalid Form Body\ncontent: Must be 2000 or fewer in length.') {
                 let i = 1;
                 queue.songs.length = 10;
+                const fetch = require('node-fetch');
                 const body = serverQueue.songs.map(s => `${i++}: ${s.info.title}`).join('\n');
                 const res = await fetch('https://hasteb.in/documents', {
                     method: 'POST',

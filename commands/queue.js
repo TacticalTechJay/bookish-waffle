@@ -19,14 +19,14 @@ module.exports = {
                 const body = queue.songs.map(s => `${i++}: ${s.info.title}`).join('\n');
                 queue.songs.length = 10;
                 const fetch = require('node-fetch');
-                const res = await fetch('https://hasteb.in/documents', {
+                const res = await fetch('https://bin.lunasrv.com/documents', {
                     method: 'POST',
                     body: body,
                     headers: { 'Content-Type': 'text/plain' }
                 });
                 i = 1;
                 const { key } = await res.json();
-                message.channel.send(`**Now Playing:** ${serverQueue.songs[0].info.title}\n__**Song queue:**__\n${queue.songs.map(song => `${i++} **-** ${Util.escapeMarkdown(song.info.title)}`).join('\n')}\n**Length:** ${serverQueue.songs.length} songs\nThe rest of the queue can be found here: https://hasteb.in/${key}.js`);
+                message.channel.send(`**Now Playing:** ${serverQueue.songs[0].info.title}\n__**Song queue:**__\n${queue.songs.map(song => `${i++} **-** ${Util.escapeMarkdown(song.info.title)}`).join('\n')}\n**Length:** ${serverQueue.songs.length} songs\nThe rest of the queue can be found here: https://bin.lunasrv.com/${key}.js`);
             }
             else {console.error(e);}
         });

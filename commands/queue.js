@@ -12,7 +12,7 @@ module.exports = {
         if (!serverQueue) return message.channel.send('The queue is empty! I think it is about time to add songs, don\'t you think?');
         const queue = JSON.parse(JSON.stringify(serverQueue));
         queue.songs.shift();
-        return message.channel.send(`**Now Playing:** ${serverQueue.songs[0].info.title}\n__**Song queue:**__\n${queue.songs.length < 1 ? 'Nothing left. What now?' : queue.songs.map(song => `${i++} **-** ${Util.escapeMarkdown(song.info.title)}`).join('\n')}`).catch(e => {
+        return message.channel.send(`**Now Playing:** ${serverQueue.songs[0].info.title}\n__**Song queue:**__\n${queue.songs.length < 1 ? 'Nothing left. What now?' : queue.songs.map(song => `${i++} **-** ${Util.escapeMarkdown(song.info.title)}`).join('\n')}`).catch(async e => {
             if (e.message == 'Invalid Form Body\ncontent: Must be 2000 or fewer in length.') {
                 let i = 1;
                 queue.songs.length = 10;

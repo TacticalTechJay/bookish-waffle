@@ -17,6 +17,6 @@ module.exports = {
             headers: { 'Content-Type': 'text/plain' }
         });
         const { key } = await res.json();
-        message.channel.send(`Your saved queue is listed here:\n https://bin.lunasrv.com/${key}.js`);
+        message.channel.send(`Your saved queue is listed here:\n https://bin.lunasrv.com/${key}`);
     }
 }

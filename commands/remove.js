@@ -25,7 +25,10 @@ module.exports = {
         if (message.member.voice.channel.id !== message.guild.me.voice.channel.id) return message.channel.send('You need to be in the same voice channel as me to use this command!');
         if (isNaN(toRemove)) return message.channel.send('That is not a number. :neutral_face:');
         if (toRemove == 0) return message.channel.send('Why do you want to remove this song? Try using skip instead!');
-        serverQueue.songs.splice(toRemove, 1);
-        return message.channel.send('The deed is done.');
+        if (message.member.voice.selfDeaf) return message.channel.send('You need to be undeafened to use something like this.');
+        if (serverQueue.songs[toRemove].requester.id == message.author.id || message.member.permissions.has('MANAGE_MESSAGES')) {
+            serverQueue.songs.splice(toRemove, 1);
+            return message.channel.send('The deed is done.');
+        } else return message.channel.send('You are not the requester of the song and are lacking the Manage Messages permissions to remove it.')
     }
 };

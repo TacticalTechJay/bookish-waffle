@@ -4,36 +4,24 @@ module.exports = {
     category: 'music',
     args: true,
     guildOnly: true,
-    usage: '<Forward/Backwards> <Amount>',
+    usage: '<Timestamp>',
     async execute(message, args, client) {
         const player = client.manager.get(message.guild.id);
         const queue = client.queue.get(message.guild.id);
+        let time = args[0].split(':');
         if (!player || !queue) return message.channel.send('You need to be playing music to use this command');
-	if (!message.member.voice.channel) return message.channel.send('You need to be in a voice channel.');
-        if (message.member.voice.channel !== message.guild.me.voice.channel) return message.channel.send('You need to be in the same voice channel as me!');
-        if (!args[0]) return message.channel.send('You need to specify on whether you are going to seek forwards or backwards!');
-        if (args[0].toLowerCase() == 'forwards' || args[0].toLowerCase() == 'forward') {
-            args.shift();
-            const amount = player.state.position + require('ms')(args.join(' '));
-            const test = require('ms')(args.join(' '));
-            if (typeof test !== 'number') return message.channel.send('Improper format of amount!\nIt should be like this: `plana seek forward 1m 24s`');
-            if (amount > queue.songs[0].info.length) return message.channel.send('That is too far!');
-            player.seek(amount);
-            return message.channel.send(`Going forward with specified amount: ${args.join(' ')}`);
+        if (!message.member.voice.channel) return message.channel.send('You need to be in a voice channel.')
+        else if (message.member.voice.channel !== message.guild.me.voice.channel) return message.channel.send('You need to be in the same voice channel as me!')
+        else if (message.member.voice.selfDeaf) return message.channel.send('You need to be undeafened to use something like this.');
+        var s = 0, m = 1
+
+        while (time.length > 0) {
+            s += m * parseInt(time.pop(), 10)
+            m = 60;
         }
- else if (args[0].toLowerCase() == 'backwards' || args[0].toLowerCase() == 'backward' || args[0].toLowerCase() == 'rewind') {
-            args.shift();
-            const amount = player.state.position - require('ms')(args.join(' '));
-            const test = require('ms')(args.join(' '));
-            if (typeof test !== 'number') return message.channel.send('Improper format of amount!\nIt should be like this: `plana seek backward 1m 24s`');
-            if (amount < 0) return message.channel.send('That is too far!');
-            player.seek(amount);
-            return message.channel.send(`Going backwards with specified amount: ${args.join(' ')}`);
-        }
-        const amount = require('ms')(args.join(' '));
-        if (typeof amount !== 'number') return message.channel.send('Your specified amount was invalid. Try this:\n`plana seek 1m 30s`');
-	if (amount <= -1 || amount >= ++queue.songs[0].info.length) return message.channel.send('Your specified point was out of reach! Try going within the limits');
-        player.seek(amount);
-        return message.channel.send(`I have went to point ${args.join(' ')}`);
+        if (s*1000 > queue.songs[0].info.length) return message.channel.send('That is wayyyyy out of my league.');
+        if (isNaN(s)) return message.channel.send('I can\'t seek with that!');
+        player.seek(s*1000);
+        return message.channel.send(`Seeked to **${args[0]}**.`);
     }
 };

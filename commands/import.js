@@ -9,10 +9,12 @@ module.exports = {
         const queue = client.queue.get(message.guild.id);
         const qsave = client.qsaves.get(`g${message.guild.id}me${message.author.id}`);
         if (!qsave) return message.channel.send('You currently have no saved queue.');
-        if (!message.member.voice.channel) return message.channel.send('You need to be in a voice channel to use this command.');
+        if (!message.member.voice.channel) return message.channel.send('You need to be in a voice channel to use this command.')
+        else if (message.member.voice.selfDeaf) return message.channel.send('You need to be undeafened to use something like this.');
         if (queue) {
             const filter = m2 => m2.content.toLowerCase() == 'yes' || m2.content.toLowerCase() == 'no' && m2.author.id == message.author.id && !m2.content.startsWith(client.prefix);
             if (message.guild.me.voice.channel !== message.member.voice.channel) return message.channel.send('You need to be in the same voice channel as me to use this command.');
+            
             try {
                 message.channel.send('Are you sure you want to add your saved queue to this current one?\n**Yes** or **No**');
                 const r = await message.channel.awaitMessages(filter, {
@@ -24,14 +26,14 @@ module.exports = {
                     qsave.map(s => queue.songs.push(s));
                     return message.channel.send('Added to queue!');
                 }
- else if (r.first().content.toLowerCase() == 'no') {return message.channel.send('Cancelled.');}
+                else if (r.first().content.toLowerCase() == 'no') {return message.channel.send('Cancelled.');}
             }
- catch (e) {
+        catch (e) {
                 if (e.size == 0) return message.channel.send('There was no response.');
                 return console.error(e);
             }
         }
- else if (!queue && !client.manager.get(message.guild.id)) {
+        else if (!queue && !client.manager.get(message.guild.id)) {
             const qconstruct = {
                 songs: qsave,
                 looping: false

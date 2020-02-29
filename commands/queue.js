@@ -5,6 +5,7 @@ module.exports = {
     guildOnly: true,
     testing: false,
     aliases: ['q', 'playingsoon'],
+    cooldown: 5,
     execute(message, a, client) {
         const { Util } = require('discord.js');
         const serverQueue = client.queue.get(message.guild.id);

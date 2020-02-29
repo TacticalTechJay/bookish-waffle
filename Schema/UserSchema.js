@@ -10,6 +10,6 @@ const User = Schema({
         default: false,
         type: Boolean
     }
-})
+});
 
-module.exports = model("User", User);
+module.exports = model('User', User);

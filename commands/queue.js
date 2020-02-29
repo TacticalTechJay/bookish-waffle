@@ -18,7 +18,7 @@ module.exports = {
                 let i = 1;
                 queue.songs.length = 10;
                 const fetch = require('node-fetch');
-                const body = serverQueue.songs.map(s => `${i++}: ${s.info.title}`).join('\n');
+                const body = queue.songs.map(s => `${i++}: ${s.info.title}`).join('\n');
                 const res = await fetch('https://hasteb.in/documents', {
                     method: 'POST',
                     body: body,

@@ -9,3 +9,4 @@ json.sqlite
 marslogs.txt
 portainer-stack-agent.yml
 Schema/
+Schema/UserSchema.js

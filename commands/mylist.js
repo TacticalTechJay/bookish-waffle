@@ -4,6 +4,7 @@ module.exports = {
     category: 'music',
     args: false,
     guildOnly: true,
+    cooldown: 15,
     async execute(message, args, client) {
         const fetch = require('node-fetch');
         const qsave = client.qsaves.get(`g${message.guild.id}me${message.author.id}`);

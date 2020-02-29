@@ -37,8 +37,8 @@ module.exports = {
                 looping: false
             };
             client.queue.set(message.guild.id, qconstruct);
-            client.join(client, message);
-            client.play(client, message, client.queue.get(message.guild.id).songs[0].track);
+            client.join(message);
+            client.play(message, client.queue.get(message.guild.id).songs[0].track);
             return message.channel.send('Set and now playing!');
         }
     }

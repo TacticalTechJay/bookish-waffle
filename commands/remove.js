@@ -29,6 +29,9 @@ module.exports = {
         if (serverQueue.songs[toRemove].requester.id == message.author.id || message.member.permissions.has('MANAGE_MESSAGES')) {
             serverQueue.songs.splice(toRemove, 1);
             return message.channel.send('The deed is done.');
-        } else return message.channel.send('You are not the requester of the song and are lacking the Manage Messages permissions to remove it.')
+        }
+        else {
+            return message.channel.send('You are not the requester of the song and are lacking the Manage Messages permissions to remove it.');
+        }
     }
 };

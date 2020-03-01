@@ -8,8 +8,8 @@ module.exports = {
 	args: true,
 	usage: '<SearchTerm>',
 	async execute(message, args, client) {
-		if (!message.member.voice.channel) return message.channel.send('You must be in a voice channel!')
-		else if (message.member.voice.selfDeaf) return message.channel.send('You need to be undeafened to use something like this.');		
+		if (!message.member.voice.channel) return message.channel.send('You must be in a voice channel!');
+		else if (message.member.voice.selfDeaf) return message.channel.send('You need to be undeafened to use something like this.');
 		if (message.guild.me.voice.channel) {
 			if (message.guild.me.voice.channel.id !== message.member.voice.channel.id) return message.channel.send('You need to be in the same voice channel as me to use this command.');
 		}
@@ -18,8 +18,6 @@ module.exports = {
 		const player = await client.manager.get(message.guild.id);
 		if (!player) client.createQueue(message.guild.id);
 		if (args.join(' ').startsWith('http')) return message.channel.send('I can not search links!');
-		else {
-			client.getSong(`ytsearch:${encodeURIComponent(args.join(' '))}`, message, true);
-		}
+		else client.getSong(`ytsearch:${encodeURIComponent(args.join(' '))}`, message, true);
 	}
 };

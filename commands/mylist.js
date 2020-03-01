@@ -19,4 +19,4 @@ module.exports = {
         const { key } = await res.json();
         message.channel.send(`Your saved queue is listed here: https://bin.lunasrv.com/${key}`);
     }
-}
+};

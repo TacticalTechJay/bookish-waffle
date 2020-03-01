@@ -7,7 +7,7 @@ String.prototype.titleCase = function() {
 };
 const fs = require('fs');
 const Discord = require('discord.js');
-const { prefix, nodes, dblToken, ADLToken, mongo } = require('./config.json');
+const { prefix, nodes, dblToken, ADLToken } = require('./config.json');
 const client = new Discord.Client({ disableEveryone: true, messageCacheMaxSize: 100, messageCacheLifetime: 3600, messageSweepInterval: 7200 });
 const { PlayerManager } = require('discord.js-lavalink');
 const fetch = require('node-fetch');

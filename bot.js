@@ -72,13 +72,6 @@ client.fetchInfo = async (string) => {
 
 client.db = require('quick.db');
 client.qsaves = new client.db.table('qsaves');
-client.mongoose = require('mongoose');
-client.mongoose.connect(`mongodb://jay:1234@${mongo.ip}:27017/test`, { useNewUrlParser: true, useUnifiedTopology: true });
-client.mongoose.connection.on('error', console.error.bind(console, 'connection error:'));
-client.mongoose.connection.once('open', function() {
-	console.log('Connection successful with MongoDB!');
-});
-client.mongoose.UserModel = require('./Schema/UserSchema.js');
 
 client.nekosSafe = new (require('nekos.life'))().sfw;
 client.nekosUnSafe = new (require('nekos.life'))().nsfw;

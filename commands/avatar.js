@@ -10,7 +10,7 @@ module.exports = {
     usage: '[MemberMention/UserID]',
     async execute(message, args, client) {
         const { MessageEmbed } = require('discord.js');
-        if (!args[0]) {
+        if (!args[0] || isNaN(args[0])) {
             const embed = new MessageEmbed()
             .setTitle(`${message.author.username}'s Avatar`)
             .setImage(message.author.displayAvatarURL({ size: 2048, dynamic: true }))

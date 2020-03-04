@@ -363,7 +363,7 @@ client.getSong = (string, message, isSearch) => {
 						return message.channel.send('Cancelled. Gone. Reduced to atoms.');
 					}
 					const r = response.first().content - 1;
-					client.play(client, message, song.tracks[r].track);
+					client.play(message, song.tracks[r].track);
 					thu = song.tracks[r].info.identifier;
 					message.channel.messages.fetch(a.id).then(m => m.delete());
 					song.tracks[r].requester = message.author;

@@ -291,7 +291,8 @@ client.getSongs = async (string) => {
 client.createQueue = (guild) => {
 	client.queue.set(guild, {
 		songs: [],
-		looping: false
+		looping: 'none',
+		pb: true
 	});
 };
 client.askWhich = async (song, message, isSearch) => {
@@ -452,7 +453,29 @@ client.play = (message, track) => {
 		player.play(track);
 		player.once('end', async () => {
 
-			if (queue.looping == true) return client.play(message, queue.songs[0].track);
+			if (queue.looping == 'song') {
+				client.play(message, queue.songs[0].track);
+				const thu = queue.songs[0].info.identifier;
+				if (!queue.pb) return;
+				const em = new Discord.MessageEmbed()
+					.setTitle('Now Playing:')
+					.setColor(0x2daa4b)
+					.setThumbnail(`https://img.youtube.com/vi/${thu}/0.jpg`)
+					.setDescription(`Title: [${queue.songs[0].info.title}](${queue.songs[0].info.uri})\nAuthor: ${queue.songs[0].info.author}`);
+				return message.channel.send(em);
+			}
+			if (queue.looping == 'queue') {
+				queue.songs.push(queue.songs.shift());
+				const thu = queue.songs[0].info.identifier;
+				client.play(message, queue.songs[0].track);
+				if (!queue.pb) return;
+				const em = new Discord.MessageEmbed()
+					.setTitle('Now Playing:')
+					.setColor(0x2daa4b)
+					.setThumbnail(`https://img.youtube.com/vi/${thu}/0.jpg`)
+					.setDescription(`Title: [${queue.songs[0].info.title}](${queue.songs[0].info.uri})\nAuthor: ${queue.songs[0].info.author}`);
+				return message.channel.send(em);
+			}
 			queue.songs.shift();
 
 			if (!queue.songs.length) {
@@ -460,13 +483,12 @@ client.play = (message, track) => {
 			}
 			const thu = queue.songs[0].info.identifier;
 			client.play(message, queue.songs[0].track);
+			if (!queue.pb) return;
 			const em = new Discord.MessageEmbed()
 				.setTitle('Now Playing:')
 				.setColor(0x2daa4b)
 				.setThumbnail(`https://img.youtube.com/vi/${thu}/0.jpg`)
-				.setDescription(`
-	Title: [${queue.songs[0].info.title}](${queue.songs[0].info.uri})\nAuthor: ${queue.songs[0].info.author}
-	`);
+				.setDescription(`Title: [${queue.songs[0].info.title}](${queue.songs[0].info.uri})\nAuthor: ${queue.songs[0].info.author}`);
 			return message.channel.send(em);
 
 		});

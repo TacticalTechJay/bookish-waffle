@@ -5,6 +5,9 @@ String.prototype.titleCase = function() {
 	}
 	return splitStr.join(' ');
 };
+Array.prototype.random = function() {
+    return this[Math.floor(Math.random() * this.length)]
+};
 const fs = require('fs');
 const Discord = require('discord.js');
 const { prefix, nodes, dblToken, ADLToken } = require('./config.json');
@@ -37,7 +40,6 @@ if (process.env.MODE == 0) {
 	});
 }
 
-
 client.queue = new Map();
 client.commands = new Discord.Collection();
 client.fetchSongs = async (string, amount) => {
@@ -68,7 +70,6 @@ client.fetchInfo = async (string) => {
 		if (!res2) throw 'NO RESPONSE';
 		return res2;
 };
-
 
 client.db = require('quick.db');
 client.qsaves = new client.db.table('qsaves');
@@ -179,7 +180,7 @@ client.on('voiceStateUpdate', (oldState, newState) => {
 		if (oldState === 'No need') return;
 		if (!oldState.channel) return;
 		if (!newState.channel) {
-			if (!client.queue.get(newState.guild.id) && !client.manager.get(newState.guild.id)) return;
+			if (!client.queue.get(newState.guild.id) && !client.manager.players.get(newState.guild.id)) return;
 			try {
 				client.queue.delete(newState.guild.id);
 				console.log(newState.guild.name + ' disconnected the bot and did not have a queue.');
@@ -195,7 +196,7 @@ client.on('voiceStateUpdate', (oldState, newState) => {
 				console.error(e);
 			}
 			client.queue.delete(newState.guild.id);
-			return client.manager.get(newState.guild.id);
+			return client.manager.players.get(newState.guild.id);
 		}
 	}
 	else {
@@ -318,9 +319,9 @@ client.getSong = (string, message, isSearch) => {
 		let thu = song.tracks[0].info.identifier;
 		if (song.playlistInfo.name) {
 			const tracks = song.tracks;
-			let player = client.manager.get(message.guild.id);
+			let player = client.manager.players.get(message.guild.id);
 			if (!player) await client.join(message);
-			player = client.manager.get(message.guild.id);
+			player = client.manager.players.get(message.guild.id);
 
 
 			if (player.playing === false) {
@@ -350,8 +351,8 @@ client.getSong = (string, message, isSearch) => {
 			}
 		}
 
-		if (!client.manager.get(message.guild.id)) await client.join(message);
-		const player = client.manager.get(message.guild.id);
+		if (!client.manager.players.get(message.guild.id)) await client.join(message);
+		const player = client.manager.players.get(message.guild.id);
 
 		if (player.playing === false) {
 				client.askWhich(song, message, isSearch).then(async response => {
@@ -449,7 +450,7 @@ client.getSong = (string, message, isSearch) => {
 client.play = (message, track) => {
 	try {
 		const queue = client.queue.get(message.guild.id);
-		const player = client.manager.get(message.guild.id);
+		const player = client.manager.players.get(message.guild.id);
 		player.play(track);
 		player.once('end', async () => {
 
@@ -505,7 +506,7 @@ client.join = async (message) => {
 	}, {
 		selfdeaf: true
 	});
-	await client.manager.get(message.guild.id).volume(50);
+	await client.manager.players.get(message.guild.id).volume(50);
 	console.log(`A player has spawned in ${message.guild.name} (${message.guild.id})`);
 };
 client.leave = async (message) => {

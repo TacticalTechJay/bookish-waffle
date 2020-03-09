@@ -14,7 +14,7 @@ module.exports = {
         else if (message.member.voice.channel.id !== message.guild.me.voice.channel.id) return message.channel.send('You need to be in the same voice channel as me to use this command!');
 		else if (message.member.voice.selfDeaf) return message.channel.send('You need to be undeafened to use something like this.');
         if (op1.includes(queue.looping)) return message.channel.send('I can not skip a song that is currently looping like this.');
-        client.manager.get(message.guild.id).stop();
+        client.manager.players.get(message.guild.id).stop();
         return message.channel.send('Skipped!');
     }
 };

@@ -12,15 +12,7 @@ module.exports = {
         if (message.member.voice.channel.id !== message.guild.me.voice.channel.id) return message.channel.send('You need to be in the same voice channel as me to use this command!');
         if (message.member.voice.selfDeaf) return message.channel.send('You need to be undeafened to use something like this.');
         try {
-            client.queue.delete(message.guild.id);
-            client.emit('voiceStatusUpdate', ('No need', 'No need'));
-        }
-        catch(e) {
-           console.log(e);
-           return message.channel.send('Are you sure there is a queue?');
-        }
-        try {
-            client.manager.leave(message.guild.id);
+            await client.manager.leave(message.guild.id);
         }
         catch(e) {
             console.log(e);

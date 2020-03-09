@@ -32,7 +32,7 @@ module.exports = {
                 return console.error(e);
             }
         }
-        else if (!queue && !client.manager.get(message.guild.id)) {
+        else if (!queue && !client.manager.players.get(message.guild.id)) {
             const qconstruct = {
                 songs: qsave,
                 looping: false

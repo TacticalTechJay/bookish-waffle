@@ -6,7 +6,7 @@ module.exports = {
     guildOnly: true,
     usage: '<Timestamp>',
     async execute(message, args, client) {
-        const player = client.manager.get(message.guild.id);
+        const player = client.manager.players.get(message.guild.id);
         const queue = client.queue.get(message.guild.id);
         const time = args[0].split(':');
         if (!player || !queue) return message.channel.send('You need to be playing music to use this command');

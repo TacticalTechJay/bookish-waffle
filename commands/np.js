@@ -9,7 +9,7 @@ module.exports = {
 	execute(message, a, client) {
 		const { MessageEmbed } = require('discord.js');
 		const serverQueue = client.queue.get(message.guild.id);
-		const player = client.manager.get(message.guild.id);
+		const player = client.manager.players.get(message.guild.id);
 		if (!serverQueue) return message.channel.send('The server\'s queue is empty.');
 		const embed = new MessageEmbed()
 			.setDescription(`Looping: ${serverQueue.looping.titleCase()}\nPlayback Notificationss: ${serverQueue.pb ? 'On' : 'Off'}\nSong Name: [${serverQueue.songs[0].info.title}](${serverQueue.songs[0].info.uri})\nAuthor: ${serverQueue.songs[0].info.author}\nDuration: ${require('moment').utc(player.state.position).format('H:mm:ss')} / ${require('moment').utc(serverQueue.songs[0].info.length).format('H:mm:ss')}${serverQueue.songs[0].requester ? `\nRequester: ${serverQueue.songs[0].requester.tag}` : null}`)

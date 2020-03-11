@@ -76,21 +76,6 @@ client.qsaves = new client.db.table('qsaves');
 
 client.nekosSafe = new (require('nekos.life'))().sfw;
 client.nekosUnSafe = new (require('nekos.life'))().nsfw;
-client.pushStats = async (Token) => {
-	const body = {
-		'users': client.users.cache.size,
-		'servers': client.guilds.cache.size,
-		'shards': client.shard.count
-	};
-	const res = await fetch(`https://abstractlist.net/api/bot/${client.user.id}/stats`, {
-		method: 'post',
-		body: JSON.stringify(body),
-		headers: {
-			'Content-type': 'application/json', 'Authorization': Token
-		}
-	});
-	return await res.json();
-};
 const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
 
 for (const file of commandFiles) {
@@ -268,7 +253,8 @@ client.on('message', async (message) => {
 	}
 
 	try {
-		command.execute(message, args, client);
+		await command.execute(message, args, client);
+		console.log(`${message.guild.id} | ${command.name}`)
 	}
 	catch (error) {
 		console.error(`${message.guild.id} | ${command.name}:\n${error.stack}`);

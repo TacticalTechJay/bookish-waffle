@@ -6,7 +6,7 @@ String.prototype.titleCase = function() {
 	return splitStr.join(' ');
 };
 Array.prototype.random = function() {
-    return this[Math.floor(Math.random() * this.length)]
+    return this[Math.floor(Math.random() * this.length)];
 };
 const fs = require('fs');
 const Discord = require('discord.js');
@@ -144,7 +144,7 @@ client.on('guildCreate', g => {
 		.setTitle('Guild added.')
 		.addField('Guild Name', g.name)
 		.addField('Guild ID', g.id)
-		.addField('Guild Onwer', g.owner.user.username)
+		.addField('Guild Owner', g.owner.user.username)
 		.addField('Guild Members (Excluding bots)', g.members.cache.filter(m => !m.user.bot).size)
 		.setColor('GREEN');
 	return client.channels.cache.get('661669168009052200').send(embed);
@@ -155,7 +155,7 @@ client.on('guildDelete', g => {
 		.setTitle('Guild removed.')
 		.addField('Guild Name', g.name)
 		.addField('Guild ID', g.id)
-		.addField('Guild Onwer', g.owner.user.username)
+		.addField('Guild Owner', g.owner.user.username)
 		.addField('Guild Members (Excluding bots)', g.members.cache.filter(m => !m.user.bot).size)
 		.setColor('RED');
 	return client.channels.cache.get('661669168009052200').send(embed);
@@ -183,20 +183,6 @@ client.on('voiceStateUpdate', (oldState, newState) => {
 			client.queue.delete(newState.guild.id);
 			return client.manager.players.get(newState.guild.id);
 		}
-	}
-	else {
-		// let timeOut;
-		// let channel = newState.channel;
-		// if (!oldState.channel) channel = newState.channel;
-		// if (!client.channels.cache.get(channel.id).members.cache) return;
-		// if (client.channels.cache.get(channel.id).members.cache.filter(m => !m.user.bot).size < 1 && client.queue.get(newState.guild.id)) {
-		// 	return timeOut = setTimeout(() => {
-		// 		client.manager.leave(newState.guild.id);
-		// 	}, 30000);
-		// } else if (newState.channel.members.cache.filter(m => !m.user.bot).size >= 1 && client.queue.get(newState.guild.id)) {
-		// 	if (timeOut) return clearTimeout(timeOut);
-		// 	return;
-		// }
 	}
 });
 
@@ -254,7 +240,7 @@ client.on('message', async (message) => {
 
 	try {
 		await command.execute(message, args, client);
-		console.log(`${message.guild.id} | ${command.name}`)
+		console.log(`${message.guild.id} | ${command.name}`);
 	}
 	catch (error) {
 		console.error(`${message.guild.id} | ${command.name}:\n${error.stack}`);

@@ -248,13 +248,29 @@ client.on('message', async (message) => {
 
 // START MUSIC RELATED FUNCTIONS
 client.getSongs = async (string) => {
-	const res = await fetch(`http://${client.lavalink.host}:${client.lavalink.port}/loadtracks?identifier=${string}`, {
-		headers: { 'Authorization': client.lavalink.password }
-	}).catch(err => {
-		console.error(err);
-		return null;
-	});
-	const res2 = await res.json();
+	let i = 1;
+	async function get() {
+		const res = await fetch(`http://${client.lavalink.host}:${client.lavalink.port}/loadtracks?identifier=${string}`, {
+			headers: { 'Authorization': client.lavalink.password }
+		}).catch(err => {
+			console.error(err);
+			return null;
+		});
+		const res2 = await res.json();
+		console.log(i);
+		if (i < 3) throw 'NO_MATCHES';
+		if (res2.loadType == 'NO_MATCHES') {
+			++i
+			return get();
+		}
+		return res2;
+	}
+	try {
+		const res2 = await get();
+	} catch(e) {
+		if (e == 'NO_MATCHES') throw 'NO MATCHES';
+	}
+	const res2 = await get();
 	if (!res2) throw 'NO RESPONSE';
 	if (!res2.tracks) throw 'NO TRACKS';
 	return res2;
@@ -278,7 +294,7 @@ client.askWhich = async (song, message, isSearch) => {
 	message.channel.send(em1).then(m => a = m);
 	return await message.channel.awaitMessages(message2 => message2.content > 0 && message2.content <= 10 && message.author == message2.author || message2.content.toLowerCase().startsWith(`${client.prefix}search`) || message2.content.toLowerCase() == 'cancel', {
 		max: 1,
-		time: 15000,
+		time: 20000,
 		errors: ['time']
 	});
 };
@@ -395,7 +411,7 @@ client.getSong = (string, message, isSearch) => {
 				return message.channel.send(em);
 			}).catch(e => {
 				if (e.size == 0) {
-					message.channel.messages.get(a.id).delete();
+					message.channel.messages.cache.get(a.id).delete();
 					return message.channel.send('There was no response');
 				}
 				console.error(e);

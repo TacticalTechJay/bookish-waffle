@@ -18,7 +18,7 @@ module.exports = {
         if (message.member.voice.selfDeaf) return message.channel.send('You need to be undeafened to use something like this.');
         const player = await client.manager.players.get(message.guild.id);
         if (!player) {
-            if (!client.queue.get(message.guild.id)) client.createQueue(message.guild.id);
+            if (!client.queue.get(message.guild.id)) client.createQueue(message.guild.id, message.channel.id);
             if (client.queue.get(message.guild.id)) {
                 if (!args.join(' ')) return client.play(message);
             }

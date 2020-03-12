@@ -261,11 +261,12 @@ client.getSongs = async (string) => {
 	if (!res2.tracks) throw 'NO TRACKS';
 	return res2;
 };
-client.createQueue = (guild) => {
+client.createQueue = (guild, channel) => {
 	client.queue.set(guild, {
 		songs: [],
 		looping: 'none',
-		pb: true
+		pb: true,
+		channel: channel
 	});
 };
 client.askWhich = async (song, message, isSearch) => {

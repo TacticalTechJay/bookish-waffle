@@ -160,22 +160,20 @@ client.on('guildDelete', g => {
 		.setColor('RED');
 	return client.channels.cache.get('661669168009052200').send(embed);
 });
-client.on('voiceStateUpdate', (oldState, newState) => {
+client.on('voiceStateUpdate', async (oldState, newState) => {
 	if (newState.member == newState.guild.me) {
 		if (oldState === 'No need') return;
 		if (!oldState.channel) return;
 		if (!newState.channel) {
 			if (!client.queue.get(newState.guild.id) && !client.manager.players.get(newState.guild.id)) return;
 			try {
-				client.queue.delete(newState.guild.id);
-				console.log(newState.guild.name + ' disconnected the bot and did not have a queue.');
+				await client.queue.delete(newState.guild.id);
 			}
 			catch (e) {
 				console.error(e);
 			}
 			try {
-				client.manager.leave(newState.guild.id);
-				console.log(newState.guild.name + ' disconnected the bot and had manager still active.');
+				await client.manager.leave(newState.guild.id);
 			}
 			catch (e) {
 				console.error(e);
@@ -278,7 +276,7 @@ client.askWhich = async (song, message, isSearch) => {
 				.setDescription(song.tracks.map(t => `**${++i}** - ${Discord.Util.escapeMarkdown(t.info.title)} by ${Discord.Util.escapeMarkdown(t.info.author)}`).join('\n'))
 				.setFooter('Say "cancel" to cancel the selection!');
 	message.channel.send(em1).then(m => a = m);
-	return await message.channel.awaitMessages(message2 => message2.content > 0 && message2.content < 10 && message.author == message2.author || message2.content.toLowerCase().startsWith(`${client.prefix}search`) || message2.content.toLowerCase() == 'cancel', {
+	return await message.channel.awaitMessages(message2 => message2.content > 0 && message2.content <= 10 && message.author == message2.author || message2.content.toLowerCase().startsWith(`${client.prefix}search`) || message2.content.toLowerCase() == 'cancel', {
 		max: 1,
 		time: 15000,
 		errors: ['time']

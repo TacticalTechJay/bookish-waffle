@@ -16,4 +16,4 @@ module.exports = {
         else if (!serverQueue.pb) serverQueue.pb = true;
         return message.channel.send(serverQueue.pb ? 'I have enabled playback notifications.' : 'I have disabled playback notifications.');
     }
-}
+};

@@ -10,7 +10,6 @@ module.exports = {
 	async execute(message) {
 		const fetch = require('node-fetch');
 		const choice = ['dankmemes', 'memes', 'me_irl', 'meirl', 'crappydesign', 'hmm'][Math.floor(Math.random() * 6)];
-		console.log(choice);
 		const res = await fetch(`https://api.ksoft.si/images/rand-reddit/${choice}?remove_nsfw=true&span'=week'`, {
 			headers: { 'Authorization': `Bearer ${ksoftapi}` }
 		});

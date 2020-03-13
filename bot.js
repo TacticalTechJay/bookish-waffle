@@ -262,7 +262,7 @@ client.getSongs = async (string) => {
 		});
 		const res2 = await res.json();
 		console.log(i);
-		if (i < 3) throw 'NO_MATCHES';
+		if (i == 3) throw 'NO_MATCHES';
 		if (res2.loadType == 'NO_MATCHES') {
 			++i
 			return get();

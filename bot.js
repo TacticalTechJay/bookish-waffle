@@ -8,6 +8,10 @@ String.prototype.titleCase = function() {
 Array.prototype.random = function() {
     return this[Math.floor(Math.random() * this.length)];
 };
+String.prototype.toProperCase = function () {
+	return this.toLowerCase().replace(/(^|[\s.])[^\s.]/gm, (s) => s.toUpperCase())
+}
+
 const fs = require('fs');
 const Discord = require('discord.js');
 const { prefix, nodes, dblToken, ADLToken } = require('./config.json');

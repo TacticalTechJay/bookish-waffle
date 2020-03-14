@@ -20,7 +20,7 @@ module.exports = {
         else if (c2 > serverQueue.songs.length || c2 <= 0) return message.chanenl.send('That is out of my leage!');
         else if (c1 == c2) return message.channel.send('That is... the same place? I mean sure I\'ll move it there but, really?');
         if (serverQueue.songs[c1].requester.id == message.author.id || message.member.permissions.has('MANAGE_MESSAGES')) {
-            message.channel.send(`Moved ${serverQueue.songs[c1].info.title} to postion ${c2}`);
+            message.channel.send(`Moved \`${serverQueue.songs[c1].info.title}\` to postion ${c2}`);
             return mutate(serverQueue.songs, c1, c2);
         }
         else {

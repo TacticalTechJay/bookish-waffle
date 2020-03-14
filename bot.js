@@ -245,7 +245,7 @@ client.on('message', async (message) => {
 		console.log(`${message.guild.id} | ${command.name}`);
 	}
 	catch (error) {
-		console.error(`${message.guild.id} | ${command.name}:\n${error.stack}`);
+		console.error(`${message.guild ? message.guild.id : 'DM: ' + message.channel.id} | ${command.name}:\n${error.stack}`);
 		message.reply(`there was an error trying to execute that command! Report this to the creator of this bot: \`${error}\``);
 	}
 });

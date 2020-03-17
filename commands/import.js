@@ -35,7 +35,9 @@ module.exports = {
         else if (!queue && !client.manager.players.get(message.guild.id)) {
             const qconstruct = {
                 songs: qsave,
-                looping: false
+                looping: 'disabled',
+                pb: true,
+                channel: message.member.voice.channel.id
             };
             client.queue.set(message.guild.id, qconstruct);
             client.join(message);

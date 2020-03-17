@@ -5,7 +5,7 @@ module.exports = {
 	category: 'util',
 	aliases: ['ri'],
 	async execute(message, args) {
-		const target = message.mentions.roles.first() || message.guild.roles.cache.get(args[0]) || message.guild.roles.cache.find(c => c.name.toLowerCase() == args.join(' ')) || message.member.roles.highest;
+		const target = message.mentions.roles.first() || message.guild.roles.cache.get(args[0]) || message.guild.roles.cache.find(c => c.name.toLowerCase() == args.join(' ').toLowerCase()) || message.member.roles.highest;
 		const roleP = message.channel.permissionOverwrites.get(target.id);
 		const embed = new (require('discord.js').MessageEmbed)()
 			.setTitle(`RoleInfo for ${target.name} (${target.id})`)

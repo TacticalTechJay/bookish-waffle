@@ -1,6 +1,6 @@
 module.exports = {
 	name: 'roleinfo',
-	description: 'Get the role\'s info',
+	description: 'Get the role\'s info. If any permission overwrites show, they will be shown in the embed. Want permission overwrites for a certain voice channel? Connect to that voice channel.',
 	usage: '<RoleName/RoleMention>',
 	category: 'util',
 	aliases: ['ri'],
@@ -17,7 +17,11 @@ module.exports = {
 			.addField('Is Managed', target.managed ? 'Yes' : 'No', true)
 			.addField('Color', `#${target.color.toString(16)}`, true)
 			.addField('Permissions (Role)', `\`\`\`${target.permissions ? target.permissions.toArray().join('\n') : 'NONE'}\`\`\``)
-			.addField('Permissions (Channel)', roleP ? `\`\`\`${roleP.allow ? roleP.allow.toArray().map(p => `+ ${p}`).join('\n') + '\n' : null}${roleP.deny ? roleP.deny.toArray().map(p => `- ${p}`).join('\n') : null}\`\`\`` : '```NONE```');
+		if (roleP) embed.addField('Permissions (TextChannel)',`\`\`\`${roleP.allow ? roleP.allow.toArray().map(p => `+ ${p}`).join('\n') + '\n' : null}${roleP.deny ? roleP.deny.toArray().map(p => `- ${p}`).join('\n') : null}\`\`\``);
+		if (message.member.voice.channel) {
+			roleVCP = message.member.voice.channel.permissionOverwrites.get(target.id);
+			if (roleVCP) embed.addField('Permissions (VoiceChannel)', `\`\`\`${ roleVCP.allow ? roleVCP.allow.toArray().map(p => `+ ${p}`) + '\n' : null }${roleVCP.deny ? roleVCP.deny.toArray().map(p => `- ${p}`).join('\n') : null}\`\`\``)
+		}
 		message.channel.send(embed).catch(e => console.error(`RoleInfo: ${e}`));
 	}
 };

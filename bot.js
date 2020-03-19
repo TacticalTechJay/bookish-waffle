@@ -30,9 +30,18 @@ if (process.env.MODE == 0) {
 	kofi.start(() => {
 		console.log('Started on port 4200');
 	});
-	client.dbl.on('error', e => {
-		console.error(e);
-	});
+
+	function a() {
+		client.dbl.on('error', e => {
+			console.error(e);
+			delete client.dbl;
+			setTimeout(() => {
+				client.dbl = new DBL(dblToken, client);
+				a();
+			}, 3600000)
+		});
+	}
+	a();
 	kofi.on('donation', donation => {
 		const amount = parseInt(donation.amount);
 		const id = parseInt(donation.message);

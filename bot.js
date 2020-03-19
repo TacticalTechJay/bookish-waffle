@@ -242,7 +242,7 @@ client.on('message', async (message) => {
 
 	try {
 		await command.execute(message, args, client);
-		console.log(`${message.guild.id} | ${command.name}`);
+		console.log(`${message.guild ? message.guild.id : `DM: ${message.channel.id}`} | ${command.name}`);
 	}
 	catch (error) {
 		console.error(`${message.guild ? message.guild.id : 'DM: ' + message.channel.id} | ${command.name}:\n${error.stack}`);

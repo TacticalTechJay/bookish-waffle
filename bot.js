@@ -46,34 +46,6 @@ if (process.env.MODE == 0) {
 
 client.queue = new Map();
 client.commands = new Discord.Collection();
-client.fetchSongs = async (string, amount) => {
-	const search = encodeURIComponent(string);
-	if (!amount) throw 'SEARCH LIMIT REQUIRED';
-	const res = await fetch(`http://${client.lavalink.host}:${client.lavalink.port}/loadtracks?identifier=${search}`, {
-		headers: { 'Authorization': client.lavalink.password }
-	}).catch(err => {
-		console.error(err);
-		throw err;
-	});
-	const res2 = await res.json();
-	if (!res2) throw 'NO RESPONSE';
-	if (!res2.tracks) return 'NO TRACKS';
-	res2.tracks.length = parseInt(amount);
-	if (isNaN(res2.tracks.length)) throw 'IMPROPER AMOUNT';
-	return res2.tracks;
-};
-client.fetchInfo = async (string) => {
-	const search = encodeURIComponent(string);
-		const res = await fetch(`http://${client.lavalink.host}:${client.lavalink.port}/loadtracks?identifier=${search}`, {
-				headers: { 'Authorization': client.lavalink.password }
-		}).catch(err => {
-				console.error(err);
-				throw err;
-		});
-		const res2 = await res.json();
-		if (!res2) throw 'NO RESPONSE';
-		return res2;
-};
 
 client.db = require('quick.db');
 client.qsaves = new client.db.table('qsaves');
@@ -105,6 +77,8 @@ if (process.env.MODE == 0) {
 	});
 }
 const cooldowns = new Discord.Collection();
+
+client.login(process.env.DISCORD_TOKEN);
 client.on('ready', async () => {
 
 	console.log('Ready!');
@@ -134,12 +108,11 @@ client.on('ready', async () => {
 			});
 		}, 1800000);
 	}
- catch(e) {
+	catch(e) {
 		console.error(e);
 	}
 
 });
-client.login(process.env.DISCORD_TOKEN);
 client.on('error', console.error);
 client.on('disconnect', console.log);
 client.on('guildCreate', g => {

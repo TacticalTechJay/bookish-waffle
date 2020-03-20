@@ -13,9 +13,9 @@ String.prototype.toProperCase = function () {
 }
 
 const fs = require('fs');
-const Discord = require('discord.js');
+const { MessageEmbed, Client, Collection, Util } = require('discord.js');
 const { prefix, nodes, dblToken, ADLToken } = require('./config.json');
-const client = new Discord.Client({ disableEveryone: true, messageCacheMaxSize: 100, messageCacheLifetime: 3600, messageSweepInterval: 7200 });
+const client = new Client({ disableEveryone: true, messageCacheMaxSize: 100, messageCacheLifetime: 3600, messageSweepInterval: 7200 });
 const { PlayerManager } = require('discord.js-lavalink');
 const fetch = require('node-fetch');
 const { KoFi } = require('kofi.js');
@@ -24,7 +24,7 @@ let a;
 client.prefix = prefix;
 
 client.queue = new Map();
-client.commands = new Discord.Collection();
+client.commands = new Collection();
 
 client.db = require('quick.db');
 client.qsaves = new client.db.table('qsaves');
@@ -83,7 +83,7 @@ if (process.env.MODE == 0) {
 		client.db.push('donor', `member_${id}`);
 	});
 }
-const cooldowns = new Discord.Collection();
+const cooldowns = new Collection();
 
 client.login(process.env.DISCORD_TOKEN);
 client.on('ready', async () => {
@@ -124,7 +124,7 @@ client.on('error', console.error);
 client.on('disconnect', console.log);
 client.on('guildCreate', g => {
 	if (!g.available) return;
-	const embed = new Discord.MessageEmbed()
+	const embed = new MessageEmbed()
 		.setTitle('Guild added.')
 		.addField('Guild Name', g.name)
 		.addField('Guild ID', g.id)
@@ -135,7 +135,7 @@ client.on('guildCreate', g => {
 });
 client.on('guildDelete', g => {
 	if (!g.available) return;
-	const embed = new Discord.MessageEmbed()
+	const embed = new MessageEmbed()
 		.setTitle('Guild removed.')
 		.addField('Guild Name', g.name)
 		.addField('Guild ID', g.id)
@@ -194,7 +194,7 @@ client.on('message', async (message) => {
 		return message.channel.send(reply);
 	}
 
-	if (!cooldowns.has(command.name)) cooldowns.set(command.name, new Discord.Collection());
+	if (!cooldowns.has(command.name)) cooldowns.set(command.name, new Collection());
 
 	const now = Date.now();
 	const timestamps = cooldowns.get(command.name);
@@ -234,7 +234,7 @@ client.on('message', async (message) => {
 client.getSongs = async (string) => {
 	let i = 1;
 	async function get() {
-		const res = await fetch(`http://${client.lavalink.host}:${client.lavalink.port}/loadtracks?identifier=${string}`, {
+		const res = await fetch(`http://${client.lavalink.host}:${client.lavalink.port}/loadtracks?identifier=${encodeURIComponent(string)}`, {
 			headers: { 'Authorization': client.lavalink.password }
 		}).catch(err => {
 			console.error(err);
@@ -270,9 +270,9 @@ client.askWhich = async (song, message, isSearch) => {
 	if (!isSearch) return;
 	let i = 0;
 	song.tracks.length = 10;
-	const em1 = new Discord.MessageEmbed()
+	const em1 = new MessageEmbed()
 		.setTitle('Pick a song!')
-				.setDescription(song.tracks.map(t => `**${++i}** - ${Discord.Util.escapeMarkdown(t.info.title)} by ${Discord.Util.escapeMarkdown(t.info.author)}`).join('\n'))
+				.setDescription(song.tracks.map(t => `**${++i}** - ${Util.escapeMarkdown(t.info.title)} by ${Util.escapeMarkdown(t.info.author)}`).join('\n'))
 				.setFooter('Say "cancel" to cancel the selection!');
 	message.channel.send(em1).then(m => a = m);
 	return await message.channel.awaitMessages(message2 => message2.content > 0 && message2.content <= 10 && message.author == message2.author || message2.content.toLowerCase().startsWith(`${client.prefix}search`) || message2.content.toLowerCase() == 'cancel', {
@@ -300,11 +300,11 @@ client.getSong = (string, message, isSearch) => {
 					client.queue.get(message.guild.id).songs.push(t);
 				});
 				client.play(message, tracks[0].track);
-				const em = new Discord.MessageEmbed()
+				const em = new MessageEmbed()
 					.setTitle('Now Playing Playlist')
 					.setColor(0x2daa4b)
 					.setThumbnail(`https://img.youtube.com/vi/${thu}/0.jpg`)
-					.setDescription(`Title: **${song.playlistInfo.name}**\nSong Amount: ${song.tracks.length}`);
+					.setDescription(`Title: **${Util.escapeMarkdown(song.playlistInfo.name)}**\nSong Amount: ${song.tracks.length}`);
 				return message.channel.send(em);
 			}
 			else {
@@ -312,7 +312,7 @@ client.getSong = (string, message, isSearch) => {
 					t.requester = message.author;
 					client.queue.get(message.guild.id).songs.push(t);
 				});
-				const em = new Discord.MessageEmbed()
+				const em = new MessageEmbed()
 					.setTitle('Added Playlist to Queue')
 					.setColor(0x2697ff)
 					.setThumbnail(`https://img.youtube.com/vi/${thu}/0.jpg`)
@@ -340,13 +340,11 @@ client.getSong = (string, message, isSearch) => {
 					message.channel.messages.fetch(a.id).then(m => m.delete());
 					song.tracks[r].requester = message.author;
 					client.queue.get(message.guild.id).songs.push(song.tracks[r]);
-					const em = new Discord.MessageEmbed()
+					const em = new MessageEmbed()
 						.setTitle('Now Playing:')
 						.setColor(0x2daa4b)
 						.setThumbnail(`https://img.youtube.com/vi/${thu}/0.jpg`)
-						.setDescription(`
-						Title: [${song.tracks[r].info.title}](${song.tracks[r].info.uri})\nAuthor: ${song.tracks[r].info.author}
-						`);
+						.setDescription(`Title: [${Util.escapeMarkdown(song.tracks[r].info.title)}](${song.tracks[r].info.uri})\nAuthor: ${Util.escapeMarkdown(song.tracks[r].info.author)}`);
 					return message.channel.send(em);
 				}).catch(e => {
 					if (!e) {
@@ -361,13 +359,11 @@ client.getSong = (string, message, isSearch) => {
 				song.tracks[0].requester = message.author;
 				client.play(message, song.tracks[0].track);
 				client.queue.get(message.guild.id).songs.push(song.tracks[0]);
-				const em = new Discord.MessageEmbed()
+				const em = new MessageEmbed()
 					.setTitle('Now Playing:')
 					.setColor(0x2daa4b)
 					.setThumbnail(`https://img.youtube.com/vi/${thu}/0.jpg`)
-					.setDescription(`
-				Title: [${song.tracks[0].info.title}](${song.tracks[0].info.uri})\nAuthor: ${song.tracks[0].info.author}\nLength: ${require('moment').utc(song.tracks[0].info.length).format('H:mm:ss')}
-				`);
+					.setDescription(`Title: [${Util.escapeMarkdown(song.tracks[0].info.title)}](${song.tracks[0].info.uri})\nAuthor: ${Util.escapeMarkdown(song.tracks[0].info.author)}\nLength: ${require('moment').utc(song.tracks[0].info.length).format('H:mm:ss')}`);
 				return message.channel.send(em);
 			}
 		}
@@ -384,12 +380,12 @@ client.getSong = (string, message, isSearch) => {
 				message.channel.messages.fetch(a.id).then(m => m.delete());
 				song.tracks[response.first().content - 1].requester = message.author;
 				client.queue.get(message.guild.id).songs.push(song.tracks[response.first().content - 1]);
-				const em = new Discord.MessageEmbed()
+				const em = new MessageEmbed()
 					.setTitle('Added To Queue:')
 					.setColor(0x2697ff)
 					.setThumbnail(`https://img.youtube.com/vi/${thu}/0.jpg`)
 					.setDescription(`
-					Title: [${song.tracks[response.first().content - 1].info.title}](${song.tracks[response.first().content - 1].info.uri})\nAuthor: ${song.tracks[response.first().content - 1].info.author}
+					Title: [${Util.escapeMarkdown(song.tracks[response.first().content - 1].info.title)}](${song.tracks[response.first().content - 1].info.uri})\nAuthor: ${Util.escapeMarkdown(song.tracks[response.first().content - 1].info.author)}
 					`);
 				return message.channel.send(em);
 			}).catch(e => {
@@ -402,12 +398,12 @@ client.getSong = (string, message, isSearch) => {
 			if (!isSearch) {
 				song.tracks[0].requester = message.author;
 				client.queue.get(message.guild.id).songs.push(song.tracks[0]);
-				const em = new Discord.MessageEmbed()
+				const em = new MessageEmbed()
 					.setTitle('Added To Queue:')
 					.setColor(0x2697ff)
 					.setThumbnail(`https://img.youtube.com/vi/${thu}/0.jpg`)
 					.setDescription(`
-					Title: [${song.tracks[0].info.title}](${song.tracks[0].info.uri})\nAuthor: ${song.tracks[0].info.author}\nLength: ${require('moment').utc(song.tracks[0].info.length).format('H:mm:ss')}
+					Title: [${Util.escapeMarkdown(song.tracks[0].info.title)}](${song.tracks[0].info.uri})\nAuthor: ${Util.escapeMarkdown(song.tracks[0].info.author)}\nLength: ${require('moment').utc(song.tracks[0].info.length).format('H:mm:ss')}
 					`);
 				return message.channel.send(em);
 			}
@@ -428,11 +424,11 @@ client.play = (message, track) => {
 				client.play(message, queue.songs[0].track);
 				const thu = queue.songs[0].info.identifier;
 				if (!queue.pb) return;
-				const em = new Discord.MessageEmbed()
+				const em = new MessageEmbed()
 					.setTitle('Now Playing:')
 					.setColor(0x2daa4b)
 					.setThumbnail(`https://img.youtube.com/vi/${thu}/0.jpg`)
-					.setDescription(`Title: [${queue.songs[0].info.title}](${queue.songs[0].info.uri})\nAuthor: ${queue.songs[0].info.author}`);
+					.setDescription(`Title: [${Util.escapeMarkdown(queue.songs[0].info.title)}](${queue.songs[0].info.uri})\nAuthor: ${Util.escapeMarkdown(queue.songs[0].info.author)}`);
 				return message.channel.send(em);
 			}
 			if (queue.looping == 'queue') {
@@ -440,11 +436,11 @@ client.play = (message, track) => {
 				const thu = queue.songs[0].info.identifier;
 				client.play(message, queue.songs[0].track);
 				if (!queue.pb) return;
-				const em = new Discord.MessageEmbed()
+				const em = MessageEmbed()
 					.setTitle('Now Playing:')
 					.setColor(0x2daa4b)
 					.setThumbnail(`https://img.youtube.com/vi/${thu}/0.jpg`)
-					.setDescription(`Title: [${queue.songs[0].info.title}](${queue.songs[0].info.uri})\nAuthor: ${queue.songs[0].info.author}`);
+					.setDescription(`Title: [${Util.escapeMarkdown(queue.songs[0].info.title)}](${queue.songs[0].info.uri})\nAuthor: ${Util.escapeMarkdown(queue.songs[0].info.author)}`);
 				return message.channel.send(em);
 			}
 			queue.songs.shift();
@@ -455,11 +451,11 @@ client.play = (message, track) => {
 			const thu = queue.songs[0].info.identifier;
 			client.play(message, queue.songs[0].track);
 			if (!queue.pb) return;
-			const em = new Discord.MessageEmbed()
+			const em = new MessageEmbed()
 				.setTitle('Now Playing:')
 				.setColor(0x2daa4b)
 				.setThumbnail(`https://img.youtube.com/vi/${thu}/0.jpg`)
-				.setDescription(`Title: [${queue.songs[0].info.title}](${queue.songs[0].info.uri})\nAuthor: ${queue.songs[0].info.author}`);
+				.setDescription(`Title: [${Util.escapeMarkdown(queue.songs[0].info.title)}](${queue.songs[0].info.uri})\nAuthor: ${Util.escapeMarkdown(queue.songs[0].info.author)}`);
 			return message.channel.send(em);
 
 		});

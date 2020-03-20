@@ -234,7 +234,8 @@ client.on('message', async (message) => {
 client.getSongs = async (string) => {
 	let i = 1;
 	async function get() {
-		const res = await fetch(`http://${client.lavalink.host}:${client.lavalink.port}/loadtracks?identifier=${encodeURIComponent(string)}`, {
+		const url = new URL(`http://${client.lavalink.host}:${client.lavalink.port}/loadtracks?identifier=${string}`)
+		const res = await fetch(url, {
 			headers: { 'Authorization': client.lavalink.password }
 		}).catch(err => {
 			console.error(err);

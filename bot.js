@@ -437,7 +437,7 @@ client.play = (message, track) => {
 				const thu = queue.songs[0].info.identifier;
 				client.play(message, queue.songs[0].track);
 				if (!queue.pb) return;
-				const em = MessageEmbed()
+				const em = new MessageEmbed()
 					.setTitle('Now Playing:')
 					.setColor(0x2daa4b)
 					.setThumbnail(`https://img.youtube.com/vi/${thu}/0.jpg`)

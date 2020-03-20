@@ -23,36 +23,6 @@ const DBL = require('dblapi.js');
 let a;
 client.prefix = prefix;
 
-if (process.env.MODE == 0) {
-	const kofi = new KoFi('/notdonation', 4200);
-	client.dbl = new DBL(dblToken, client);
-	client.prefix = `${process.env.PREFIX} `;
-	kofi.start(() => {
-		console.log('Started on port 4200');
-	});
-
-	function a() {
-		client.dbl.on('error', e => {
-			console.error(e);
-			delete client.dbl;
-			setTimeout(() => {
-				client.dbl = new DBL(dblToken, client);
-				a();
-			}, 3600000)
-		});
-	}
-	a();
-	kofi.on('donation', donation => {
-		const amount = parseInt(donation.amount);
-		const id = parseInt(donation.message);
-		client.db.push('donations', donation);
-		if (amount < 3) return;
-		if (!donation.message || isNaN(id)) return;
-		if (!client.db.get('donor').includes(`member_${id}`)) return;
-		client.db.push('donor', `member_${id}`);
-	});
-}
-
 client.queue = new Map();
 client.commands = new Discord.Collection();
 
@@ -83,6 +53,34 @@ if (process.env.MODE == 0) {
 				message.channel.send(new (require('discord.js').MessageEmbed)().setImage((await x[1]()).url));
 			}
 		});
+	});
+	
+	const kofi = new KoFi('/notdonation', 4200);
+	client.dbl = new DBL(dblToken, client);
+	client.prefix = `${process.env.PREFIX} `;
+	kofi.start(() => {
+		console.log('Started on port 4200');
+	});
+
+	function a() {
+		client.dbl.on('error', e => {
+			console.error(e);
+			delete client.dbl;
+			setTimeout(() => {
+				client.dbl = new DBL(dblToken, client);
+				a();
+			}, 3600000)
+		});
+	}
+	a();
+	kofi.on('donation', donation => {
+		const amount = parseInt(donation.amount);
+		const id = parseInt(donation.message);
+		client.db.push('donations', donation);
+		if (amount < 3) return;
+		if (!donation.message || isNaN(id)) return;
+		if (!client.db.get('donor').includes(`member_${id}`)) return;
+		client.db.push('donor', `member_${id}`);
 	});
 }
 const cooldowns = new Discord.Collection();

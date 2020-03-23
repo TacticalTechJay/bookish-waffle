@@ -149,21 +149,9 @@ client.on('voiceStateUpdate', async (oldState, newState) => {
 		if (oldState === 'No need') return;
 		if (!oldState.channel) return;
 		if (!newState.channel) {
-			if (!client.queue.get(newState.guild.id) && !client.manager.players.get(newState.guild.id)) return;
-			try {
-				await client.queue.delete(newState.guild.id);
-			}
-			catch (e) {
-				console.error(e);
-			}
-			try {
-				await client.manager.leave(newState.guild.id);
-			}
-			catch (e) {
-				console.error(e);
-			}
-			client.queue.delete(newState.guild.id);
-			return client.manager.players.get(newState.guild.id);
+			await client.queue.delete(newState.guild.id);
+			await client.manager.leave(newState.guild.id);
+			return !client.manager.players.get(newState.guild.id);
 		}
 	}
 });

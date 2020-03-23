@@ -10,7 +10,7 @@ RUN npm install
 # Our precious bot
 COPY . /home/container/earth-chan
 
-ENV MODE 0
+ENV MODE 1
 ENV PREFIX plana
 ENV VERSION v1.2.3
 

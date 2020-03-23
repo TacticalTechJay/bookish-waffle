@@ -9,7 +9,7 @@ module.exports = {
     max_memory_restart: '1G',
     'exec_mode': 'fork',
     env: {
-      MODE: 1,
+      MODE: 0,
       VERSION: 'Superior'
     }
   }]

@@ -39,7 +39,7 @@ for (const file of commandFiles) {
 }
 delete client.nekosUnSafe.neko;
 delete client.nekosUnSafe.avatar;
-if (process.env.MODE == 0) {
+if (process.env.MODE) {
 	Object.entries(client.nekosUnSafe).map(x => {
 		client.commands.set(x[0].toLowerCase(), {
 			name: x[0].toLowerCase(),

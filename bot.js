@@ -101,24 +101,24 @@ client.on('ready', async () => {
 		user: client.user.id,
 		shards: client.shard.count
 	});
-	try {
 		setInterval(async () => {
 			const body = {
 				'users': client.users.cache.size,
 				'servers': client.guilds.cache.size,
 				'shards': client.shard.count
 			};
-			await fetch(`https://abstractlist.net/api/bot/${client.user.id}/stats`, {
-				method: 'post',
-				body: JSON.stringify(body),
-				headers: { 'Content-type': 'application/json', 'Authorization': ADLToken }
-			});
+			try {
+				const res = await fetch(`https://abstractlist.net/api/bot/${client.user.id}/stats`, {
+					method: 'post',
+					body: JSON.stringify(body),
+					headers: { 'Content-type': 'application/json', 'Authorization': ADLToken }
+				});
+				return await res.json();
+			}
+			catch (e) {
+				return console.error(e);
+			}
 		}, 1800000);
-	}
-	catch(e) {
-		console.error(e);
-	}
-
 });
 client.on('error', console.error);
 client.on('disconnect', console.log);

@@ -108,7 +108,7 @@ client.on('ready', async () => {
 				'shards': client.shard.count
 			};
 			try {
-				const res = await fetch(`https://abstractlist.net/api/bot/${client.user.id}/stats`, {
+				const res = await fetch(`https://abstractlist.com/api/bots/${client.user.id}/stats`, {
 					method: 'post',
 					body: JSON.stringify(body),
 					headers: { 'Content-type': 'application/json', 'Authorization': ADLToken }

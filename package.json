@@ -4,7 +4,6 @@
   "description": "NULL",
   "main": "index.js",
   "dependencies": {
-    "@google-cloud/text-to-speech": "^2.2.0",
     "array-move": "^2.2.0",
     "bytes": "^3.1.0",
     "chalk": "^3.0.0",
@@ -16,7 +15,6 @@
     "lavalink": "^2.8.2",
     "moment": "^2.24.0",
     "moment-duration-format": "^2.3.2",
-    "mongoose": "^5.8.4",
     "ms": "^2.1.2",
     "nekos.life": "^2.0.4",
     "node-fetch": "^2.6.0",

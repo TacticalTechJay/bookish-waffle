@@ -113,7 +113,7 @@ client.on('ready', async () => {
 					body: JSON.stringify(body),
 					headers: { 'Content-type': 'application/json', 'Authorization': ADLToken }
 				});
-				return await res.json();
+				return console.log(await res.json());
 			}
 			catch (e) {
 				return console.error(e);

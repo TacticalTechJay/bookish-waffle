@@ -1,6 +1,6 @@
 module.exports = {
   apps : [{
-    name: 'marschan',
+    name: 'Beta-Bot',
     script: 'index.js',
 
     instances: 1,

@@ -11,7 +11,7 @@ RUN npm install
 COPY . /home/container/earth-chan
 
 ENV MODE 1
-ENV PREFIX plana
+ENV PREFIX sh
 ENV VERSION v1.2.3
 
 # Start me!

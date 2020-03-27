@@ -99,7 +99,7 @@ walker.on('file', async (root, stats, next) => {
 
 // START MUSIC RELATED FUNCTIONS
 let i = 1;
-async function get() {
+async function get(string) {
 	const url = new URL(`http://${client.lavalink.host}:${client.lavalink.port}/loadtracks?identifier=${string}`)
 	const res = await fetch(url, {
 		headers: { 'Authorization': client.lavalink.password }
@@ -111,18 +111,16 @@ async function get() {
 	if (i == 3) throw 'NO_MATCHES';
 	if (res2.loadType == 'NO_MATCHES') {
 		++i
-		return get();
+		return get(string);
 	}
 	return res2;
 }
 client.getSongs = async (string) => {
-	let i = 1;
 	try {
-		const res2 = await get();
+		var res2 = await get(string);
 	} catch(e) {
 		if (e == 'NO_MATCHES') throw 'NO MATCHES';
 	}
-	const res2 = await get();
 	if (!res2) throw 'NO RESPONSE';
 	if (!res2.tracks) throw 'NO TRACKS';
 	return res2;
@@ -287,8 +285,8 @@ client.play = (message, track) => {
 		const queue = client.queue.get(message.guild.id);
 		const player = client.manager.players.get(message.guild.id);
 		player.play(track);
-		player.once('end', async () => {
-
+		player.once('end', async data => {
+			console.log(data);
 			if (queue.looping == 'song') {
 				client.play(message, queue.songs[0].track);
 				const thu = queue.songs[0].info.identifier;

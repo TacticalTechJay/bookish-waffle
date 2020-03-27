@@ -14,12 +14,13 @@ String.prototype.toProperCase = function () {
 
 const fs = require('fs');
 const { MessageEmbed, Client, Collection, Util } = require('discord.js');
-const { prefix, nodes, dblToken, ADLToken } = require('./config.json');
+const { prefix, dblToken } = require('./config.json');
 const client = new Client({ disableEveryone: true, messageCacheMaxSize: 100, messageCacheLifetime: 3600, messageSweepInterval: 7200 });
-const { PlayerManager } = require('discord.js-lavalink');
 const fetch = require('node-fetch');
 const { KoFi } = require('kofi.js');
 const DBL = require('dblapi.js');
+const { walk } = require('walk');
+const { resolve } = require('path');
 let a;
 client.prefix = prefix;
 
@@ -86,136 +87,14 @@ if (parseInt(process.env.MODE)) {
 const cooldowns = new Collection();
 
 client.login(process.env.DISCORD_TOKEN);
-client.on('ready', async () => {
 
-	console.log('Ready!');
-	client.user.setActivity(`${client.prefix}help for help.`)
-		.then(presence => console.log(`Activity is ${presence.activities[0] ? presence.activities[0].name : 'none'}`))
-		.catch(console.error);
-	client.lavalink = {
-		host: nodes[0].host,
-		password: nodes[0].password,
-		port: nodes[0].port
-	};
-	client.manager = new PlayerManager(client, nodes, {
-		user: client.user.id,
-		shards: client.shard.count
+const walker = walk('./events');
+walker.on('file', async (root, stats, next) => {
+	const event = require(`${resolve(root)}/${stats.name}`);
+	client.on(event.name, (...args) => {
+		event.exec(...args, client, cooldowns);
 	});
-		setInterval(async () => {
-			const body = {
-				'users': client.users.cache.size,
-				'servers': client.guilds.cache.size,
-				'shards': client.shard.count
-			};
-			try {
-				const res = await fetch(`https://abstractlist.com/api/bots/${client.user.id}/stats`, {
-					method: 'post',
-					body: JSON.stringify(body),
-					headers: { 'Content-type': 'application/json', 'Authorization': ADLToken }
-				});
-				return console.log(await res.json());
-			}
-			catch (e) {
-				return console.error(e);
-			}
-		}, 1800000);
-});
-client.on('error', console.error);
-client.on('disconnect', console.log);
-client.on('guildCreate', g => {
-	if (!g.available) return;
-	const embed = new MessageEmbed()
-		.setTitle('Guild added.')
-		.addField('Guild Name', g.name)
-		.addField('Guild ID', g.id)
-		.addField('Guild Owner', g.owner.user.username)
-		.addField('Guild Members (Excluding bots)', g.members.cache.filter(m => !m.user.bot).size)
-		.setColor('GREEN');
-	return client.channels.cache.get('661669168009052200').send(embed);
-});
-client.on('guildDelete', g => {
-	if (!g.available) return;
-	const embed = new MessageEmbed()
-		.setTitle('Guild removed.')
-		.addField('Guild Name', g.name)
-		.addField('Guild ID', g.id)
-		.addField('Guild Owner', g.owner.user.username)
-		.addField('Guild Members (Excluding bots)', g.members.cache.filter(m => !m.user.bot).size)
-		.setColor('RED');
-	return client.channels.cache.get('661669168009052200').send(embed);
-});
-client.on('voiceStateUpdate', async (oldState, newState) => {
-	if (newState.member == newState.guild.me) {
-		if (oldState === 'No need') return;
-		if (!oldState.channel) return;
-		if (!newState.channel) {
-			await client.queue.delete(newState.guild.id);
-			await client.manager.leave(newState.guild.id);
-			return !client.manager.players.get(newState.guild.id);
-		}
-	}
-});
-
-client.on('message', async (message) => {
-	if (!message.content.toLowerCase().startsWith(client.prefix) || message.author.bot) return;
-	const args = message.content.slice(client.prefix.length).split(/ +/);
-	const commandName = args.shift().toLowerCase();
-	const command = client.commands.get(commandName) || client.commands.find(cmd => cmd.aliases && cmd.aliases.includes(commandName));
-
-	if (!command) return;
-	if (typeof client.dbl !== 'undefined') {
-		const voted = await client.dbl.hasVoted(message.author.id);
-		if (command.voterOnly && !command.donatorOnly && !voted) return message.channel.send('Woah there! This command is for voters only! Vote on DBL to use this command. Vote here!\n<https://top.gg/bot/628802763123589160/vote>');
-		if (command.donatorOnly && !command.voterOnly && !client.db.get('donor').includes(`member_${message.author.id}`)) return message.channel.send(`Woah there! This command is for donators only! Donate more than one cup of coffee on KoFi to use these commands (Be sure to include your user ID: \`${message.author.id}\`). Donation link: <https://www.ko-fi.com/earthchandiscord>`);
-		if (command.voterOnly && command.donatorOnly && !voted && !client.db.get('donor').includes(`member_${message.author.id}`)) return message.channel.send(`Woah there! This command is only for voters/donators! Vote on Discord Bot List to use this command or donate more than just a cup off coffee on KoFi with your user ID in the message (\`${message.author.id}\`) included in the message.\nDonation link: <https://www.ko-fi.com/earthchandiscord>\nVote link: <https://top.gg/bot/628802763123589160/vote>`);
-	}
-	if (command.testing && message.author.id != 127888387364487168) return message.reply(`${command.name} is currently in its testing stage.`);
-	if (command.guildOnly && message.channel.type !== 'text') return message.reply('I can\'t execute that command inside DMs!');
-
-	if (command.args && !args.length) {
-		let reply = `You didn't provide any arguments, ${message.author}!`;
-
-		if (command.usage) {
-			reply += `\nThe proper usage would be: \`${client.prefix}${command.name} ${command.usage}\``;
-		}
-
-		return message.channel.send(reply);
-	}
-
-	if (!cooldowns.has(command.name)) cooldowns.set(command.name, new Collection());
-
-	const now = Date.now();
-	const timestamps = cooldowns.get(command.name);
-	const cooldownAmount = (command.cooldown || 3) * 1000;
-	const cooldownDonAmount = ((command.cooldown - 2 < 0 ? 1 : command.cooldown - 2)) * 1000;
-
-	if (!timestamps.has(message.author.id)) {
-		timestamps.set(message.author.id, now);
-		if (client.db.get('donor').includes(`member_${message.author}`)) setTimeout(() => timestamps.delete(message.author.id), cooldownDonAmount);
-		else setTimeout(() => timestamps.delete(message.author.id), cooldownAmount);
-	}
-	else {
-		let expirationTime;
-		if (client.db.get('donor').includes(`member_${message.author.id}`)) expirationTime = timestamps.get(message.author.id) + cooldownDonAmount;
-		else expirationTime = timestamps.get(message.author.id) + cooldownAmount;
-
-		if (now < expirationTime) {
-			const timeLeft = (expirationTime - now) / 1000;
-			return message.reply(`please wait ${timeLeft.toFixed(1)} more second(s) before reusing the \`${command.name}\` command.`);
-		}
-
-		timestamps.set(message.author.id, now);
-		setTimeout(() => timestamps.delete(message.author.id), cooldownAmount);
-	}
-
-	try {
-		await command.execute(message, args, client);
-		console.log(`${message.guild ? message.guild.id : `DM: ${message.channel.id}`} | ${command.name}`);
-	}
-	catch (error) {
-		console.error(`${message.guild ? message.guild.id : 'DM: ' + message.channel.id} | ${command.name}:\n${error.stack}`);
-		message.reply(`there was an error trying to execute that command! Report this to the creator of this bot: \`${error}\``);
-	}
+	next();
 });
 
 // START MUSIC RELATED FUNCTIONS
@@ -457,9 +336,7 @@ client.join = async (message) => {
 	await client.manager.join({
 		guild: message.guild.id,
 		channel: message.member.voice.channel.id,
-		host: client.lavalink.host
-	}, {
-		selfdeaf: true
+		node: client.lavalink.id
 	});
 	await client.manager.players.get(message.guild.id).volume(50);
 	console.log(`A player has spawned in ${message.guild.name} (${message.guild.id})`);

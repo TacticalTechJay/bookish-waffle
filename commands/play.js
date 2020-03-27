@@ -16,8 +16,7 @@ module.exports = {
 		if (!message.guild.me.hasPermission(['SPEAK', 'CONNECT', 'VIEW_CHANNEL'])) return message.channel.send('I do not have the required permissions to play music');
         if (!message.member.voice.channel.permissionsFor(message.guild.me).has(['SPEAK', 'CONNECT', 'VIEW_CHANNEL'])) return message.channel.send('I do not have the required permisssions to play music');
         if (message.member.voice.selfDeaf) return message.channel.send('You need to be undeafened to use something like this.');
-        const player = await client.manager.players.get(message.guild.id);
-        if (!player) {
+        if (!client.manager.players.get(message.guild.id)) {
             if (!client.queue.get(message.guild.id)) client.createQueue(message.guild.id, message.channel.id);
             if (client.queue.get(message.guild.id)) {
                 if (!args.join(' ')) return client.play(message);

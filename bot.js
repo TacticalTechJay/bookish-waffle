@@ -98,24 +98,25 @@ walker.on('file', async (root, stats, next) => {
 });
 
 // START MUSIC RELATED FUNCTIONS
+let i = 1;
+async function get() {
+	const url = new URL(`http://${client.lavalink.host}:${client.lavalink.port}/loadtracks?identifier=${string}`)
+	const res = await fetch(url, {
+		headers: { 'Authorization': client.lavalink.password }
+	}).catch(err => {
+		console.error(err);
+		return null;
+	});
+	const res2 = await res.json();
+	if (i == 3) throw 'NO_MATCHES';
+	if (res2.loadType == 'NO_MATCHES') {
+		++i
+		return get();
+	}
+	return res2;
+}
 client.getSongs = async (string) => {
 	let i = 1;
-	async function get() {
-		const url = new URL(`http://${client.lavalink.host}:${client.lavalink.port}/loadtracks?identifier=${string}`)
-		const res = await fetch(url, {
-			headers: { 'Authorization': client.lavalink.password }
-		}).catch(err => {
-			console.error(err);
-			return null;
-		});
-		const res2 = await res.json();
-		if (i == 3) throw 'NO_MATCHES';
-		if (res2.loadType == 'NO_MATCHES') {
-			++i
-			return get();
-		}
-		return res2;
-	}
 	try {
 		const res2 = await get();
 	} catch(e) {

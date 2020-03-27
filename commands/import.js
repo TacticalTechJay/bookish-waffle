@@ -40,7 +40,7 @@ module.exports = {
                 channel: message.member.voice.channel.id
             };
             client.queue.set(message.guild.id, qconstruct);
-            client.join(message);
+            await client.join(message);
             client.play(message, client.queue.get(message.guild.id).songs[0].track);
             return message.channel.send('Set and now playing!');
         }

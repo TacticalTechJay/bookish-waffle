@@ -25,7 +25,7 @@ module.exports = {
             return client.channels.cache.get('661669168009052200').send(embed);
         } else if (packet.t == 'VOICE_STATE_UPDATE') {
             if (packet.d.user_id !== client.user.id) return;
-            if (!packet.d.session_id) {
+            if (!packet.d.channel_id) {
                 if (!packet.d.guild_id || packet.d.self_deaf) return;
                 await client.queue.delete(packet.d.guild_id);
                 await client.manager.leave(packet.d.guild_id);

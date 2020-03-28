@@ -286,7 +286,6 @@ client.play = (message, track) => {
 		const player = client.manager.players.get(message.guild.id);
 		player.play(track);
 		player.once('end', async data => {
-			console.log(data);
 			if (queue.looping == 'song') {
 				client.play(message, queue.songs[0].track);
 				const thu = queue.songs[0].info.identifier;

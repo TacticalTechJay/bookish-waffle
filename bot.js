@@ -109,11 +109,9 @@ async function get(string, i) {
 	const res2 = await res.json();
 	if (i == 3) throw 'NO_MATCHES';
 	if (res2.loadType == 'NO_MATCHES') {
-		console.log(require('util').inspect(res2, { depth: 0 }));
 		++i;
 		return get(string);
 	}
-	console.log(require('util').inspect(res2, { depth: 0 }));
 	return res2;
 }
 client.getSongs = async (string) => {

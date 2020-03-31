@@ -113,7 +113,7 @@ async function get(string) {
 		++i;
 		return get(string);
 	}
-	console.log(res2);
+	console.log(require('util').inspect(res2, { depth: 0 }));
 	return res2;
 }
 client.getSongs = async (string) => {

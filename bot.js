@@ -113,6 +113,7 @@ async function get(string) {
 		++i;
 		return get(string);
 	}
+	console.log(res2);
 	return res2;
 }
 client.getSongs = async (string) => {

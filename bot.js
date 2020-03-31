@@ -62,7 +62,7 @@ if (parseInt(process.env.MODE)) {
 	kofi.start(() => {
 		console.log('Started on port 4200');
 	});
-
+// eslint-disable-next-line
 	function a() {
 		client.dbl.on('error', e => {
 			console.error(e);
@@ -285,7 +285,7 @@ client.play = (message, track) => {
 		const queue = client.queue.get(message.guild.id);
 		const player = client.manager.players.get(message.guild.id);
 		player.play(track);
-		player.once('end', async data => {
+		player.once('end', async () => {
 			if (queue.looping == 'song') {
 				client.play(message, queue.songs[0].track);
 				const thu = queue.songs[0].info.identifier;

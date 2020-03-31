@@ -19,7 +19,7 @@ module.exports = {
                 .addField('Presence', user.presence.status.titleCase(), true)
                 .addField('Created Date', require('moment')(user.user.createdAt).format('MMMM Do[,] YYYY'), true)
                 .addField('Joined Date', require('moment')(user.joinedAt).format('MMMM Do[,] YYYY'), true)
-	            .addField(`Roles (${--message.member.roles.cache.size})`, message.member.roles.cache ? message.member.roles.cache.map(x => x.toString()).join(' ').substring(0, 1024).replace(/\s\S+[^>]$/, '') : 'None')
+                .addField(`Roles (${--message.member.roles.cache.size})`, message.member.roles.cache ? message.member.roles.cache.map(x => x.toString()).join(' ').substring(0, 1024).replace(/\s\S+[^>]$/, '') : 'None')
                 .setColor(0x679f28)
                 .setThumbnail(user.user.displayAvatarURL());
             return message.channel.send(embed);

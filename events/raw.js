@@ -1,6 +1,6 @@
 module.exports = {
     name: 'raw',
-    async exec (packet, a, client) {
+    async exec(packet, a, client) {
         if (!['GUILD_CREATE', 'GUILD_DELETE', 'VOICE_STATE_UPDATE'].includes(packet.t)) return;
         const { MessageEmbed } = require('discord.js');
         if (packet.t == 'GUILD_CREATE') {
@@ -13,7 +13,8 @@ module.exports = {
                 .addField('Guild Members', packet.d.member_count)
                 .setColor('GREEN');
             return client.channels.cache.get('661669168009052200').send(embed);
-        } else if (packet.t == 'GUILD_DELETE') {
+        }
+        else if (packet.t == 'GUILD_DELETE') {
             if (packet.d.unavailable || packet.d.lazy) return;
             const embed = new MessageEmbed()
                 .setTitle('Guild removed.')
@@ -23,7 +24,8 @@ module.exports = {
                 .addField('Guild Members', packet.d.member_count)
                 .setColor('RED');
             return client.channels.cache.get('661669168009052200').send(embed);
-        } else if (packet.t == 'VOICE_STATE_UPDATE') {
+        }
+        else if (packet.t == 'VOICE_STATE_UPDATE') {
             if (packet.d.user_id !== client.user.id) return;
             if (!packet.d.channel_id) {
                 if (!packet.d.guild_id || packet.d.self_deaf) return;
@@ -33,4 +35,4 @@ module.exports = {
             }
         }
     }
-}
+};

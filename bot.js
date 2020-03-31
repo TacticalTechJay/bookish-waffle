@@ -8,9 +8,9 @@ String.prototype.titleCase = function() {
 Array.prototype.random = function() {
     return this[Math.floor(Math.random() * this.length)];
 };
-String.prototype.toProperCase = function () {
-	return this.toLowerCase().replace(/(^|[\s.])[^\s.]/gm, (s) => s.toUpperCase())
-}
+String.prototype.toProperCase = function() {
+	return this.toLowerCase().replace(/(^|[\s.])[^\s.]/gm, (s) => s.toUpperCase());
+};
 
 const fs = require('fs');
 const { MessageEmbed, Client, Collection, Util } = require('discord.js');
@@ -55,7 +55,7 @@ if (parseInt(process.env.MODE)) {
 			}
 		});
 	});
-	
+
 	const kofi = new KoFi('/notdonation', 4200);
 	client.dbl = new DBL(dblToken, client);
 	client.prefix = `${process.env.PREFIX} `;
@@ -70,7 +70,7 @@ if (parseInt(process.env.MODE)) {
 			setTimeout(() => {
 				client.dbl = new DBL(dblToken, client);
 				a();
-			}, 3600000)
+			}, 3600000);
 		});
 	}
 	a();
@@ -100,7 +100,7 @@ walker.on('file', async (root, stats, next) => {
 // START MUSIC RELATED FUNCTIONS
 let i = 1;
 async function get(string) {
-	const url = new URL(`http://${client.lavalink.host}:${client.lavalink.port}/loadtracks?identifier=${string}`)
+	const url = new URL(`http://${client.lavalink.host}:${client.lavalink.port}/loadtracks?identifier=${string}`);
 	const res = await fetch(url, {
 		headers: { 'Authorization': client.lavalink.password }
 	}).catch(err => {
@@ -110,7 +110,7 @@ async function get(string) {
 	const res2 = await res.json();
 	if (i == 3) throw 'NO_MATCHES';
 	if (res2.loadType == 'NO_MATCHES') {
-		++i
+		++i;
 		return get(string);
 	}
 	return res2;

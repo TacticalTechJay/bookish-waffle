@@ -1,6 +1,6 @@
 module.exports = {
     name: 'ready',
-    async exec (client) {
+    async exec(client) {
         const { nodes, ADLToken } = require('../config.json');
         const { Manager } = require('@lavacord/discord.js');
         const fetch = require('node-fetch');
@@ -26,7 +26,7 @@ module.exports = {
                 'shards': client.shard.count
             };
             try {
-                const res = await fetch(`https://abstractlist.com/api/bots/${client.user.id}/stats`, {
+                const res = await fetch(`https://abstractlist.net/api/bots/${client.user.id}/stats`, {
                     method: 'post',
                     body: JSON.stringify(body),
                     headers: { 'Content-type': 'application/json', 'Authorization': ADLToken }
@@ -36,6 +36,6 @@ module.exports = {
             catch (e) {
                 return console.error(e);
             }
-        }, 1800000);    
+        }, 1800000);
     }
-}
+};

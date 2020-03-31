@@ -27,9 +27,9 @@ module.exports = {
                 await client.queue.delete(message.guild.id);
                 await client.manager.leave(message.guild.id);
                 return await message.channel.send('Done.');
-            };
+            }
         });
         if (!player && !queue) return message.channel.send('This command is not needed. No music is playing and the queue does not exist.');
-        return message.channel.send('Done.')
+        return message.channel.send('Done.');
     }
 };

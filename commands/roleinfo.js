@@ -17,11 +17,11 @@ module.exports = {
 			.addField('Is Hoisted', target.hoist ? 'Yes' : 'No', true)
 			.addField('Is Managed', target.managed ? 'Yes' : 'No', true)
 			.addField('Color', `#${target.color.toString(16)}`, true)
-			.addField('Permissions (Role)', `\`\`\`${target.permissions ? target.permissions.toArray().join('\n') : 'NONE'}\`\`\``)
-		if (roleP) embed.addField('Permissions (TextChannel)',`\`\`\`${roleP.allow ? roleP.allow.toArray().map(p => `+ ${p}`).join('\n') + '\n' : null}${roleP.deny ? roleP.deny.toArray().map(p => `- ${p}`).join('\n') : null}\`\`\``);
+			.addField('Permissions (Role)', `\`\`\`${target.permissions ? target.permissions.toArray().join('\n') : 'NONE'}\`\`\``);
+		if (roleP) embed.addField('Permissions (TextChannel)', `\`\`\`${roleP.allow ? roleP.allow.toArray().map(p => `+ ${p}`).join('\n') + '\n' : null}${roleP.deny ? roleP.deny.toArray().map(p => `- ${p}`).join('\n') : null}\`\`\``);
 		if (message.member.voice.channel) {
-			roleVCP = message.member.voice.channel.permissionOverwrites.get(target.id);
-			if (roleVCP) embed.addField('Permissions (VoiceChannel)', `\`\`\`${ roleVCP.allow ? roleVCP.allow.toArray().map(p => `+ ${p}`) + '\n' : null }${roleVCP.deny ? roleVCP.deny.toArray().map(p => `- ${p}`).join('\n') : null}\`\`\``)
+			const roleVCP = message.member.voice.channel.permissionOverwrites.get(target.id);
+			if (roleVCP) embed.addField('Permissions (VoiceChannel)', `\`\`\`${ roleVCP.allow ? roleVCP.allow.toArray().map(p => `+ ${p}`) + '\n' : null }${roleVCP.deny ? roleVCP.deny.toArray().map(p => `- ${p}`).join('\n') : null}\`\`\``);
 		}
 		message.channel.send(embed).catch(e => console.error(`RoleInfo: ${e}`));
 	}

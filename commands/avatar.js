@@ -10,7 +10,7 @@ module.exports = {
     usage: '[MemberMention/UserID]',
     async execute(message, args, client) {
         const { MessageEmbed } = require('discord.js');
-        if (!args[0] || isNaN(args[0])) {
+        if (!args[0]) {
             const embed = new MessageEmbed()
             .setTitle(`${message.author.username}'s Avatar`)
             .setImage(message.author.displayAvatarURL({ size: 2048, dynamic: true }))
@@ -18,12 +18,14 @@ module.exports = {
             .setColor(0x36bdfc);
             return message.channel.send(embed);
         }
-        const user = await message.mentions.users.first() || await client.users.cache.get(args[0]) || await client.users.fetch(args[0]);
+        const user = message.mentions.members.first() || message.guild.members.cache.get(args[0]) || message.guild.members.cache.find(m => m.user.tag.includes(args.join(' '))) || await client.users.fetch(args[0]);
+        if (!user) return message.channel.send('No user found.');
+        const pfp = user.displayAvatarURL ? user.displayAvatarURL({ size: 2048, dynamic: true }) : user.user.displayAvatarURL({ size: 2048, dynamic: true });
         const embed = new MessageEmbed()
-            .setTitle(`${user.username}'s Avatar`)
+            .setTitle(`${user.username ? user.username : user.user.username}'s Avatar`)
             .setColor(0x36bdfc)
-            .setURL(user.displayAvatarURL({ size: 2048, dynamic: true }))
-            .setImage(user.displayAvatarURL({ size: 2048, dynamic: true }));
+            .setURL(pfp)
+            .setImage(pfp);
         message.channel.send(embed);
     }
 };

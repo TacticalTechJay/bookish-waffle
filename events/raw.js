@@ -5,6 +5,7 @@ module.exports = {
         const { MessageEmbed } = require('discord.js');
         if (packet.t == 'GUILD_CREATE') {
             if (packet.d.unavailable || packet.d.lazy) return;
+            console.log(packet.d);
             const embed = new MessageEmbed()
                 .setTitle('Guild added.')
                 .addField('Guild Name', packet.d.name)
@@ -16,6 +17,7 @@ module.exports = {
         }
         else if (packet.t == 'GUILD_DELETE') {
             if (packet.d.unavailable || packet.d.lazy) return;
+            console.log(packet.d);
             const embed = new MessageEmbed()
                 .setTitle('Guild removed.')
                 .addField('Guild Name', packet.d.name)

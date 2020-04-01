@@ -10,7 +10,7 @@ module.exports = {
                 .setTitle('Guild added.')
                 .addField('Guild Name', packet.d.name)
                 .addField('Guild ID', packet.d.id)
-                .addField('Guild Owner', client.users.cache.get(packet.d.owner_id).tag)
+                .addField('Guild Owner ID', packet.d.owner_id)
                 .addField('Guild Members', packet.d.member_count)
                 .setColor('GREEN');
             return client.channels.cache.get('661669168009052200').send(embed);
@@ -22,7 +22,7 @@ module.exports = {
                 .setTitle('Guild removed.')
                 .addField('Guild Name', packet.d.name)
                 .addField('Guild ID', packet.d.id)
-                .addField('Guild Owner', client.users.cache.get(packet.d.owner_id).tag)
+                .addField('Guild Owner ID', packet.d.owner_id)
                 .addField('Guild Members', packet.d.member_count)
                 .setColor('RED');
             return client.channels.cache.get('661669168009052200').send(embed);

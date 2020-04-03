@@ -110,15 +110,16 @@ async function get(string, i) {
 	if (i == 3) throw 'NO_MATCHES';
 	if (res2.loadType == 'NO_MATCHES') {
 		++i;
-		return get(string);
+		return get(string, i);
 	}
 	return res2;
 }
 client.getSongs = async (string) => {
 	try {
-		let i = 1;
+		let i = 0;
 		var res2 = await get(string, i);
 	} catch(e) {
+		console.error(e);
 		if (e == 'NO_MATCHES') throw 'NO MATCHES';
 	}
 	if (!res2) throw 'NO RESPONSE';

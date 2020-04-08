@@ -4,8 +4,10 @@ module.exports = {
         if (!['GUILD_CREATE', 'GUILD_DELETE', 'VOICE_STATE_UPDATE'].includes(packet.t)) return;
         const { MessageEmbed } = require('discord.js');
         if (packet.t == 'GUILD_CREATE') {
-            if (packet.d.unavailable || packet.d.lazy) return;
-            console.log(packet.d);
+            if (packet.d.unavailable) return;
+            const packetDate = require('moment').utc(packet.d.joined_at).toString();
+            const nowDate = require('moment').utc().toString();
+            if (packetDate !== nowDate) return;
             const embed = new MessageEmbed()
                 .setTitle('Guild added.')
                 .addField('Guild Name', packet.d.name)
@@ -16,16 +18,8 @@ module.exports = {
             return client.channels.cache.get('661669168009052200').send(embed);
         }
         else if (packet.t == 'GUILD_DELETE') {
-            if (packet.d.unavailable || packet.d.lazy) return;
-            console.log(packet.d);
-            const embed = new MessageEmbed()
-                .setTitle('Guild removed.')
-                .addField('Guild Name', packet.d.name)
-                .addField('Guild ID', packet.d.id)
-                .addField('Guild Owner ID', packet.d.owner_id)
-                .addField('Guild Members', packet.d.member_count)
-                .setColor('RED');
-            return client.channels.cache.get('661669168009052200').send(embed);
+            if (packet.d.unavailable) return;
+            return client.channels.cache.get('661669168009052200').send(`Ladies and gentlement, we lost a guild. We now have ${client.guilds.cache.size} guilds. :pensive:`);
         }
         else if (packet.t == 'VOICE_STATE_UPDATE') {
             if (packet.d.user_id !== client.user.id) return;

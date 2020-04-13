@@ -12,7 +12,6 @@ String.prototype.toProperCase = function() {
 	return this.toLowerCase().replace(/(^|[\s.])[^\s.]/gm, (s) => s.toUpperCase());
 };
 
-const fs = require('fs');
 const { MessageEmbed, Client, Collection, Util } = require('discord.js');
 const { prefix, dblToken } = require('./config.json');
 const client = new Client({ disableMentions: 'everyone', messageCacheMaxSize: 100, messageCacheLifetime: 3600, messageSweepInterval: 7200 });
@@ -32,12 +31,7 @@ client.qsaves = new client.db.table('qsaves');
 
 client.nekosSafe = new (require('nekos.life'))().sfw;
 client.nekosUnSafe = new (require('nekos.life'))().nsfw;
-const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
 
-for (const file of commandFiles) {
-	const command = require(`./commands/${file}`);
-	client.commands.set(command.name, command);
-}
 delete client.nekosUnSafe.neko;
 delete client.nekosUnSafe.avatar;
 if (parseInt(process.env.MODE)) {
@@ -88,12 +82,19 @@ const cooldowns = new Collection();
 
 client.login(process.env.DISCORD_TOKEN);
 
-const walker = walk('./events');
-walker.on('file', async (root, stats, next) => {
+const eventLoad = walk('./events');
+eventLoad.on('file', async (root, stats, next) => {
 	const event = require(`${resolve(root)}/${stats.name}`);
 	client.on(event.name, (...args) => {
 		event.exec(...args, client, cooldowns);
 	});
+	next();
+});
+const commandLoad = walk('./commands');
+commandLoad.on('file', async (root, stats, next) => {
+	const command = require(`${resolve(root)}/${stats.name}`);
+	command.category = root.split('/')[2] || command.category;
+	client.commands.set(command.name, command);
 	next();
 });
 

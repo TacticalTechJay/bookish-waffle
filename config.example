@@ -1,19 +1,25 @@
 {
-    "token": "Main Bot's Token",
-    "beta_token": "Beta Bot's Token",
-    "prefix": "Choice of prefix.",
-    "nodes":[
-        {
-            "host": "IP Address",
-            "password": "Lavalink Password",
-            "port": "numerical port"
-        }],
-   "dblToken": "Top.gg Token" ,
-   "ksoftapi": "Ksoft Api Token",
-   "ADLToken": "Abstract Discord List Token",
-   "mongo": {
-       "user": "UserName",
-       "ip": "ip",
-       "pwd": "PassWord"
-   }
+  "stable": {
+    "token": null,
+    "prefix": "!",
+    "dblToken": null,
+    "ksoftapi": null,
+    "ADLToken": null,
+    "version": "v2.0.0"
+  },
+  "beta": {
+    "token": null,
+    "prefix": "/",
+    "dblToken": null,
+    "ksoftapi": null,
+    "ADLToken": null,
+    "version": "v2.2.0"
+  },
+  "sys": {
+    "nodes":[{
+          "host": "LavalinkHost,
+          "password": "LavalinkPassword",
+          "port": 1234
+      }]
+  }
 }

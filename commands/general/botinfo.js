@@ -1,4 +1,5 @@
 const Discord = require('discord.js');
+const { stable, beta } = require('../../config.json');
 module.exports = {
     name: 'botinfo',
     description: 'Info of the bot!',
@@ -18,7 +19,7 @@ module.exports = {
             .addField('❤ Total Guilds', amount2, true)
             .addField('💎 Shard ID', message.guild.shardID, true)
             .addField('👑 Creator', `${creator.username + '#' + creator.discriminator}`, true)
-            .addField('Version', process.env.VERSION, true)
+            .addField('Version', parseInt(process.env.MODE) ? stable.version : beta.version, true)
             .addField('📚 Libary', `Discord.js ${Discord.version}`, true)
             .addField('🖥 OS', require('os').type(), true)
             .addField('👍 Vote', `[DBL Upvote](https://top.gg/bot/${BOTID}/vote)`, true)

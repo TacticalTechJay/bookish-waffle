@@ -1,5 +1,6 @@
 const fetch = require('node-fetch');
-const config = require('../../config.json');
+const { stable, beta } = require('../../config.json');
+const ksoftapi = parseInt(process.env.MODE) ? stable.ksoftapi : beta.ksoftapi;
 module.exports = {
     name: 'yaoi',
     description: 'Just your avergae lewd.',
@@ -11,7 +12,7 @@ module.exports = {
 	if (message.guild.id == '620424864221757481') return message.channel.send('No gay shit dude.');
         const r = await fetch('https://api.ksoft.si/images/rand-reddit/yaoi', {
             headers: {
-                'Authorization': `Bearer ${config.ksoftapi}`
+                'Authorization': `Bearer ${ksoftapi}`
             }
         });
         const { image_url } = await r.json();

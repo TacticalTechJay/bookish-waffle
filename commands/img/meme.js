@@ -1,4 +1,5 @@
-const { ksoftapi } = require('../../config.json');
+const { stable, beta } = require('../../config.json');
+const ksoftapi = parseInt(process.env.MODE) ? stable.ksoftapi : beta.ksoftapi;
 module.exports = {
 	name: 'meme',
 	description: 'Dank memer but 99% better because of a lower cooldown.',

@@ -5,7 +5,6 @@ module.exports = {
 	testing: false,
 	cooldown: 0,
 	async execute(message, args, client) {
-		if (!client.db.get('trusted').includes(message.author.id)) return;
 		const clean = text => {
 			if (typeof (text) === 'string') {
 				return text.replace(/`/g, '`' + String.fromCharCode(8203)).replace(/@/g, '@' + String.fromCharCode(8203));

@@ -1,20 +1,21 @@
 module.exports = {
     name: 'ready',
     async exec(client) {
-        const { nodes, ADLToken } = require('../config.json');
+        const { stable, beta, sys } = require('../config.json');
         const { Manager } = require('@lavacord/discord.js');
         const fetch = require('node-fetch');
+        const ADLToken = parseInt(process.env.MODE) ? stable.ADLToken : beta.ADLTOKEN;
         console.log('Ready!');
         client.user.setActivity(`${client.prefix}help for help.`)
             .then(presence => console.log(`Activity is ${presence.activities[0] ? presence.activities[0].name : 'none'}`))
             .catch(console.error);
         client.lavalink = {
-            host: nodes[0].host,
-            password: nodes[0].password,
-            port: nodes[0].port,
-            id: nodes[0].id
+            host: sys.nodes[0].host,
+            password: sys.nodes[0].password,
+            port: sys.nodes[0].port,
+            id: sys.nodes[0].id
         };
-        client.manager = new Manager(client, nodes, {
+        client.manager = new Manager(client, sys.nodes, {
             user: client.user.id,
             shards: client.shard.count
         });

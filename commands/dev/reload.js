@@ -6,7 +6,6 @@ module.exports = {
   cooldown: 0,
   args: true,
   execute(message, args, client) {
-    if (message.author.id !== '127888387364487168') return;
     if(!args || args.size < 1) return message.reply('you must provide a command name to reload.');
     const commandName = args[0];
     // Check if the command exists and is valid

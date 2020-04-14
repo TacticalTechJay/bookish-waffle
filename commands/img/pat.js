@@ -1,4 +1,5 @@
-const config = require('../../config.json');
+const { stable, beta } = require('../../config.json');
+const ksoftapi = parseInt(process.env.MODE) ? stable.ksoftapi : beta.ksoftapi;
 module.exports = {
     name: 'pat',
     description: 'Pat others or request to get a pat from the bot!',
@@ -12,7 +13,7 @@ module.exports = {
         const { MessageEmbed } = require('discord.js');
         const target = message.mentions.members.first() || message.guild.members.cache.get(args[0]);
         const res = await fetch('https://api.ksoft.si/images/random-image?tag=pat', {
-            headers: { 'Authorization': `Bearer ${config.ksoftapi}` }
+            headers: { 'Authorization': `Bearer ${ksoftapi}` }
         });
         const { url } = await res.json();
         const embed = new MessageEmbed()

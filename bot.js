@@ -13,7 +13,7 @@ String.prototype.toProperCase = function() {
 };
 
 const { MessageEmbed, Client, Collection, Util } = require('discord.js');
-const { prefix, dblToken } = require('./config.json');
+const { stable, beta } = require('./config.json');
 const client = new Client({ disableMentions: 'everyone', messageCacheMaxSize: 100, messageCacheLifetime: 3600, messageSweepInterval: 7200 });
 const fetch = require('node-fetch');
 const { KoFi } = require('kofi.js');
@@ -21,8 +21,8 @@ const DBL = require('dblapi.js');
 const { walk } = require('walk');
 const { resolve } = require('path');
 let a;
-client.prefix = prefix;
 
+client.prefix = parseInt(process.env.MODE) ? stable.prefix : beta.prefix;
 client.queue = new Map();
 client.commands = new Collection();
 
@@ -51,8 +51,7 @@ if (parseInt(process.env.MODE)) {
 	});
 
 	const kofi = new KoFi('/notdonation', 4200);
-	client.dbl = new DBL(dblToken, client);
-	client.prefix = `${process.env.PREFIX} `;
+	client.dbl = new DBL(stable.dblToken, client);
 	kofi.start(() => {
 		console.log('Started on port 4200');
 	});
@@ -62,7 +61,7 @@ if (parseInt(process.env.MODE)) {
 			console.error(e);
 			delete client.dbl;
 			setTimeout(() => {
-				client.dbl = new DBL(dblToken, client);
+				client.dbl = new DBL(stable.dblToken, client);
 				a();
 			}, 3600000);
 		});
@@ -82,16 +81,16 @@ const cooldowns = new Collection();
 
 client.login(process.env.DISCORD_TOKEN);
 
-const eventLoad = walk('./events');
-eventLoad.on('file', async (root, stats, next) => {
+const eventLoader = walk('./events');
+eventLoader.on('file', async (root, stats, next) => {
 	const event = require(`${resolve(root)}/${stats.name}`);
 	client.on(event.name, (...args) => {
 		event.exec(...args, client, cooldowns);
 	});
 	next();
 });
-const commandLoad = walk('./commands');
-commandLoad.on('file', async (root, stats, next) => {
+const commandLoader = walk('./commands');
+commandLoader.on('file', async (root, stats, next) => {
 	const command = require(`${resolve(root)}/${stats.name}`);
 	command.category = root.split('/')[2] || command.category;
 	client.commands.set(command.name, command);

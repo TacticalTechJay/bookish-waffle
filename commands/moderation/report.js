@@ -1,4 +1,5 @@
-const { ksoftapi } = require('../../config.json');
+const { stable, beta } = require('../../config.json');
+const ksoftapi = parseInt(process.env.MODE) ? stable.ksoftapi : beta.ksoftapi;
 module.exports = {
     name: 'report',
     description: 'Report a user and ban them through a global ban list so others know the risks before it may be too late.',

@@ -5,7 +5,6 @@
   "main": "index.js",
   "dependencies": {
     "@lavacord/discord.js": "0.0.2",
-    "@sentry/node": "^5.15.4",
     "array-move": "^2.2.0",
     "bytes": "^3.1.0",
     "chalk": "^3.0.0",

@@ -4,7 +4,6 @@ module.exports = {
     description: null,
     cooldown: 1,
     async execute(message, args) {
-		if (message.author.id !== '127888387364487168') return;
 		if (!args[0]) return message.channel.send('```COMMAND REQUIRED```');
 		try {
 			exec(args.join(' '), (err, stdout, stderr) => {

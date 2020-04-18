@@ -21,7 +21,22 @@ module.exports = {
             .addField('👑 Creator', `${creator.username + '#' + creator.discriminator}`, true)
             .addField('🖥 Version', parseInt(process.env.MODE) ? stable.version : beta.version, true)
             .addField('📚 Libary', `Discord.js ${Discord.version}`, true)
-            .addField('🖥 OS', require('os').type(), true)
+              if (os.platform == 'win32') {
+    const data = await si.osInfo();
+    embed.addField('🖥 OS', `${data.distro}`, true);
+    embed.setThumbnail('https://cdn.discordapp.com/attachments/491024501971222538/491024518761021460/Windows-Logo.png');
+  }
+  if (os.platform == 'linux') {
+    embed.addField('🖥 OS', 'Linux', true);
+    embed.setThumbnail('https://cdn.discordapp.com/attachments/491024501971222538/491024720733536277/LINUX-LOGO.png');
+  }
+  if (os.platform == 'darwin') {
+    embed.addField('🖥 OS', `${osName(os.platform(), os.release())}`, true);
+    embed.setThumbnail('https://cdn.discordapp.com/attachments/491024501971222538/491024928028491779/2000px-OS_X_El_Capitan_logo.png');
+  }
+  if (os.platform == null || undefined) {
+    embed.addField('🖥 OS', 'Unknown', true);
+  }
             .addField('👍 Vote', `[DBL Upvote](https://top.gg/bot/${BOTID}/vote)`, true)
             .addField('🤖 Bot Invite', `[Click here](https://discordapp.com/oauth2/authorize?client_id=${BOTID}&scope=bot&permissions=3353606)`, true)
             .addField('🖥 Source Code', '[Click here](https://github.com/TacticalTechJay/bookish-waffle)', true)

@@ -3,7 +3,7 @@ module.exports = {
     async exec (guild, client) {
         if (!guild.available) return;
         const embed = new (require('discord.js').MessageEmbed)()
-            .setTitle('Guild removed.')
+            .setTitle('Guild Removed')
             .addField('Guild Name', guild.name)
             .addField('Guild ID', guild.id)
             .addField('Guild Owner', guild.owner.user.username)

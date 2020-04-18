@@ -4,20 +4,20 @@ module.exports = {
   guildOnly: false,
   testing: false,
   cooldown: 0,
-  args: true,
+  args: false,
   execute(message, args, client) {
     if(!args || args.size < 1) return message.reply('you must provide a command name to reload.');
-    const commandName = args[0];
-    // Check if the command exists and is valid
-    if(!client.commands.has(commandName)) {
-      return message.reply('that command does not exist');
-    }
-    // the path is relative to the *current folder*, so just ./filename.js
-    delete require.cache[require.resolve(`./${commandName}.js`)];
-    // We also need to delete and reload the command from the client.commands Enmap
-    client.commands.delete(commandName);
-    const props = require(`./${commandName}.js`);
-    client.commands.set(commandName, props);
-    message.reply(`the command ${commandName} has been reloaded`);
+    const { walk } = require('walk');
+    const { resolve } = require('path');
+    const commandsReload = walk('/')
+    client.commands = new (require('discord.js').Collection)();
+    commandsReload.on('file', (root, stats, next) => {
+      console.log(root);
+      const command = require(`${resolve(root)}${stats.name}`);
+      command.category = root.split('/')[2] || command.category || 'etc';
+      client.commands.set(command.name, command);
+      next();
+    });
+    return message.reply(`all commands *should* be reloaded.`);
   }
 };

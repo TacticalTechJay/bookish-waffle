@@ -1,18 +1,18 @@
 {
   "stable": {
-    "token": null,
+    "token": "",
     "prefix": "!",
-    "dblToken": null,
-    "ksoftapi": null,
-    "ADLToken": null,
+    "dblToken": "",
+    "ksoftapi": "",
+    "ADLToken": "",
     "version": "v2.0.0"
   },
   "beta": {
-    "token": null,
+    "token": "",
     "prefix": "/",
-    "dblToken": null,
-    "ksoftapi": null,
-    "ADLToken": null,
+    "dblToken": "",
+    "ksoftapi": "",
+    "ADLToken": "",
     "version": "v2.2.0"
   },
   "sys": {

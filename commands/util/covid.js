@@ -9,7 +9,7 @@ module.exports = {
     const { body } = await get("https://corona.lmao.ninja/v2/all/");
     
     const embed = new MessageEmbed();
-      embed.setColor("GREEN");
+      embed.setColor("RANDOM");
       embed.addField("Cases", `${body.cases}`);
       embed.addField("Active", `${body.active}`);
       embed.addField("Recovered", `${body.recovered}`);

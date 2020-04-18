@@ -6,7 +6,7 @@ module.exports = {
     description: 'NULL',
     guildOnly: true,
     args: true,
-    usage: null,
+    usage: false,
     async execute(message, args) {
     const { body } = await get("https://corona.lmao.ninja/v2/all/");
     

@@ -47,7 +47,7 @@ module.exports = {
 
             if (now < expirationTime) {
                 const timeLeft = (expirationTime - now) / 1000;
-                return message.reply(`please wait ${timeLeft.toFixed(1)} more second(s) before reusing the \`${command.name}\` command.`);
+                return message.reply(`Please wait ${timeLeft.toFixed(1)} more second(s) before reusing the \`${command.name}\` command.`);
             }
 
             timestamps.set(message.author.id, now);
@@ -60,7 +60,7 @@ module.exports = {
         }
         catch (error) {
             console.error(`${message.guild ? message.guild.id : 'DM: ' + message.channel.id} | ${command.name}:\n${error.stack}`);
-            message.reply(`there was an error trying to execute that command! Report this to the creator of this bot: \`${error}\``);
+            message.reply(`There was an error trying to execute that command! Report this to the creator of this bot: \`${error}\``);
         }
     }
 };

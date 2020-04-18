@@ -5,7 +5,7 @@ module.exports = {
     guildOnly: true,
     args: true,
     usage: '<String>',
-    execute(message, args) {
+    async execute(message, args) {
     const { body } = await get("https://corona.lmao.ninja/v2/all/");
     
     const embed = new MessageEmbed();

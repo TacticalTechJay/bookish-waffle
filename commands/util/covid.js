@@ -5,7 +5,7 @@ module.exports = {
     name: 'covid',
     description: 'NULL',
     guildOnly: true,
-    args: true,
+    args: false,
     usage: false,
     async execute(message, args) {
     const { body } = await get("https://corona.lmao.ninja/v2/all/");

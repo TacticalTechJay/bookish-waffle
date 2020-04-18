@@ -11,7 +11,7 @@ module.exports = {
 			.setThumbnail(message.guild.iconURL())
 			.addField('Server Owner', message.guild.owner, true)
 			.addField('Server ID', message.guild.id, true)
-			.addField('Verification Level', ['`None`', '`Low`', '`Medium`', '`(╯°□°）╯︵ ┻━┻`', '`┻━┻ ﾐヽ(ಠ益ಠ)ノ彡┻━┻`'][message.guild.verificationLevel], true)
+			.addField('Verification Level', message.guild.verificationLevel.titleCase(), true)
 			.addField('Partner Status', message.guild.partnered ? 'Partnered' : 'Not partnered', true)
 			.addField('Boost Count', message.guild.premiumSubscriptionCount, true)
 			.addField('Boost Level', message.guild.premiumTier, true)

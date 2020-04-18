@@ -10,7 +10,7 @@ module.exports = {
         const { MessageEmbed } = require('discord.js');
         if (message.channel.nsfw) {
             const fetch = require('node-fetch');
-            const { stable, beta } = require('../config.json');
+            const { stable, beta } = require('../../config.json');
             const ksoftapi = parseInt(process.env.MODE) ? stable.ksoftapi : beta.ksoftapi;
             const res = await fetch('https://api.ksoft.si/images/random-image?tag=neko&nsfw=true', {
                 headers: { 'Authorization': `Bearer ${ksoftapi}` }

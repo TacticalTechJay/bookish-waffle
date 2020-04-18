@@ -23,7 +23,7 @@ module.exports = {
                 .setThumbnail(user.user.displayAvatarURL());
             return message.channel.send(embed);
         }
-        const user = message.mentions.members.first() || message.guild.members.cache.get(args[0]) || message.guild.members.cache.find(m => m.user.username.includes(args.join(' '))) || await client.users.fetch(args[0]);
+        const user = message.mentions.members.first() || message.guild.members.cache.get(args[0]) || message.guild.members.cache.find(m => m.user.username.toLowerCase().includes(args.join(' '))) || await client.users.fetch(args[0]);
         const embed = new MessageEmbed()
             .setColor(0x12db37)
             .setTitle(`${user.user ? user.user.tag : user.tag} (${user.id})`)

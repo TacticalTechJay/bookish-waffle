@@ -37,12 +37,12 @@ module.exports = {
   if (os.platform == null || undefined) {
     embed.addField('🖥 OS', 'Unknown', true);
   }
-            .addField('👍 Vote', `[DBL Upvote](https://top.gg/bot/${BOTID}/vote)`, true)
-            .addField('🤖 Bot Invite', `[Click here](https://discordapp.com/oauth2/authorize?client_id=${BOTID}&scope=bot&permissions=3353606)`, true)
-            .addField('🖥 Source Code', '[Click here](https://github.com/TacticalTechJay/bookish-waffle)', true)
-            .addField('📞 Support Server', '[It is here!](https://discord.gg/PMbESdB)', true)
-           .addField('☁ Hosted by', '[GalaxyGate](https://lunasrv.com/host)', true)
-            .addField('💲 Donations', '[Ko-fi](https://www.ko-fi.com/earthchandiscord) | [Patreon](https://www.patreon.com/earthchandiscord)', true);
+            embed.addField('👍 Vote', `[DBL Upvote](https://top.gg/bot/${BOTID}/vote)`, true)
+            embed.addField('🤖 Bot Invite', `[Click here](https://discordapp.com/oauth2/authorize?client_id=${BOTID}&scope=bot&permissions=3353606)`, true)
+            embed.addField('🖥 Source Code', '[Click here](https://github.com/TacticalTechJay/bookish-waffle)', true)
+            embed.addField('📞 Support Server', '[It is here!](https://discord.gg/PMbESdB)', true)
+           embed.addField('☁ Hosted by', '[GalaxyGate](https://lunasrv.com/host)', true)
+            embed.addField('💲 Donations', '[Ko-fi](https://www.ko-fi.com/earthchandiscord) | [Patreon](https://www.patreon.com/earthchandiscord)', true);
         message.channel.send(embed);
     }
 };

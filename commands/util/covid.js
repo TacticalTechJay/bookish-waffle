@@ -1,11 +1,13 @@
 const { get } = require("snekfetch");
+const { MessageEmbed } = require("discord.js");
+
 module.exports = {
     name: 'covid',
     description: 'NULL',
     guildOnly: true,
     args: true,
-    usage: '<String>',
-    execute(message, args) {
+    usage: false,
+    async execute(message, args) {
     const { body } = await get("https://corona.lmao.ninja/v2/all/");
     
     const embed = new MessageEmbed();

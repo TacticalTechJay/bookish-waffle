@@ -1,7 +1,7 @@
 module.exports = {
     name: 'voiceStateUpdate',
     async exec (oldState, newState, client) {
-        if (oldState.user.id !== client.user.id) return;
+        if (oldState.member.user.id !== client.user.id) return;
         if (!oldState.channel) return;
         if (!newState.channel) {
             await client.queue.delete(newState.guild.id);

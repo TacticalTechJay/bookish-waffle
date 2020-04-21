@@ -2,7 +2,6 @@ module.exports = {
 	name: 'loop',
 	description: 'Loop your songs in a breeze!',
 	args: true,
-	guildOnly: true,
 	testing: false,
 	usage: '<single/queue/none>',
 	execute(message, args, client) {

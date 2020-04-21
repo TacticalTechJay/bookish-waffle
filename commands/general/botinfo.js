@@ -3,7 +3,6 @@ const { stable, beta } = require('../../config.json');
 module.exports = {
 		name: 'botinfo',
 		description: 'Info of the bot!',
-		guildOnly: true,
 		args: false,
 		testing: false,
 		aliases: ['bi'],

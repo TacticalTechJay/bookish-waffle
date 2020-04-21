@@ -2,7 +2,6 @@ module.exports = {
     name: 'mylist',
     description: 'List your saved queue in case you have forgotten it!.',
     args: false,
-    guildOnly: true,
     cooldown: 15,
     async execute(message, args, client) {
         const fetch = require('node-fetch');

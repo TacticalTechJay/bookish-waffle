@@ -1,7 +1,6 @@
 module.exports = {
 	name: 'kick',
 	description: 'Kick naughty users. >:C',
-	guildOnly: true,
 	args: true,
 	usage: '<Mention/UserID>',
 	execute(message, args) {

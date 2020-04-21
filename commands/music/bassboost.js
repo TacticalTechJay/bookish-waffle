@@ -1,7 +1,6 @@
 module.exports = {
     name: 'bassboost',
     description: 'Set a level of bassboost based on four different levels.',
-    guildOnly: true,
     args: true,
     testing: false,
     donatorOnly: true,

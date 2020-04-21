@@ -1,7 +1,6 @@
 module.exports = {
     name: 'avatar',
     description: 'Obtain the a user\'s profile picture.',
-    guildOnly: false,
     cooldown: 5,
     aliases: ['pfp', 'profilepicture'],
     args: false,

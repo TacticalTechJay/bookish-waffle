@@ -3,7 +3,6 @@ module.exports = {
 	name: 'serverinfo',
 	description: 'Obtain server information.',
 	aliases: ['si'],
-	guildOnly: true,
 	args: false,
 	async execute(message) {
 		const embed = new MessageEmbed()

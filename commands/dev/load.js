@@ -3,7 +3,6 @@ module.exports = {
   description: 'BOT OWNER ONLY',
   args: true,
   testing: false,
-  guildOnly: false,
   cooldown: 0,
   group: 'trusted',
   execute(message, args, client) {

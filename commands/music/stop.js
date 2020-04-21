@@ -2,7 +2,6 @@ module.exports = {
     name: 'stop',
     description: 'Stop music in case of emergencies! Or you simply got bored of songs.',
     args: false,
-    guildOnly: true,
     testing: false,
     async execute(message, args, client) {
         const queue = client.queue.get(message.guild.id);

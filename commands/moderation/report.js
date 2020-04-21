@@ -3,7 +3,6 @@ const ksoftapi = parseInt(process.env.MODE) ? stable.ksoftapi : beta.ksoftapi;
 module.exports = {
     name: 'report',
     description: 'Report a user and ban them through a global ban list so others know the risks before it may be too late.',
-    guildOnly: true,
     args: true,
     cooldown: 60,
     usage: '<UserPing/UserID> <ImageURL> <Reason>',

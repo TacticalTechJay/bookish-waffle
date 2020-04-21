@@ -1,7 +1,6 @@
 module.exports = {
 	name: 'np',
 	description: 'Displays what is currently playing!',
-	guildOnly: true,
 	testing: false,
 	cooldown: 5,
 	aliases: ['nowplaying'],

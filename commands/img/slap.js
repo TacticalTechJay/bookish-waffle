@@ -2,7 +2,6 @@ module.exports = {
 	name: 'slap',
 	description: 'Slap someone (or me) or I can slap you!',
 	testing: false,
-	guildOnly: true,
 	args: false,
 	cooldown: 3,
 	usage: '<mention>',

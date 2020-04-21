@@ -2,7 +2,6 @@ module.exports = {
     name: 'skip',
     description: 'Skip music whenever needed. Though you can\'t skip when looping a song.',
     args: false,
-    guildOnly: true,
     testing: false,
     aliases: ['s'],
     async execute(message, args, client) {

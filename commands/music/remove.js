@@ -1,7 +1,6 @@
 module.exports = {
     name: 'remove',
     description: 'Remove a song from the queue with this command.',
-    guildOnly: true,
     testing: false,
     args: true,
     cooldown: 5,

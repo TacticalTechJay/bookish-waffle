@@ -2,7 +2,6 @@ const { MessageEmbed } = require('discord.js');
 module.exports = {
     name: 'userinfo',
     description: 'Displays information about a user.',
-    guildOnly: true,
     args: false,
     testing: false,
     aliases: ['ui'],

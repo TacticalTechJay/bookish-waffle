@@ -4,7 +4,6 @@ module.exports = {
 	usage: '<RoleName/RoleMention>',
 	category: 'util',
 	aliases: ['ri'],
-	guildOnly: true,
 	async execute(message, args) {
 		const target = message.mentions.roles.first() || message.guild.roles.cache.get(args[0]) || message.guild.roles.cache.find(c => c.name.toLowerCase() == args.join(' ').toLowerCase()) || message.member.roles.highest;
 		const roleP = message.channel.permissionOverwrites.get(target.id);

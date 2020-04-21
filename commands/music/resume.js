@@ -2,7 +2,6 @@ module.exports = {
     name: 'resume',
     description: 'Resumes the currently playing song.',
     args: false,
-    guildOnly: true,
     testing: false,
     cooldown: 5,
     execute(message, a, client) {

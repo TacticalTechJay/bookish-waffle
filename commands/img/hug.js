@@ -3,7 +3,6 @@ const ksoftapi = parseInt(process.env.MODE) ? stable.ksoftapi : beta.ksoftapi;
 module.exports = {
     name: 'hug',
     description: 'Hug others or request to get a hug from the bot!',
-    guildOnly: true,
     testing: false,
     args: false,
     cooldown: 3,

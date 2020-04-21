@@ -2,7 +2,6 @@ module.exports = {
     name: 'fox',
     description: 'Get a random image of a fox girl from nekos.life! (It\'s ~~kinda~~ safe so don\'t worry.)',
     cooldown: 5,
-    guildOnly: false,
     args: false,
     async execute(message, args, client) {
         const { url } = await client.nekosSafe.foxGirl();

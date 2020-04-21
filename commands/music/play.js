@@ -3,7 +3,6 @@ module.exports = {
     name: 'play',
     description: 'Play music in a voice channel you\'re in... at high quality. :sunglasses:',
     args: true,
-    guildOnly: true,
     testing: false,
     cooldown: 5,
     aliases: ['p'],

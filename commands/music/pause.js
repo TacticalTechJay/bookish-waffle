@@ -2,7 +2,6 @@ module.exports = {
     name: 'pause',
     description: 'Pause the music and 🙉',
     args: false,
-    guildOnly: true,
     testing: false,
     cooldown: 5,
     execute(message, a, client) {

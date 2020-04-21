@@ -3,7 +3,6 @@ module.exports = {
     name: 'import',
     description: 'Import the queue that you have previously saved.',
     args: false,
-    guildOnly: true,
     aliases: ['qadd', 'qim'],
     async execute(message, args, client) {
         const queue = client.queue.get(message.guild.id);

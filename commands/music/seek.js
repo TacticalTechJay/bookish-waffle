@@ -2,7 +2,6 @@ module.exports = {
     name: 'seek',
     description: 'Fastforward or rewind a song.',
     args: true,
-    guildOnly: true,
     usage: '<Timestamp>',
     async execute(message, args, client) {
         const player = client.manager.players.get(message.guild.id);

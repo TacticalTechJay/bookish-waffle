@@ -3,7 +3,6 @@ module.exports = {
     description: 'Enable and disable playback notifications',
     args: false,
     aliases: ['pb', 'pbn', 'notif', 'ntf', 'n'],
-    guildOnly: true,
     async execute(message, args, client) {
         const serverQueue = client.queue.get(message.guild.id);
         if (!serverQueue) return message.channel.send('There is nothing playing, so I won\'t be able to disable playback notifications!');

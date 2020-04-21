@@ -1,7 +1,6 @@
 module.exports = {
     name: 'queue',
     description: 'Check the queue of the list of songs that are being played.',
-    guildOnly: true,
     testing: false,
     aliases: ['q', 'playingsoon'],
     cooldown: 5,

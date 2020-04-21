@@ -3,7 +3,6 @@ module.exports = {
     description: 'Save the queue for future repeated use.',
     aliases: ['qsave'],
     args: false,
-    guildOnly: true,
     async execute(message, args, client) {
         const queue = client.queue.get(message.guild.id);
         const qsave = client.qsaves.get(`g${message.guild.id}me${message.author.id}`);

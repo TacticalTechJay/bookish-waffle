@@ -1,7 +1,6 @@
 module.exports = {
 	name: 'prune',
 	description: 'Remove those messages all in one scoop!',
-	guildOnly: true,
 	testing: false,
 	args: true,
 	aliases: ['clear', 'purge'],

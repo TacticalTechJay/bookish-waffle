@@ -2,7 +2,6 @@ module.exports = {
     name: 'neko',
     description: 'Get a random image of a neko from nekos.life! (It\'s ~~kinda~~ safe do not worry.)',
     cooldown: 5,
-    guildOnly: false,
     args: false,
     async execute(message, args, client) {
         let url = await client.nekosSafe.neko();

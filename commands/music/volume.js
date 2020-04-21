@@ -2,7 +2,6 @@ module.exports = {
   name: 'volume',
   description: 'It is a volume command for music.',
   args: false,
-  guildOnly: true,
   testing: false,
   usage: '[0-150]',
   async execute(message, args, client) {

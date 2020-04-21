@@ -3,7 +3,6 @@ const ksoftapi = parseInt(process.env.MODE) ? stable.ksoftapi : beta.ksoftapi;
 module.exports = {
     name: 'pat',
     description: 'Pat others or request to get a pat from the bot!',
-    guildOnly: true,
     testing: false,
     args: false,
     cooldown: 3,

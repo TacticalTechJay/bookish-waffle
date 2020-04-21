@@ -1,7 +1,6 @@
 module.exports = {
     name: 'unban',
     description: 'Think they served their ban long enough? Well now you can them!',
-    guildOnly: true,
     args: true,
     usage: '<UserID>',
     cooldown: 5,

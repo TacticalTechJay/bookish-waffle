@@ -1,7 +1,6 @@
 module.exports = {
   name: 'reload',
   description: 'BOT OWNER ONLY',
-  guildOnly: false,
   testing: false,
   cooldown: 0,
   args: false,

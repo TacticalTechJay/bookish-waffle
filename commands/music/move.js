@@ -4,7 +4,6 @@ module.exports = {
     description: 'Move a song\'s spot in the queue to wherever you want it to go!',
     aliases: ['mv', 'shift'],
     args: true,
-    guildOnly: true,
     usage: '<PrePos> <PostPos>',
     async execute(message, args, client) {
         const serverQueue = client.queue.get(message.guild.id);

@@ -2,7 +2,6 @@ const { MessageEmbed } = require('discord.js');
 module.exports = {
     name: 'upvote',
     description: 'Vote for the bot! :D',
-    guildOnly: false,
     testing: false,
     args: false,
     cooldown: 5,

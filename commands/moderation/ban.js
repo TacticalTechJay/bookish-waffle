@@ -1,7 +1,6 @@
 module.exports = {
 	name: 'ban',
 	description: 'Ban the super expired doritos.',
-	guildOnly: true,
 	args: true,
 	usage: '<Mention/UserID>',
 	cooldown: 5,

@@ -1,7 +1,6 @@
 module.exports = {
     name: 'say',
     description: 'I speak for the trees. The trees say ***d i e***',
-    guildOnly: false,
     args: true,
     usage: '<String>',
     execute(message, args) {

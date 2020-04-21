@@ -1,7 +1,6 @@
 module.exports = {
     name: 'urbandictionary',
     description: 'Get an urban dictionary definition right from https://urbandictionary.com',
-    guildOnly: false,
     args: true,
     testing: false,
     cooldown: 5,

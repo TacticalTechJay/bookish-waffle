@@ -4,7 +4,6 @@ const { MessageEmbed } = require("discord.js");
 module.exports = {
     name: 'covid',
     description: 'Get latest stats for the coronavirus plague!',
-    guildOnly: true,
     args: false,
     usage: false,
     async execute(message) {

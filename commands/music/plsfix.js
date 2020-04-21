@@ -2,7 +2,6 @@ module.exports = {
     name: 'plsfix',
     description: 'Fixes music. (hopefully)',
     args: false,
-    guildOnly: true,
     testing: false,
     cooldown: 30,
     aliases: ['songfix', 'musicfix', 'fix'],

@@ -2,7 +2,6 @@ const Discord = require('discord.js');
 module.exports = {
     name: 'invite',
     description: 'Invite me into your server!',
-    guildOnly: false,
     args: false,
     testing: false,
     execute(message, rand, client) {

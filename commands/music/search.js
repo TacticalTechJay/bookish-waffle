@@ -2,7 +2,6 @@ const Utils = require('../../utils/index.js')
 module.exports = {
 	name: 'search',
 	description: 'Search for music to play! Great ikr?',
-	guildOnly: true,
 	testing: false,
 	cooldown: 5,
 	args: true,

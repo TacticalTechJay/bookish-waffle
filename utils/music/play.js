@@ -15,8 +15,7 @@ module.exports = async (message, track, client) => {
 					.setThumbnail(`https://img.youtube.com/vi/${thu}/0.jpg`)
 					.setDescription(`Title: [${Util.escapeMarkdown(queue.songs[0].info.title)}](${queue.songs[0].info.uri})\nAuthor: ${Util.escapeMarkdown(queue.songs[0].info.author)}`);
 				return message.channel.send(em);
-			}
-			if (queue.looping == 'queue') {
+			} else if (queue.looping == 'queue') {
 				queue.songs.push(queue.songs.shift());
 				const thu = queue.songs[0].info.identifier;
 				require('./play.js')(message, queue.songs[0].track, client);
@@ -31,7 +30,7 @@ module.exports = async (message, track, client) => {
 			queue.songs.shift();
 
 			if (!queue.songs.length) {
-				return require('./leave.js')(message);
+				return require('./leave.js')(message, client);
 			}
 			const thu = queue.songs[0].info.identifier;
 			require('./play.js')(message, queue.songs[0].track, client);

@@ -1,6 +1,6 @@
 module.exports = {
     name: 'guildCreate',
-    async exec (guild) {
+    async exec (guild, client) {
         if (!guild.available) return;
         const embed = new (require('discord.js').MessageEmbed)()
 		    .setTitle('Guild added.')

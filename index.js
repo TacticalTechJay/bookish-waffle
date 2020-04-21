@@ -1,3 +1,7 @@
+const { sys } = require('./config.json');
+const Sentry = require('@sentry/node');
+Sentry.init({ dsn: sys.dsn });
+
 const { ShardingManager } = require('discord.js');
 
 if (parseInt(process.env.MODE)) {

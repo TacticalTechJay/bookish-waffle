@@ -3,11 +3,11 @@ const { MessageEmbed } = require("discord.js");
 
 module.exports = {
     name: 'covid',
-    description: 'NULL',
+    description: 'Get latest stats for the coronavirus plague!',
     guildOnly: true,
     args: false,
     usage: false,
-    async execute(message, args) {
+    async execute(message) {
     const { body } = await get("https://corona.lmao.ninja/v2/all/");
     
     const embed = new MessageEmbed();

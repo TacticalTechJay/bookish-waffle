@@ -30,14 +30,3 @@ module.exports = {
         }
     }
 };
-/*
-    bassboost(level, player) {
-        let node = (band, gain) => { band, gain };
-        const presets = { high: 0.25, medium: 0.15, low: 0.05, none: 0.00 };
-        if (typeof (level) == "string") {
-            let bands = [ node(0, presets[level]), node(1, presets[level]), node(2, presets[level]) ];
-            this.basslevel = level;
-            return player.node.send("equalizer", { bands });
-        } else return false;
-    }
-*/

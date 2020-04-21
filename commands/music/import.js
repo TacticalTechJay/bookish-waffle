@@ -1,3 +1,4 @@
+const Utils = require('../../utils/index.js');
 module.exports = {
     name: 'import',
     description: 'Import the queue that you have previously saved.',
@@ -39,8 +40,8 @@ module.exports = {
                 channel: message.member.voice.channel.id
             };
             client.queue.set(message.guild.id, qconstruct);
-            await client.join(message);
-            client.play(message, client.queue.get(message.guild.id).songs[0].track);
+            await Utils.music.join(message);
+            Utils.music.play(message, client.queue.get(message.guild.id).songs[0].track, client);
             return message.channel.send('Set and now playing!');
         }
     }

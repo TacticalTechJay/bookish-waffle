@@ -1,3 +1,4 @@
+const Utils = require('../../utils/index.js')
 module.exports = {
     name: 'play',
     description: 'Play music in a voice channel you\'re in... at high quality. :sunglasses:',
@@ -15,12 +16,12 @@ module.exports = {
 		if (!message.guild.me.hasPermission(['SPEAK', 'CONNECT', 'VIEW_CHANNEL'])) return message.channel.send('I do not have the required permissions to play music');
         if (!message.member.voice.channel.permissionsFor(message.guild.me).has(['SPEAK', 'CONNECT', 'VIEW_CHANNEL'])) return message.channel.send('I do not have the required permisssions to play music');
         if (message.member.voice.selfDeaf) return message.channel.send('You need to be undeafened to use something like this.');
-        if (!client.manager.players.get(message.guild.id) && !client.queue.get(message.guild.id)) client.createQueue(message.guild.id, message.channel.id);
+        if (!client.manager.players.get(message.guild.id) && !client.queue.get(message.guild.id)) Utils.music.createQueue(message.guild.id, message.channel.id, client);
         if (args.join(' ').startsWith('http')) {
-            client.getSong(`${args.join(' ')}`, message, false);
+            Utils.music.getSong(`${args.join(' ')}`, message, false, client);
         }
         else {
-            client.getSong(`ytsearch:${encodeURIComponent(args.join(' '))}`, message, false);
+            Utils.music.getSong(`ytsearch:${encodeURIComponent(args.join(' '))}`, message, false, client);
         }
     }
 };

@@ -5,7 +5,7 @@ This is a simple bot for all your simple needs.
 - You should have [Git](https://git-scm.com/) installed.
 - You should have [Node.js](https://nodejs.org/) installed.
 - You should have a code editor installed.
-- You should have a Lavalink server running.
+- You should have a [Lavalink](https://github.com/Frederikam/Lavalink) server running.
 
 # Installation
 **Coming soon.**

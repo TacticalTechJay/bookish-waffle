@@ -1,3 +1,7 @@
+const { stable, beta, sys } = require('./config.json');
+const Sentry = require('@sentry/node');
+Sentry.init({ dsn: sys.dsn, debug: true });
+
 String.prototype.titleCase = function() {
 	const splitStr = this.toLowerCase().split(' ');
 	for (let i = 0; i < splitStr.length; i++) {
@@ -13,7 +17,6 @@ String.prototype.toProperCase = function() {
 };
 
 const { MessageEmbed, Client, Collection, Util } = require('discord.js');
-const { stable, beta } = require('./config.json');
 const client = new Client({ disableMentions: 'everyone', messageCacheMaxSize: 100, messageCacheLifetime: 3600, messageSweepInterval: 7200 });
 const fetch = require('node-fetch');
 const { KoFi } = require('kofi.js');

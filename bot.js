@@ -1,6 +1,6 @@
 const { stable, beta, sys } = require('./config.json');
 const Sentry = require('@sentry/node');
-Sentry.init({ dsn: sys.dsn, debug: true });
+Sentry.init({ dsn: sys.dsn });
 
 String.prototype.titleCase = function() {
 	const splitStr = this.toLowerCase().split(' ');

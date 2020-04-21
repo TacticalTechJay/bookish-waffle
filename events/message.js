@@ -1,7 +1,10 @@
+const Sentry = require('@sentry/node');
+const { sys } = require('../config.json');
+
 module.exports = {
     name: 'message',
     async exec(message, client, cooldowns) {
-        if (!message.content.toLowerCase().startsWith(client.prefix) || message.author.bot) return;
+        if (message.channel.type !== 'text' || !message.content.toLowerCase().startsWith(client.prefix) || message.author.bot) return;
         const args = message.content.slice(client.prefix.length).split(/ +/);
         const commandName = args.shift().toLowerCase();
         const command = client.commands.get(commandName) || client.commands.find(cmd => cmd.aliases && cmd.aliases.includes(commandName));
@@ -14,9 +17,7 @@ module.exports = {
             if (command.donatorOnly && !command.voterOnly && !client.db.get('donor').includes(`member_${message.author.id}`)) return message.channel.send(`Woah there! This command is for donators only! Donate more than one cup of coffee on KoFi to use these commands (Be sure to include your user ID: \`${message.author.id}\`). Donation link: <https://www.ko-fi.com/earthchandiscord>`);
             if (command.voterOnly && command.donatorOnly && !voted && !client.db.get('donor').includes(`member_${message.author.id}`)) return message.channel.send(`Woah there! This command is only for voters/donators! Vote on Discord Bot List to use this command or donate more than just a cup off coffee on KoFi with your user ID in the message (\`${message.author.id}\`) included in the message.\nDonation link: <https://www.ko-fi.com/earthchandiscord>\nVote link: <https://top.gg/bot/628802763123589160/vote>`);
         }
-        if (command.testing && !client.db.get('trusted').includes(message.author.id)) return message.reply(`${command.name} is currently in its testing stage.`);
-        if (command.guildOnly && message.channel.type !== 'text') return message.reply('I can\'t execute that command inside DMs!');
-        if (command.category == 'dev' && !client.db.get('trusted').includes(message.author.id)) return;
+        if (command.category == 'dev' && !sys.groups[command.group].includes(message.author.id)) return;
 
         if (command.args && !args.length) {
             let reply = `You didn't provide any arguments, ${message.author}!`;
@@ -56,11 +57,12 @@ module.exports = {
 
         try {
             await command.execute(message, args, client);
-            console.log(`${message.guild ? message.guild.id : `DM: ${message.channel.id}`} | ${command.name}`);
+            console.log(`${message.guild.id} | ${command.name}`);
         }
         catch (error) {
-            console.error(`${message.guild ? message.guild.id : 'DM: ' + message.channel.id} | ${command.name}:\n${error.stack}`);
-            message.reply(`There was an error trying to execute that command! Report this to the creator of this bot: \`${error}\``);
+            Sentry.captureException(error);
+            console.error(`${message.guild.id} | ${command.name}:\n${error.stack}`);
+            message.channel.send(`There seemd to be a problem while using this command. It has been reported already to the developer(s). Hold tight! We're coming for rescue! `);
         }
     }
 };

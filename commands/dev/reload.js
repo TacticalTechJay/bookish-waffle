@@ -5,11 +5,12 @@ module.exports = {
   testing: false,
   cooldown: 0,
   args: false,
+  group: 'trusted',
   execute(message, args, client) {
     if(!args || args.size < 1) return message.reply('you must provide a command name to reload.');
     const { walk } = require('walk');
     const { resolve } = require('path');
-    const commandsReload = walk('/')
+    const commandsReload = walk(`${process.env}`)
     client.commands = new (require('discord.js').Collection)();
     commandsReload.on('file', (root, stats, next) => {
       console.log(root);

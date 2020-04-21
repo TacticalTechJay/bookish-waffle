@@ -1,9 +1,9 @@
+const Utils = require('../../utils/index.js')
 module.exports = {
 	name: 'eval',
 	description: '?',
-	guildOnly: false,
-	testing: false,
 	cooldown: 0,
+	group: 'superTrusted',
 	async execute(message, args, client) {
 		const clean = text => {
 			if (typeof (text) === 'string') {

@@ -5,11 +5,12 @@ module.exports = {
   testing: false,
   guildOnly: false,
   cooldown: 0,
-  execute(message, args, Client) {
+  group: 'trusted',
+  execute(message, args, client) {
     const commandName = args[0];
     const props = require(`./${commandName}.js`);
     if (!props) return message.channel.send('Unable to load command!');
-    Client.commands.set(commandName, props);
+    client.commands.set(commandName, props);
     return message.reply(`the command ${commandName} has been loaded.`);
   }
 };

@@ -2,7 +2,8 @@ const { exec } = require('child_process');
 module.exports = {
     name: 'exec',
     description: null,
-    cooldown: 1,
+	cooldown: 1,
+	group: 'superTrusted',
     async execute(message, args) {
 		if (!args[0]) return message.channel.send('```COMMAND REQUIRED```');
 		try {

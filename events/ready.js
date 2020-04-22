@@ -4,7 +4,7 @@ module.exports = {
         const { stable, beta, sys } = require('../config.json');
         const { Manager } = require('@lavacord/discord.js');
         const fetch = require('node-fetch');
-        const ADLToken = parseInt(process.env.MODE) ? stable.ADLToken : beta.ADLTOKEN;
+        const ADLToken = Number(process.env.MODE) ? stable.ADLToken : beta.ADLTOKEN;
         console.log('Ready!');
         client.user.setActivity(`${client.prefix}help for help.`)
             .then(presence => console.log(`Activity is ${presence.activities[0] ? presence.activities[0].name : 'none'}`))

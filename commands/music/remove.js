@@ -16,7 +16,7 @@ module.exports = {
             serverQueue.songs.pop();
             return message.channel.send('Removed the last song of the queue.');
         }
-        const toRemove = parseInt(args[0]);
+        const toRemove = Number(args[0]);
         if (!serverQueue) return message.channel.send('It appears as though there is nothing to remove.');
         if (!message.member.voice.channel) return message.channel.send('You need to be in a voice channel to use this command!');
         if (!message.guild.me.voice.channel) return message.channel.send('I am not in a voice channel. :thinking:');

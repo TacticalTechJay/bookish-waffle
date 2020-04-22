@@ -1,6 +1,6 @@
 const fetch = require('node-fetch');
 const { stable, beta } = require('../../config.json');
-const ksoftapi = parseInt(process.env.MODE) ? stable.ksoftapi : beta.ksoftapi;
+const ksoftapi = Number(process.env.MODE) ? stable.ksoftapi : beta.ksoftapi;
 module.exports = {
     name: 'yaoi',
     description: 'Just your avergae lewd.',

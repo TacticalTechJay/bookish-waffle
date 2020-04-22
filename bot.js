@@ -20,11 +20,12 @@ const { Client, Collection } = require('discord.js');
 const client = new Client({ disableMentions: 'everyone', messageCacheMaxSize: 100, messageCacheLifetime: 3600, messageSweepInterval: 7200 });
 const { KoFi } = require('kofi.js');
 const DBL = require('dblapi.js');
-const dblToken = parseInt(process.env.MODE) ? stable.dblToken : beta.dblToken;
+const MODE = Number(process.env.MODE)
+const dblToken = MODE ? stable.dblToken : beta.dblToken;
 const Utils = require('./utils/index.js')
 const { QuickPG } = require('quick.pg');
 
-client.prefix = parseInt(process.env.MODE) ? stable.prefix : beta.prefix;
+client.prefix = MODE ? stable.prefix : beta.prefix;
 client.queue = new Map();
 client.commands = new Collection();
 
@@ -57,13 +58,13 @@ Object.entries(client.nekosUnSafe).map(x => {
 	});
 });
 
-if (parseInt(process.env.MODE)) {
+if (MODE) {
 	const kofi = new KoFi(sys.kofi.webhook, sys.kofi.port);
 	kofi.start(() => {
 		console.log(`Started on port ${sys.kofi.port}`);
 	});
 	kofi.on('donation', async donation => {
-		const amount = parseInt(donation.amount);
+		const amount = Number(donation.amount);
 		const id = parseInt(donation.message);
 		const users = await client.pg.donations.get('donorList')
 		await client.pg.donations.push('donorInf', donation);

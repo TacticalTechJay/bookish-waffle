@@ -7,8 +7,8 @@ module.exports = {
     usage: '<PrePos> <PostPos>',
     async execute(message, args, client) {
         const serverQueue = client.queue.get(message.guild.id);
-        const c1 = parseInt(args[0]);
-        const c2 = parseInt(args[1]);
+        const c1 = Number(args[0]);
+        const c2 = Number(args[1]);
         if (!serverQueue) return message.channel.send('There is nothing playing... hmmm :thinking:');
         if (!message.member.voice.channel) return message.channel.send('You need to in a voice channel!');
         else if (message.member.voice.channel.id !== message.guild.me.voice.channel.id) return message.channel.send('You need to be in the same voice channel as me!');

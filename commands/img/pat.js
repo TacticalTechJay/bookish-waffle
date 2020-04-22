@@ -1,5 +1,5 @@
 const { stable, beta } = require('../../config.json');
-const ksoftapi = parseInt(process.env.MODE) ? stable.ksoftapi : beta.ksoftapi;
+const ksoftapi = Number(process.env.MODE) ? stable.ksoftapi : beta.ksoftapi;
 module.exports = {
     name: 'pat',
     description: 'Pat others or request to get a pat from the bot!',

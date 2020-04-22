@@ -18,7 +18,7 @@ module.exports = {
                 .addField('❤ Total Guilds', amount2, true)
                 .addField('💎 Shard ID', message.guild.shardID, true)
                 .addField('👑 Creator', `${creator.username + '#' + creator.discriminator}`, true)
-                .addField('🖥 Version', parseInt(process.env.MODE) ? stable.version : beta.version, true)
+                .addField('🖥 Version', Number(process.env.MODE) ? stable.version : beta.version, true)
                 .addField('📚 Libary', `Discord.js ${Discord.version}`, true)
             if (os.platform() == 'win32') {
                 const data = await si.osInfo();

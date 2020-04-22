@@ -21,7 +21,6 @@ const client = new Client({ disableMentions: 'everyone', messageCacheMaxSize: 10
 const { KoFi } = require('kofi.js');
 const DBL = require('dblapi.js');
 const dblToken = parseInt(process.env.MODE) ? stable.dblToken : beta.dblToken;
-const kofiPort = parseInt(process.env.MODE) ? sys.kofi.port.stable : sys.kofi.port.beta
 const Utils = require('./utils/index.js')
 const { QuickPG } = require('quick.pg');
 
@@ -52,10 +51,10 @@ Object.entries(client.nekosUnSafe).map(x => {
 	});
 });
 
-const kofi = new KoFi(sys.kofi.webhook, kofiPort);
+const kofi = new KoFi(sys.kofi.webhook, sys.kofi.port);
 client.dbl = new DBL(dblToken, client);
 if (parseInt(process.env.MODE)) kofi.start(() => {
-	console.log(`Started on port ${kofiPort}`);
+	console.log(`Started on port ${sys.kofi.port}`);
 });
 // eslint-disable-next-line
 let b = 0;

@@ -22,6 +22,10 @@
           "port": 1234
       }],
     "dsn": "sentry.io link for thing",
+    "kofi": {
+        "webhook": "/donation",
+        "port": 124
+    },
     "groups": {
       "trusted": ["ID1", "ID2", "ID3"],
       "superTrusted": ["ID1", "ID2", "ID3"]

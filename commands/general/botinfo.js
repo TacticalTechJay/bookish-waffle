@@ -4,7 +4,6 @@ module.exports = {
 		name: 'botinfo',
 		description: 'Info of the bot!',
 		args: false,
-		testing: false,
 		aliases: ['bi'],
 		async execute(message, nothing, client) {
             const os = require('os')

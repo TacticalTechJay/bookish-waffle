@@ -1,21 +1,25 @@
 const Sentry = require('@sentry/node');
 const { sys } = require('../config.json');
+const { Collection } = require('discord.js');
+const cooldowns = new Collection();
 
 module.exports = {
     name: 'message',
-    async exec(message, client, cooldowns) {
+    async exec(message, client) {
         if (message.channel.type !== 'text' || !message.content.toLowerCase().startsWith(client.prefix) || message.author.bot) return;
         const args = message.content.slice(client.prefix.length).split(/ +/);
         const commandName = args.shift().toLowerCase();
         const command = client.commands.get(commandName) || client.commands.find(cmd => cmd.aliases && cmd.aliases.includes(commandName));
-        const { Collection } = require('discord.js');
+        const donorList = await client.donations.get('donorList')
+        const donorListExistence = await client.donations.exists("donorList");
+        if (!donorListExistence) await client.donations.set('donorList', []);
 
         if (!command) return;
         if (typeof client.dbl !== 'undefined') {
             const voted = await client.dbl.hasVoted(message.author.id);
             if (command.voterOnly && !command.donatorOnly && !voted) return message.channel.send('Woah there! This command is for voters only! Vote on DBL to use this command. Vote here!\n<https://top.gg/bot/628802763123589160/vote>');
-            if (command.donatorOnly && !command.voterOnly && !client.db.get('donor').includes(`member_${message.author.id}`)) return message.channel.send(`Woah there! This command is for donators only! Donate more than one cup of coffee on KoFi to use these commands (Be sure to include your user ID: \`${message.author.id}\`). Donation link: <https://www.ko-fi.com/earthchandiscord>`);
-            if (command.voterOnly && command.donatorOnly && !voted && !client.db.get('donor').includes(`member_${message.author.id}`)) return message.channel.send(`Woah there! This command is only for voters/donators! Vote on Discord Bot List to use this command or donate more than just a cup off coffee on KoFi with your user ID in the message (\`${message.author.id}\`) included in the message.\nDonation link: <https://www.ko-fi.com/earthchandiscord>\nVote link: <https://top.gg/bot/628802763123589160/vote>`);
+            if (command.donatorOnly && !command.voterOnly && !donorList.includes(`user_${message.author.id}`)) return message.channel.send(`Woah there! This command is for donators only! Donate more than one cup of coffee on KoFi to use these commands (Be sure to include your user ID: \`${message.author.id}\`). Donation link: <https://www.ko-fi.com/earthchandiscord>`);
+            if (command.voterOnly && command.donatorOnly && !voted && !donorList.includes(`user_${message.author.id}`)) return message.channel.send(`Woah there! This command is only for voters/donators! Vote on Discord Bot List to use this command or donate more than just a cup off coffee on KoFi with your user ID in the message (\`${message.author.id}\`) included in the message.\nDonation link: <https://www.ko-fi.com/earthchandiscord>\nVote link: <https://top.gg/bot/628802763123589160/vote>`);
         }
         if (command.category == 'dev' && !sys.groups[command.group].includes(message.author.id)) return;
 
@@ -38,12 +42,12 @@ module.exports = {
 
         if (!timestamps.has(message.author.id)) {
             timestamps.set(message.author.id, now);
-            if (client.db.get('donor').includes(`member_${message.author}`)) setTimeout(() => timestamps.delete(message.author.id), cooldownDonAmount);
+            if (donorList.includes(`user_${message.author.id}`)) setTimeout(() => timestamps.delete(message.author.id), cooldownDonAmount);
             else setTimeout(() => timestamps.delete(message.author.id), cooldownAmount);
         }
         else {
             let expirationTime;
-            if (client.db.get('donor').includes(`member_${message.author.id}`)) expirationTime = timestamps.get(message.author.id) + cooldownDonAmount;
+            if (donorList.includes(`user_${message.author.id}`)) expirationTime = timestamps.get(message.author.id) + cooldownDonAmount;
             else expirationTime = timestamps.get(message.author.id) + cooldownAmount;
 
             if (now < expirationTime) {

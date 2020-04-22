@@ -1,3 +1,4 @@
+const { sys } = require('../../config.json');
 module.exports = {
 	name: 'help',
 	description: 'List all of my commands or info about a specific command.',
@@ -20,7 +21,7 @@ module.exports = {
 				.setColor(0x00fff9)
 				.setFooter(`You can send "${client.prefix}help [command name]" to get info on a specific command! (Credit to Aidville for some of these.)`);
 			if (message.channel.nsfw) embed.addField(`NSFW (${commands.filter(command => command.category === 'nsfw').size})`, commands.filter(command => command.category === 'nsfw').map(command => `\`${command.name}\``).join(', '), false);
-			if (client.db.get('trusted').includes(message.author.id)) embed.addField(`Dev (${commands.filter(command => command.category === 'dev').size})`, commands.filter(command => command.category === 'dev').map(command => `\`${command.name}\``).join(', '), false);
+			if (sys.groups.trusted.includes(message.author.id)) embed.addField(`Dev (${commands.filter(command => command.category === 'dev').size})`, commands.filter(command => command.category === 'dev').map(command => `\`${command.name}\``).join(', '), false);
 			return message.channel.send(embed);
 		}
 

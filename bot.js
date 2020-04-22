@@ -51,12 +51,24 @@ Object.entries(client.nekosUnSafe).map(x => {
 	});
 });
 
-const kofi = new KoFi(sys.kofi.webhook, sys.kofi.port);
+if (parseInt(process.env.MODE)) {
+	const kofi = new KoFi(sys.kofi.webhook, sys.kofi.port);
+	kofi.start(() => {
+		console.log(`Started on port ${sys.kofi.port}`);
+	});
+	kofi.on('donation', async donation => {
+		const amount = parseInt(donation.amount);
+		const id = parseInt(donation.message);
+		const users = await client.donations.get('donorList')
+		await client.donations.push('donorInf', donation);
+		if (amount < 3) return;
+		if (!donation.message || isNaN(id)) return;
+		if (users.include(`user_${id}`)) return;
+		await client.donations.push('donorList', `user_${id}`);
+	});
+}
+
 client.dbl = new DBL(dblToken, client);
-if (parseInt(process.env.MODE)) kofi.start(() => {
-	console.log(`Started on port ${sys.kofi.port}`);
-});
-// eslint-disable-next-line
 let b = 0;
 function a() {
 	client.dbl.on('error', e => {
@@ -71,16 +83,7 @@ function a() {
 	});
 }
 a();
-kofi.on('donation', async donation => {
-	const amount = parseInt(donation.amount);
-	const id = parseInt(donation.message);
-	const users = await client.donations.get('donorList')
-	await client.donations.push('donorInf', donation);
-	if (amount < 3) return;
-	if (!donation.message || isNaN(id)) return;
-	if (users.include(`user_${id}`)) return;
-	await client.donations.push('donorList', `user_${id}`);
-});
+
 
 client.login(process.env.DISCORD_TOKEN);
 

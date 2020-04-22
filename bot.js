@@ -76,7 +76,7 @@ if (parseInt(process.env.MODE)) {
 
 client.dbl = new DBL(dblToken, client);
 let b = 0;
-async function a() {
+async function usefullness() {
 	client.dbl.on('error', e => {
 		console.error(e);
 		delete client.dbl;
@@ -92,7 +92,7 @@ async function a() {
 	client.donations = await client.pg.donations.all();
 	client.qsaves = await client.pg.qsaves.all()
 }
-a();
+usefullness();
 
 
 client.login(process.env.DISCORD_TOKEN);

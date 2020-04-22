@@ -1,5 +1,5 @@
 module.exports = async (message, track, client) => {
-    const { Util } = require('discord.js');
+    const { Util, MessageEmbed } = require('discord.js');
     try {
 		const queue = client.queue.get(message.guild.id);
 		const player = client.manager.players.get(message.guild.id);

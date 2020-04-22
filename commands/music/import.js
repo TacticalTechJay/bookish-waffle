@@ -6,7 +6,7 @@ module.exports = {
     aliases: ['qadd', 'qim'],
     async execute(message, args, client) {
         const queue = client.queue.get(message.guild.id);
-        const qsave = client.qsaves.get(`g${message.guild.id}me${message.author.id}`);
+        const qsave = await client.qsaves.get(`g${message.guild.id}me${message.author.id}`);
         if (!qsave) return message.channel.send('You currently have no saved queue.');
         if (!message.member.voice.channel) return message.channel.send('You need to be in a voice channel to use this command.');
         else if (message.member.voice.selfDeaf) return message.channel.send('You need to be undeafened to use something like this.');
@@ -39,7 +39,7 @@ module.exports = {
                 channel: message.member.voice.channel.id
             };
             client.queue.set(message.guild.id, qconstruct);
-            await Utils.music.join(message);
+            await Utils.music.join(message, client);
             Utils.music.play(message, client.queue.get(message.guild.id).songs[0].track, client);
             return message.channel.send('Set and now playing!');
         }

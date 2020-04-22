@@ -10,9 +10,8 @@ module.exports = {
         const args = message.content.slice(client.prefix.length).split(/ +/);
         const commandName = args.shift().toLowerCase();
         const command = client.commands.get(commandName) || client.commands.find(cmd => cmd.aliases && cmd.aliases.includes(commandName));
-        const donorList = await client.donations.get('donorList')
-        const donorListExistence = await client.donations.exists("donorList");
-        if (!donorListExistence) await client.donations.set('donorList', []);
+        const donorList = client.donations.donorList;
+
 
         if (!command) return;
         if (typeof client.dbl !== 'undefined') {

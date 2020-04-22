@@ -28,8 +28,14 @@ client.prefix = parseInt(process.env.MODE) ? stable.prefix : beta.prefix;
 client.queue = new Map();
 client.commands = new Collection();
 
-client.donations = new QuickPG(sys.postgres, {table: 'donations'});
-client.qsaves = new QuickPG(sys.postgres, {table: 'qsaves'});
+client.pg = {
+	donations: new QuickPG(sys.postgres, {table: 'donations'}),
+	qsaves: new QuickPG(sys.postgres, {table: 'qsaves'})
+}
+setInterval(async () => {
+	client.donations = await client.pg.donations.all();
+	client.qsaves = await client.pg.qsaves.all()
+}, 15000)
 
 client.nekosSafe = new (require('nekos.life'))().sfw;
 client.nekosUnSafe = new (require('nekos.life'))().nsfw;
@@ -59,18 +65,18 @@ if (parseInt(process.env.MODE)) {
 	kofi.on('donation', async donation => {
 		const amount = parseInt(donation.amount);
 		const id = parseInt(donation.message);
-		const users = await client.donations.get('donorList')
-		await client.donations.push('donorInf', donation);
+		const users = await client.pg.donations.get('donorList')
+		await client.pg.donations.push('donorInf', donation);
 		if (amount < 3) return;
 		if (!donation.message || isNaN(id)) return;
 		if (users.include(`user_${id}`)) return;
-		await client.donations.push('donorList', `user_${id}`);
+		await client.pg.donations.push('donorList', `user_${id}`);
 	});
 }
 
 client.dbl = new DBL(dblToken, client);
 let b = 0;
-function a() {
+async function a() {
 	client.dbl.on('error', e => {
 		console.error(e);
 		delete client.dbl;
@@ -81,6 +87,10 @@ function a() {
 			a();
 		}, 3600000);
 	});
+	const donorListExistence = await client.pg.donations.exists("donorList");
+	if (!donorListExistence) await client.pg.donations.set('donorList', []);
+	client.donations = await client.pg.donations.all();
+	client.qsaves = await client.pg.qsaves.all()
 }
 a();
 

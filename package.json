@@ -1,7 +1,7 @@
 {
-  "name": "waffle",
+  "name": "earth-chan",
   "version": "1.0.0",
-  "description": "NULL",
+  "description": "This is a simple bot for all your simple needs.",
   "main": "index.js",
   "dependencies": {
     "@lavacord/discord.js": "0.0.2",

@@ -3,7 +3,7 @@ const { MessageEmbed } = require("discord.js");
 
 module.exports = {
     name: 'covid',
-    description: 'Get latest stats for the coronavirus plague!',
+    description: 'Get latest stats for the Novel Coronavirus plague!',
     args: false,
     usage: false,
     async execute(message) {

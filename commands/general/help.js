@@ -1,7 +1,7 @@
 const { sys } = require('../../config.json');
 module.exports = {
 	name: 'help',
-	description: 'List all of my commands or info about a specific command.',
+	description: 'List all of my commands or info about a specific commandsssssssss.',
 	aliases: ['commands', 'cmds'],
 	usage: '[commandName]',
 	cooldown: 3,

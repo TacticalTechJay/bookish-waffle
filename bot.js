@@ -38,26 +38,6 @@ setInterval(async () => {
 	client.qsaves = await client.pg.qsaves.all()
 }, 15000)
 
-client.nekosSafe = new (require('nekos.life'))().sfw;
-client.nekosUnSafe = new (require('nekos.life'))().nsfw;
-
-delete client.nekosUnSafe.neko;
-delete client.nekosUnSafe.avatar;
-Object.entries(client.nekosUnSafe).map(x => {
-	client.commands.set(x[0].toLowerCase(), {
-		name: x[0].toLowerCase(),
-		description: 'Just your average lewd',
-		category: 'nsfw',
-		cooldown: 5,
-		voterOnly: true,
-		donatorOnly: true,
-		async execute(message) {
-			if (!message.channel.nsfw) return message.channel.send('Nope. It\'s lewd. (Use the command in an nsfw channel.)');
-			message.channel.send(new (require('discord.js').MessageEmbed)().setImage((await x[1]()).url));
-		}
-	});
-});
-
 if (MODE) {
 	const kofi = new KoFi(sys.kofi.webhook, sys.kofi.port);
 	kofi.start(() => {

@@ -2,9 +2,10 @@ module.exports = async (client) => {
     const { walk } = require('walk');
     const { resolve } = require('path');
     const commandLoader = walk('./commands');
-    
-    client.nekosSafe = new (require('nekos.life'))().sfw;
-    client.nekosUnSafe = new (require('nekos.life'))().nsfw;
+
+    const nekosLife = new (require('nekos.life'))()
+    client.nekosSafe = nekosLife.sfw;
+    client.nekosUnSafe = nekosLife.nsfw;
 
     delete client.nekosUnSafe.neko;
     delete client.nekosUnSafe.avatar;

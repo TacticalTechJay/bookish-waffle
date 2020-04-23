@@ -8,7 +8,6 @@ module.exports = {
     cooldown: 1,
     group: 'trusted',
     async execute(message) {
-        if (!sys.collaborators.includes(message.author.id)) return;
         try {
             const executedPiece = await execSync('git pull').toString();
             if (executedPiece.startsWith('Already up to date')) return message.channel.send('The focuesed branch is up to date.');

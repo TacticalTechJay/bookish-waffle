@@ -1,5 +1,4 @@
 const { execSync } = require('child_process');
-const { sys } = 
 
 module.exports = {
     name: 'git',
@@ -16,6 +15,7 @@ module.exports = {
             process.exit(1);
         } catch (err) {
             message.author.send(err);
+            throw err;
         }
     }
 }

@@ -65,7 +65,7 @@ async function usefullness() {
 		b++;
 		setTimeout(() => {
 			client.dbl = new DBL(stable.dblToken, client);
-			a();
+			return usefullness();
 		}, 3600000);
 	});
 	const donorListExistence = await client.pg.donations.exists("donorList");

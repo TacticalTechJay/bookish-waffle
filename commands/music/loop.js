@@ -2,12 +2,11 @@ module.exports = {
 	name: 'loop',
 	description: 'Loop your songs in a breeze!',
 	args: true,
-	testing: false,
 	usage: '<single/queue/none>',
 	execute(message, args, client) {
 		const serverQueue = client.queue.get(message.guild.id);
-		const op1 = ['single', 'song', 'now', 'np'];
-		const op2 = ['queue', 'playlist'];
+		const op1 = ['single', 'song', 'now', 'np', 's'];
+		const op2 = ['queue', 'playlist', 'q'];
 		const op3 = ['none', 'disabled', 'disable'];
 		if (!serverQueue) return message.channel.send('There is nothing playing, so I won\'t be able to enable looping!');
 		if (!message.member.voice.channel) return message.channel.send('You need to be in a voice channel to use this command!');

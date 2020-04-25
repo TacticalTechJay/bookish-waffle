@@ -6,7 +6,7 @@ module.exports = {
     category: 'useful',
     cooldown: 1,
     group: 'trusted',
-    async execute(message) {
+    async execute(message, args, client) {
         try {
             const executedPiece = await execSync('git pull').toString();
             if (executedPiece.startsWith('Already up to date')) return message.channel.send('The focuesed branch is up to date.');
@@ -18,4 +18,4 @@ module.exports = {
             throw err;
         }
     }
-}
+};

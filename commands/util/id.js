@@ -5,4 +5,4 @@ module.exports = {
     async execute(message) {
         return message.channel.send(message.author.id);
     }
-}
+};

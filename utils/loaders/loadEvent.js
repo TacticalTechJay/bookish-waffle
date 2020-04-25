@@ -9,4 +9,4 @@ module.exports = async (client, cooldowns) => {
 		});
 		next();
 	});
-}
+};

@@ -48,4 +48,4 @@ module.exports = async (message, track, client) => {
 		console.log(err);
 	}
 
-}
+};

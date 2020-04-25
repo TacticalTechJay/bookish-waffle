@@ -1,4 +1,3 @@
-const Utils = require('../../utils/index.js')
 module.exports = {
 	name: 'eval',
 	description: '?',

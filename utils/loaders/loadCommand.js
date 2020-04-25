@@ -3,7 +3,7 @@ module.exports = async (client) => {
     const { resolve } = require('path');
     const commandLoader = walk('./commands');
 
-    const nekosLife = new (require('nekos.life'))()
+    const nekosLife = new (require('nekos.life'))();
     client.nekosSafe = nekosLife.sfw;
     client.nekosUnSafe = nekosLife.nsfw;
 
@@ -28,6 +28,6 @@ module.exports = async (client) => {
         const command = require(`${resolve(root)}/${stats.name}`);
         command.category = root.split('/')[2] || command.category || 'etc';
         client.commands.set(command.name, command);
-	    next();
+		next();
     });
-}
+};

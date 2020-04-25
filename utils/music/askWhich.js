@@ -13,4 +13,4 @@ module.exports = async (song, message, isSearch, client) => {
 		time: 20000,
 		errors: ['time']
 	});
-}
+};

@@ -6,7 +6,7 @@ module.exports = {
 		args: false,
 		aliases: ['bi'],
 		async execute(message, nothing, client) {
-            const os = require('os')
+            const os = require('os');
             const amount = await client.shard.broadcastEval('this.guilds.cache.size');
             const amount2 = await amount.reduce((prev, val) => prev + val, 0);
             const creator = await client.users.fetch('127888387364487168');
@@ -19,9 +19,9 @@ module.exports = {
                 .addField('💎 Shard ID', message.guild.shardID, true)
                 .addField('👑 Creator', `${creator.username + '#' + creator.discriminator}`, true)
                 .addField('🖥 Version', Number(process.env.MODE) ? stable.version : beta.version, true)
-                .addField('📚 Libary', `Discord.js ${Discord.version}`, true)
+                .addField('📚 Libary', `Discord.js ${Discord.version}`, true);
             if (os.platform() == 'win32') {
-                const data = await si.osInfo();
+                const data = await os.osInfo();
                 embed.addField('🖥 OS', `${data.distro}`, true);
                 embed.setThumbnail('https://cdn.discordapp.com/attachments/491024501971222538/491024518761021460/Windows-Logo.png');
             }

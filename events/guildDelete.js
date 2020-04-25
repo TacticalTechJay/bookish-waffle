@@ -1,6 +1,6 @@
 module.exports = {
     name: 'guildDelete',
-    async exec (guild, client) {
+    async exec(guild, client) {
         if (!guild.available) return;
         const embed = new (require('discord.js').MessageEmbed)()
             .setTitle('Guild Removed')
@@ -11,4 +11,4 @@ module.exports = {
             .setColor('RED');
         return client.channels.cache.get('661669168009052200').send(embed);
     }
-}
+};

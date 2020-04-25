@@ -1,5 +1,5 @@
 module.exports = async (string, client) => {
-	const fetch = require('node-fetch');	
+	const fetch = require('node-fetch');
 	async function get(string, i) {
 		const url = new URL(`http://${client.lavalink.host}:${client.lavalink.port}/loadtracks?identifier=${string}`);
 		const res = await fetch(url, {
@@ -26,4 +26,4 @@ module.exports = async (string, client) => {
 	if (!res2) throw 'NO RESPONSE';
 	if (!res2.tracks) throw 'NO TRACKS';
 	return res2;
-}
+};

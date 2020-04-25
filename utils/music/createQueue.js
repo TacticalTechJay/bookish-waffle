@@ -5,4 +5,4 @@ module.exports = async (guild, channel, client) => {
 		pb: true,
 		channel: channel
 	});
-}
+};

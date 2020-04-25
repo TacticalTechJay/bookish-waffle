@@ -1,6 +1,6 @@
 module.exports = {
     name: 'voiceStateUpdate',
-    async exec (oldState, newState, client) {
+    async exec(oldState, newState, client) {
         if (oldState.member.user.id !== client.user.id) return;
         if (!oldState.channel) return;
         if (!newState.channel) {
@@ -9,4 +9,4 @@ module.exports = {
             return !client.manager.players.get(newState.guild.id);
         }
     }
-}
+};

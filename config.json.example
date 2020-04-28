@@ -5,7 +5,13 @@
     "dblToken": "",
     "ksoftapi": "",
     "ADLToken": "",
-    "version": "v2.0.0"
+    "version": "v2.0.0",
+    "postgres": {
+      "host": "localhost",
+      "user": "thegamer",
+      "password": "1234567890",
+      "database": "bookish-waffle_butABeta"
+    }
   },
   "beta": {
     "token": "",
@@ -13,7 +19,13 @@
     "dblToken": "",
     "ksoftapi": "",
     "ADLToken": "",
-    "version": "v2.2.0"
+    "version": "v2.2.0",
+    "postgres": {
+      "host": "localhost",
+      "user": "thegamer",
+      "password": "1234567890",
+      "database": "bookish-waffle"
+    }
   },
   "sys": {
     "nodes":[{

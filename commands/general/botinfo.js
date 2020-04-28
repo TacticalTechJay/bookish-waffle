@@ -29,10 +29,6 @@ module.exports = {
                 embed.addField('🖥 OS', 'Linux', true);
                 embed.setThumbnail('https://cdn.discordapp.com/attachments/491024501971222538/491024720733536277/LINUX-LOGO.png');
             }
-            if (os.platform() == 'darwin') {
-                embed.addField('🖥 OS', `${osName(os.platform(), os.release())}`, true);
-                embed.setThumbnail('https://cdn.discordapp.com/attachments/491024501971222538/491024928028491779/2000px-OS_X_El_Capitan_logo.png');
-            }
             if (os.platform() == null || undefined) {
                 embed.addField('🖥 OS', 'Unknown', true);
             }

@@ -17,7 +17,7 @@ module.exports = {
 			if (message.flags.a || message.flags.async) code = `(async()=>{${code}})();`;
             let evaled = await eval(code);
             if (typeof evaled !== 'string') {
-                evaled = require('util').inspect(evaled, { depth: 0 });
+                evaled = require('util').inspect(evaled, { depth: message.flags.depth || 0 });
             }
             if (evaled.includes(client.token)) return message.channel.send('```Nice try FBI.```');
             message.channel.send(`\`\`\`js\n${clean(evaled)}\`\`\``);

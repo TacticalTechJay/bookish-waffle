@@ -59,7 +59,7 @@ async function usefullness() {
 	client.dbl.on('error', e => {
 		console.error(e);
 		delete client.dbl;
-		if (b == 5) throw'DBL won\'t get initialized after 5 errors. Remaining yeeted.'
+		if (b == 5) throw'DBL won\'t get initialized after 5 errors. Remaining yeeted.';
 		b++;
 		setTimeout(() => {
 			client.dbl = new DBL(dblToken, client);

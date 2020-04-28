@@ -16,16 +16,53 @@ String.prototype.toProperCase = function() {
 	return this.toLowerCase().replace(/(^|[\s.])[^\s.]/gm, (s) => s.toUpperCase());
 };
 
+const MODE = Number(process.env.MODE);
+const prefix = MODE ? stable.prefix : beta.prefix;
+
 const { Client, Collection } = require('discord.js');
-const client = new Client({ disableMentions: 'everyone', messageCacheMaxSize: 100, messageCacheLifetime: 3600, messageSweepInterval: 7200 });
+const client = new Client({ disableMentions: 'everyone', messageCacheMaxSize: 100, messageCacheLifetime: 3600, messageSweepInterval: 7200, presence: {
+		status: 'dnd',
+		activity: {
+			name: `${prefix}help`,
+			type: 'LISTENING'
+		}
+	},
+	ws: {
+		intents: ['GUILDS', 'GUILD_MESSAGES', 'GUILD_BANS', 'GUILD_VOICE_STATES']
+	},
+	disabledEvents: [
+		'GUILD_MEMBER_UPDATE',
+		'GUILD_MEMBERS_CHUNK',
+		'GUILD_INTEGRATIONS_UPDATE',
+		'GUILD_ROLE_CREATE',
+		'GUILD_ROLE_DELETE',
+		'GUILD_ROLE_UPDATE',
+		'GUILD_BAN_ADD',
+		'GUILD_BAN_REMOVE',
+		'GUILD_EMOJIS_UPDATE',
+		'CHANNEL_PINS_UPDATE',
+		'CHANNEL_CREATE',
+		'CHANNEL_DELETE',
+		'CHANNEL_UPDATE',
+		'MESSAGE_DELETE',
+		'MESSAGE_UPDATE',
+		'MESSAGE_DELETE_BULK',
+		'MESSAGE_REACTION_REMOVE',
+		'MESSAGE_REACTION_REMOVE_ALL',
+		'USER_UPDATE',
+		'USER_SETTINGS_UPDATE',
+		'PRESENCE_UPDATE',
+		'TYPING_START',
+		'WEBHOOKS_UPDATE'
+	]
+});
 const { KoFi } = require('kofi.js');
 const DBL = require('dblapi.js');
-const MODE = Number(process.env.MODE);
 const dblToken = MODE ? stable.dblToken : beta.dblToken;
 
 client.utils = require('./utils/index.js');
-client.prefix = MODE ? stable.prefix : beta.prefix;
 client.queue = new Map();
+client.prefix = MODE ? stable.prefix : beta.prefix;
 client.commands = new Collection();
 
 if (MODE) {

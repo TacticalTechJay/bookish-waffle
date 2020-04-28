@@ -47,7 +47,7 @@ module.exports = {
             });
             await client.utils.music.join(message, client);
             const wait = require('util').promisify(setTimeout);
-            await wait(1000);
+            await wait(1500);
             client.utils.music.play(message, client.queue.get(message.guild.id).songs[0].track, client);
             return message.channel.send('Set and now playing!');
         }

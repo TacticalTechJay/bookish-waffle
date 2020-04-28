@@ -4,11 +4,9 @@ module.exports = {
         const { stable, beta, sys } = require('../config.json');
         const { Manager } = require('@lavacord/discord.js');
         const fetch = require('node-fetch');
-        const ADLToken = Number(process.env.MODE) ? stable.ADLToken : beta.ADLTOKEN;
-        console.log('Ready!');
-        client.user.setActivity(`${client.prefix}help for help.`)
-            .then(presence => console.log(`Activity is ${presence.activities[0] ? presence.activities[0].name : 'none'}`))
-            .catch(console.error);
+
+        console.log(`Started on ${client.user.username} using the following prefix: ${client.prefix}\nThe following are the IDs for the owners of this bot:\n${sys.groups.superTrusted.join(' | ')}`);
+
         client.lavalink = {
             host: sys.nodes[0].host,
             password: sys.nodes[0].password,
@@ -20,7 +18,10 @@ module.exports = {
             shards: client.shard.count
         });
         await client.manager.connect();
+
         client.utils.orm(client);
+
+        const ADLToken = Number(process.env.MODE) ? stable.ADLToken : beta.ADLTOKEN;
         var interval = setInterval(async () => {
             const body = {
                 'users': client.users.cache.size,

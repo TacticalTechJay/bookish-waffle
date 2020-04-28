@@ -7,6 +7,9 @@ module.exports = {
     name: 'message',
     async exec(message, client) {
         if (message.channel.type !== 'text' || !message.content.toLowerCase().startsWith(client.prefix) || message.author.bot) return;
+        const { content, flags } = client.utils.parseFlags(message.content);
+        message.content = content;
+        message.flags = flags;
         const args = message.content.slice(client.prefix.length).split(/ +/);
         const commandName = args.shift().toLowerCase();
         const command = client.commands.get(commandName) || client.commands.find(cmd => cmd.aliases && cmd.aliases.includes(commandName));

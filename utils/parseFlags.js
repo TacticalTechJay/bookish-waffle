@@ -19,4 +19,4 @@ module.exports = parseFlags = (str) => {
     str = str.replace(shortReg, '');
 
     return { flags, content: str };
-}
+};

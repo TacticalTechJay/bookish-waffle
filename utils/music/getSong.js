@@ -1,4 +1,4 @@
-const { MessageEmbed, Util } = require('discord.js')
+const { MessageEmbed, Util } = require('discord.js');
 module.exports = async (string, message, isSearch, client) => {
     require('./getSongs.js')(string, client).then(async song => {
 		if (!song) return message.channel.send('No tracks were found');
@@ -26,6 +26,7 @@ module.exports = async (string, message, isSearch, client) => {
 				return message.channel.send(em);
 			}
 			else {
+				if (client.queue.get(message.guild.id) && client.queue.get(message.guild.id).locked && client.queue.get(message.guild.id).songs[0].requester.id !== message.author.id) return message.channel.send('This queue is currently locked to the requester of the current song.');
 				tracks.forEach(t => {
 					t.requester = message.author;
 					client.queue.get(message.guild.id).songs.push(t);
@@ -86,6 +87,7 @@ module.exports = async (string, message, isSearch, client) => {
 			}
 		}
 		else {
+			if (client.queue.get(message.guild.id) && client.queue.get(message.guild.id).locked && client.queue.get(message.guild.id).songs[0].requester.id !== message.author.id) return message.channel.send('This queue is currently locked to the requester of the current song.');
 			require('./askWhich.js')(song, message, isSearch, client).then(async response => {
 				if (!response) return;
 				if (response.first().content.toLowerCase() == `${client.prefix}search`) return;
@@ -114,6 +116,7 @@ module.exports = async (string, message, isSearch, client) => {
 				console.error(e);
 			});
 			if (!isSearch) {
+				if (client.queue.get(message.guild.id) && client.queue.get(message.guild.id).locked && client.queue.get(message.guild.id).songs[0].requester.id !== message.author.id) return message.channel.send('This queue is currently locked to the requester of the current song.');
 				song.tracks[0].requester = message.author;
 				client.queue.get(message.guild.id).songs.push(song.tracks[0]);
 				const em = new MessageEmbed()
@@ -131,4 +134,4 @@ module.exports = async (string, message, isSearch, client) => {
 		return message.channel.send('There was an error. ' + err);
 	});
 
-}
+};

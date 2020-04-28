@@ -1,7 +1,6 @@
 module.exports = {
 	name: 'np',
 	description: 'Displays what is currently playing!',
-	testing: false,
 	cooldown: 5,
 	aliases: ['nowplaying'],
 	execute(message, a, client) {

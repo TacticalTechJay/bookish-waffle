@@ -11,5 +11,9 @@
             join: require('./music/join.js'),
             leave: require('./music/leave.js'),
             play: require('./music/play.js')
-        }
+        },
+        database: {
+            user: require('./database/user.js')
+        },
+        orm: require('./initializeORM.js')
     };

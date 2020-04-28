@@ -2,13 +2,14 @@ module.exports = {
 	name: 'loop',
 	description: 'Loop your songs in a breeze!',
 	args: true,
-	usage: '<single/queue/none>',
+	usage: 'String:<s/q/n>',
 	execute(message, args, client) {
 		const serverQueue = client.queue.get(message.guild.id);
 		const op1 = ['single', 'song', 'now', 'np', 's'];
 		const op2 = ['queue', 'playlist', 'q'];
-		const op3 = ['none', 'disabled', 'disable'];
+		const op3 = ['none', 'disabled', 'disable', 'n'];
 		if (!serverQueue) return message.channel.send('There is nothing playing, so I won\'t be able to enable looping!');
+		if (serverQueue.locked && serverQueue.songs[0].requester.id !== message.author.id) return message.channel.send('This queue is currently locked to the requester of the current song.');
 		if (!message.member.voice.channel) return message.channel.send('You need to be in a voice channel to use this command!');
 		if (!message.guild.me.voice.channel) return message.channel.send('I am not in a voice channel. :thinking:');
 		else if (message.member.voice.channel.id !== message.guild.me.voice.channel.id) return message.channel.send('You need to be in the same voice channel as me ot use this command!');

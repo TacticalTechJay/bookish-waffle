@@ -1,3 +1,4 @@
+const { Util } = require('discord.js');
 module.exports = {
     name: 'queue',
     description: 'Check the queue of the list of songs that are being played.',
@@ -5,7 +6,6 @@ module.exports = {
     aliases: ['q', 'playingsoon'],
     cooldown: 5,
     execute(message, a, client) {
-        const { Util } = require('discord.js');
         const serverQueue = client.queue.get(message.guild.id);
         let i = 1;
         if (!serverQueue) return message.channel.send('The queue is empty! I think it is about time to add songs, don\'t you think?');

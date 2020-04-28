@@ -9,6 +9,7 @@ module.exports = {
         const time = args[0].split(':');
         if (!player || !queue) return message.channel.send('You need to be playing music to use this command');
         if (!message.member.voice.channel) return message.channel.send('You need to be in a voice channel.');
+        if (queue.locked && queue.songs[0].requester.id !== message.author.id) return message.channel.send('This queue is currently locked to the requester of the current song.');
         else if (message.member.voice.channel !== message.guild.me.voice.channel) return message.channel.send('You need to be in the same voice channel as me!');
         else if (message.member.voice.selfDeaf) return message.channel.send('You need to be undeafened to use something like this.');
         var s = 0, m = 1;

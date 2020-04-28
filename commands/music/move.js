@@ -10,6 +10,7 @@ module.exports = {
         const c1 = Number(args[0]);
         const c2 = Number(args[1]);
         if (!serverQueue) return message.channel.send('There is nothing playing... hmmm :thinking:');
+        if (serverQueue.locked && serverQueue.songs[0].requester.id !== message.author.id) return message.channel.send('This queue is currently locked to the requester of the current song.');
         if (!message.member.voice.channel) return message.channel.send('You need to in a voice channel!');
         else if (message.member.voice.channel.id !== message.guild.me.voice.channel.id) return message.channel.send('You need to be in the same voice channel as me!');
         else if (message.member.voice.selfDeaf) return message.channel.send('You need to be undeafened to use something like this.');

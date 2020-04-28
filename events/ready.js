@@ -20,6 +20,7 @@ module.exports = {
             shards: client.shard.count
         });
         await client.manager.connect();
+        client.utils.orm(client);
         setInterval(async () => {
             const body = {
                 'users': client.users.cache.size,

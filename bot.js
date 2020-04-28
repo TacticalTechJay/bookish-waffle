@@ -20,23 +20,13 @@ const { Client, Collection } = require('discord.js');
 const client = new Client({ disableMentions: 'everyone', messageCacheMaxSize: 100, messageCacheLifetime: 3600, messageSweepInterval: 7200 });
 const { KoFi } = require('kofi.js');
 const DBL = require('dblapi.js');
-const MODE = Number(process.env.MODE)
+const MODE = Number(process.env.MODE);
 const dblToken = MODE ? stable.dblToken : beta.dblToken;
-const Utils = require('./utils/index.js')
-const { QuickPG } = require('quick.pg');
 
+client.utils = require('./utils/index.js');
 client.prefix = MODE ? stable.prefix : beta.prefix;
 client.queue = new Map();
 client.commands = new Collection();
-
-client.pg = {
-	donations: new QuickPG(sys.postgres, {table: 'donations'}),
-	qsaves: new QuickPG(sys.postgres, {table: 'qsaves'})
-}
-setInterval(async () => {
-	client.donations = await client.pg.donations.all();
-	client.qsaves = await client.pg.qsaves.all()
-}, 15000)
 
 if (MODE) {
 	const kofi = new KoFi(sys.kofi.webhook, sys.kofi.port);
@@ -45,38 +35,41 @@ if (MODE) {
 	});
 	kofi.on('donation', async donation => {
 		const amount = Number(donation.amount);
-		const id = parseInt(donation.message);
-		const users = await client.pg.donations.get('donorList')
-		await client.pg.donations.push('donorInf', donation);
+		const id = String(donation.message.replace(/[a-zA-Z]?\s?/gi, ''));
+
+		if (!id) return;
 		if (amount < 3) return;
-		if (!donation.message || isNaN(id)) return;
-		if (users.include(`user_${id}`)) return;
-		await client.pg.donations.push('donorList', `user_${id}`);
+		try {
+			await client.users.fetch(id);
+		} catch (e) {
+			throw `Incorrect ID provided for the following donation:\n${donation}`;
+		}
+
+		const user = await client.utils.database.user(client, id);
+		if (user.donator) return;
+		user.donator = true;
+		return await client.orm.repos.user.save();
 	});
 }
 
-client.dbl = new DBL(dblToken, client);
+if (dblToken) client.dbl = new DBL(dblToken, client);
 let b = 0;
 async function usefullness() {
+	if (!dblToken) throw new Error('No DBL token was provided');
 	client.dbl.on('error', e => {
 		console.error(e);
 		delete client.dbl;
-		if (b == 5) return new Error("DBL won't get initialized after 5 errors. Remaining yeeted.");
+		if (b == 5) throw'DBL won\'t get initialized after 5 errors. Remaining yeeted.'
 		b++;
 		setTimeout(() => {
-			client.dbl = new DBL(stable.dblToken, client);
+			client.dbl = new DBL(dblToken, client);
 			return usefullness();
 		}, 3600000);
 	});
-	const donorListExistence = await client.pg.donations.exists("donorList");
-	if (!donorListExistence) await client.pg.donations.set('donorList', []);
-	client.donations = await client.pg.donations.all();
-	client.qsaves = await client.pg.qsaves.all()
 }
 usefullness();
 
-
 client.login(process.env.DISCORD_TOKEN);
 
-Utils.loaders.loadCommands(client);
-Utils.loaders.loadEvents(client);
+client.utils.loaders.loadCommands(client);
+client.utils.loaders.loadEvents(client);

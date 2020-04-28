@@ -55,7 +55,7 @@ if (MODE) {
 if (dblToken) client.dbl = new DBL(dblToken, client);
 let b = 0;
 async function usefullness() {
-	if (!dblToken) throw new Error('No DBL token was provided');
+	if (!dblToken) throw 'No DBL token was provided';
 	client.dbl.on('error', e => {
 		console.error(e);
 		delete client.dbl;

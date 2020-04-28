@@ -21,23 +21,22 @@ module.exports = {
         });
         await client.manager.connect();
         client.utils.orm(client);
-        setInterval(async () => {
+        var interval = setInterval(async () => {
             const body = {
                 'users': client.users.cache.size,
                 'servers': client.guilds.cache.size,
                 'shards': client.shard.count
             };
-            try {
-                const res = await fetch(`https://abstractlist.net/api/bots/${client.user.id}/stats`, {
-                    method: 'post',
-                    body: JSON.stringify(body),
-                    headers: { 'Content-type': 'application/json', 'Authorization': ADLToken }
-                });
-                return console.log(await res.json());
+            if (!ADLToken) {
+                clearInterval(interval);
+                throw 'No token was provided for ADL.';
             }
-            catch (e) {
-                return console.error(e);
-            }
+            const res = await fetch(`https://abstractlist.net/api/bots/${client.user.id}/stats`, {
+                method: 'post',
+                body: JSON.stringify(body),
+                headers: { 'Content-type': 'application/json', 'Authorization': ADLToken }
+            });
+            return console.log(await res.json());
         }, 1800000);
     }
 };

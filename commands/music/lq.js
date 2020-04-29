@@ -40,15 +40,21 @@ module.exports = {
         else if (!queue && !client.manager.players.get(message.guild.id)) {
             client.utils.music.createQueue(message.guild.id, message.member.voice.channel.id, client);
             queue = client.queue.get(message.guild.id);
-            user.queues[args.join(' ')].forEach(async url => {
+            const queueSa = user.queues[args.join(' ')];
+            const queueTe = queueSa.shift();
+
+            await client.utils.music.join(message, client);
+
+            const { tracks } = await client.utils.music.getSongs(queueTe, client);
+            tracks[0].requester = message.author;
+            queue.songs.push(tracks[0]);
+            queueSa.forEach(async url => {
                 const { tracks } = await client.utils.music.getSongs(url, client);
                 tracks[0].requester = message.author;
                 queue.songs.push(tracks[0]);
             });
-            await client.utils.music.join(message, client);
-            const wait = require('util').promisify(setTimeout);
-            await wait(1500);
-            client.utils.music.play(message, client.queue.get(message.guild.id).songs[0].track, client);
+
+            client.utils.music.play(message, queue.songs[0].track, client);
             return message.channel.send('Set and now playing!');
         }
     }

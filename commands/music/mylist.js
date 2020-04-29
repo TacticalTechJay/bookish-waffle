@@ -14,6 +14,6 @@ module.exports = {
             headers: { 'Content-Type': 'text/plain' }
         });
         const { key } = await res.json();
-        message.channel.send(`Your saved queues are listed here:${body.length >= 196 ? ` https://bin.lunasrv.com/${key}` : `\n${queues}`}`);
+        message.channel.send(`Your saved queues are listed here:${body.length >= 196 ? ` https://bin.lunasrv.com/${key}` : `\n\`\`\`${queues}\`\`\``}`);
     }
 };

@@ -45,7 +45,10 @@ module.exports = {
 
             await client.utils.music.join(message, client);
 
-            const { tracks } = await client.utils.music.getSongs(queueTe, client);
+            client.utils.music.getSongs(queueTe, client).then(res => {
+                res.tracks[0].requester = message.author;
+                queue.songs.push(res.tracks[0]);
+            });
             tracks[0].requester = message.author;
             queue.songs.push(tracks[0]);
             queueSa.forEach(async url => {

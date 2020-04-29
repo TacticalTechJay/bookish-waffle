@@ -1,3 +1,4 @@
+/* eslint-disable no-redeclare */
 const { MessageEmbed } = require('discord.js');
 module.exports = {
     name: 'userinfo',
@@ -22,7 +23,15 @@ module.exports = {
                 .setThumbnail(user.user.displayAvatarURL({ dynamic: true, size: 2048 }));
             return message.channel.send(embed);
         }
-        const user = message.mentions.members.first() || message.guild.members.cache.get(args[0]) || message.guild.members.cache.find(m => m.user.username.toLowerCase().includes(args.join(' '))) || await client.users.fetch(args[0]);
+        try {
+            var user = message.mentions.members.first() || message.guild.members.cache.find(m => m.user.username.toLowerCase().includes(args.join(' '))) || await message.guild.members.fetch(args[0]);
+        } catch (e) {
+            try {
+                var user = await client.users.fetch(args[0]);
+            } catch (e) {
+                return message.channel.send('User could not be found!');
+            }
+        }
         const embed = new MessageEmbed()
             .setColor(0x12db37)
             .setTitle(`${user.user ? user.user.tag : user.tag} (${user.id})`)

@@ -8,6 +8,6 @@ module.exports = {
         if (!user.queues[args.join(' ')]) return message.channel.send('There was no queue saved under that name.');
         delete user.queues[args.join(' ')];
         await client.orm.repos.user.save(user);
-        return message.channel.send('Your saved queue has been deleted.');
+        return message.channel.send(`Your saved queue (${args.join(' ')}) has been deleted.`);
     }
 };

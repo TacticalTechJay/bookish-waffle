@@ -1,6 +1,8 @@
 module.exports = async (string, client) => {
 	const fetch = require('node-fetch');
 	async function get(string, i) {
+		const wait = require('util').promisify(setTimeout);
+		await wait(1500);
 		const url = new URL(`http://${client.lavalink.host}:${client.lavalink.port}/loadtracks?identifier=${string}`);
 		const res = await fetch(url, {
 			headers: { 'Authorization': client.lavalink.password }

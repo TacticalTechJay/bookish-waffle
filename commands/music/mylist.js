@@ -5,7 +5,7 @@ module.exports = {
     cooldown: 15,
     async execute(message, args, client, user) {
         const fetch = require('node-fetch');
-        const queues = Object.keys(user.queues).split(', ').join('\n');
+        const queues = Object.keys(user.queues).join('\n');
         if (queues < 1) return message.channel.send('You do not have any saved queues to list.');
         const body = queues;
         const res = await fetch('https://bin.lunasrv.com/documents', {

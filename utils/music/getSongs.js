@@ -1,11 +1,10 @@
-module.exports = async (string, client) => {
+module.exports = async (string) => {
+	const { sys } = require('../../config.json');
 	const fetch = require('node-fetch');
 	async function get(string, i) {
-		const wait = require('util').promisify(setTimeout);
-		await wait(1500);
-		const url = new URL(`http://${client.lavalink.host}:${client.lavalink.port}/loadtracks?identifier=${string}`);
+		const url = new URL(`http://${sys.nodes[1].host}:${sys.nodes[1].port}/loadtracks?identifier=${string}`);
 		const res = await fetch(url, {
-			headers: { 'Authorization': client.lavalink.password }
+			headers: { 'Authorization': sys.nodes[1].password }
 		}).catch(err => {
 			console.error(err);
 			return null;
@@ -24,6 +23,7 @@ module.exports = async (string, client) => {
 	} catch(e) {
 		console.error(e);
 		if (e == 'NO_MATCHES') throw 'NO MATCHES';
+		throw e;
 	}
 	if (!res2) throw 'NO RESPONSE';
 	if (!res2.tracks) throw 'NO TRACKS';

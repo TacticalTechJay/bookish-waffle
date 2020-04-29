@@ -17,7 +17,11 @@ module.exports = {
             user: client.user.id,
             shards: client.shard.count
         });
-        await client.manager.connect();
+        client.manager.connect()
+            .then(() => {
+                console.log('All ready with these websockets!');
+            })
+            .catch(console.error);
 
         client.utils.orm(client);
 

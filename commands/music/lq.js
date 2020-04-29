@@ -1,6 +1,7 @@
 module.exports = {
     name: 'lq',
     description: 'Import the queue that you have previously saved.',
+    cooldown: 15,
     args: true,
     usage: '<String>',
     aliases: ['qadd', 'qim', 'loadqueue', 'import'],
@@ -24,8 +25,10 @@ module.exports = {
                 });
                 if (r.first().content.toLowerCase() == 'yes') {
                     user.queues[args.join(' ')].forEach(async url => {
+                        const wait = require('util').promisify(setTimeout);
+                        await wait(1500);
                         const { tracks } = await client.utils.music.getSongs(url, client);
-                        tracks.requester = message.author;
+                        tracks[0].requester = message.author;
                         queue.songs.push(tracks[0]);
                     });
                     return message.channel.send('Added to queue!');
@@ -45,15 +48,16 @@ module.exports = {
 
             await client.utils.music.join(message, client);
 
-            client.utils.music.getSongs(queueTe, client).then(res => {
-                console.log(res);
+            client.utils.music.getSongs(queueTe).then(res => {
                 res.tracks[0].requester = message.author;
                 queue.songs.push(res.tracks[0]);
             });
             queueSa.forEach(async url => {
-                const { tracks } = await client.utils.music.getSongs(url, client);
-                tracks[0].requester = message.author;
-                queue.songs.push(tracks[0]);
+                const wait = require('util').promisify(setTimeout);
+                await wait(1500);
+                const res2 = await client.utils.music.getSongs(url);
+                res2.tracks[0].requester = message.author;
+                queue.songs.push(res2.tracks[0]);
             });
 
             client.utils.music.play(message, queue.songs[0].track, client);

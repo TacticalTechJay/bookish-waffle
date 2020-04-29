@@ -28,7 +28,7 @@ const client = new Client({ disableMentions: 'everyone', messageCacheMaxSize: 10
 		}
 	},
 	ws: {
-		intents: ['GUILDS', 'GUILD_MESSAGES', 'GUILD_BANS', 'GUILD_VOICE_STATES']
+		intents: ['GUILDS', 'GUILD_MESSAGES', 'GUILD_BANS', 'GUILD_VOICE_STATES', 'GUILD_PRESENCES']
 	},
 	disabledEvents: [
 		'GUILD_MEMBER_UPDATE',

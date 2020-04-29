@@ -1,4 +1,4 @@
-FROM node:13
+FROM node:14
 
 RUN mkdir -p /home/container/earth-chan
 WORKDIR /home/container/earth-chan

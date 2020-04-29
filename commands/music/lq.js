@@ -1,3 +1,4 @@
+const wait = require('util').promisify(setTimeout);
 module.exports = {
     name: 'lq',
     description: 'Import the queue that you have previously saved.',
@@ -25,7 +26,6 @@ module.exports = {
                 });
                 if (r.first().content.toLowerCase() == 'yes') {
                     user.queues[args.join(' ')].forEach(async url => {
-                        const wait = require('util').promisify(setTimeout);
                         await wait(1500);
                         const { tracks } = await client.utils.music.getSongs(url, client);
                         tracks[0].requester = message.author;
@@ -53,12 +53,13 @@ module.exports = {
                 queue.songs.push(res.tracks[0]);
             });
             queueSa.forEach(async url => {
-                const wait = require('util').promisify(setTimeout);
                 await wait(1500);
                 const res2 = await client.utils.music.getSongs(url);
                 res2.tracks[0].requester = message.author;
                 queue.songs.push(res2.tracks[0]);
             });
+
+            await wait(1500);
 
             client.utils.music.play(message, queue.songs[0].track, client);
             return message.channel.send('Set and now playing!');

@@ -22,9 +22,6 @@ module.exports = {
                 console.log('All ready with these websockets!');
             })
             .catch(console.error);
-
-        client.utils.orm(client);
-
         const ADLToken = Number(process.env.MODE) ? stable.ADLToken : beta.ADLTOKEN;
         var interval = setInterval(async () => {
             const body = {

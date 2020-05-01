@@ -64,6 +64,7 @@ client.utils = require('./utils/index.js');
 client.queue = new Map();
 client.prefix = MODE ? stable.prefix : beta.prefix;
 client.commands = new Collection();
+client.utils.orm(client);
 
 if (MODE) {
 	const kofi = new KoFi(sys.kofi.webhook, sys.kofi.port);

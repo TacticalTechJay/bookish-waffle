@@ -4,16 +4,12 @@ module.exports = {
     args: false,
     cooldown: 15,
     async execute(message, args, client, user) {
-        const fetch = require('node-fetch');
-        const queues = Object.keys(user.queues).join('\n');
+        const queues = Object.keys(user.queues);
+        const body = queues.join('\n');
         if (queues < 1) return message.channel.send('You do not have any saved queues to list.');
-        const body = queues;
-        const res = await fetch('https://bin.lunasrv.com/documents', {
-            method: 'POST',
-            body: body,
-            headers: { 'Content-Type': 'text/plain' }
-        });
-        const { key } = await res.json();
-        message.channel.send(`Your saved queues are listed here:${body.length >= 196 ? ` https://bin.lunasrv.com/${key}` : `\n\`\`\`${queues}\`\`\``}`);
+        if (body.length >= 1967) {
+            var { key } = client.utils.bin(body);
+         }
+        message.channel.send(`Your saved queues are listed here:${body.length >= 1967 ? ` https://bin.lunasrv.com/${key}` : `\n\`\`\`${body}\`\`\``}`);
     }
 };

@@ -30,6 +30,7 @@ class Handler {
     loadCommands() {
         const files = this.readdir('./src/commands');
         for (const file of files) {
+            delete require.cache[require.resolve(file)];
             if (file.endsWith('.js')) {
                 try {
                     const command = new (require(file))(this.client);
@@ -47,6 +48,7 @@ class Handler {
     loadEvents() {
         const files = this.readdir('./src/events');
         for (const file of files) {
+            delete require.cache[require.resolve(file)];
             if (file.endsWith('.js')) {
                 try {
                     const event = new (require(file))(this.client);

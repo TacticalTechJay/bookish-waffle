@@ -1,3 +1,5 @@
 .vscode/
-config.json
 node_modules/
+logs/
+config.json
+Lavalink.jar

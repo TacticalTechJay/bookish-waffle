@@ -6,7 +6,8 @@ class Command {
         aliases: [],
         description: null,
         usage: null,
-        category: 'system'
+        category: 'system',
+        devOnly: false
     }) {
         this.client = client;
         this.name = options.name || null;
@@ -14,6 +15,7 @@ class Command {
         this.description = options.description || null;
         this.usage = options.usage || this.name;
         this.category = options.category || 'system';
+        this.devOnly = options.devOnly;
     }
 }
 

@@ -9,7 +9,7 @@ const config = require('../config.json');
 
 const client = new EarthClient(process.env.DEVELOPMENT ? config.tokens.dev : config.tokens.prod, {
     ws: {
-        intenst: 645
+        intents: 645
     }
 });
 

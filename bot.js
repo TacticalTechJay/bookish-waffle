@@ -57,7 +57,6 @@ const client = new Client({ disableMentions: 'everyone', messageCacheMaxSize: 10
 	]
 });
 const { KoFi } = require('kofi.js');
-const DBL = require('dblapi.js');
 
 client.utils = require('./utils/index.js');
 client.queue = new Map();
@@ -82,8 +81,8 @@ if (MODE) {
 		}
 
 		const user = await client.utils.database.user(client, id);
-		if (user.donator) return;
-		user.donator = true;
+		if (user.premium.donator) return;
+		user.premium.donator = true;
 		return await client.orm.repos.user.save();
 	});
 }

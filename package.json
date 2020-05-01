@@ -9,7 +9,6 @@
     "array-move": "^2.2.0",
     "bytes": "^3.1.0",
     "chalk": "^4.0.0",
-    "dblapi.js": "^2.4.0",
     "discord.js": "github:discordjs/discord.js",
     "fs": "^0.0.1-security",
     "kofi.js": "^0.1.6",

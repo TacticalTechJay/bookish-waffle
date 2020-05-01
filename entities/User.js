@@ -3,15 +3,18 @@ module.exports = {
     columns: {
         id: {
             primary: true,
-            type: 'text',
+            type: 'text'
         },
         queues: {
             type: 'simple-json',
             default: {}
         },
-        donator: {
-            type: 'boolean',
-            default: false
+        premium: {
+            type: 'simple-json',
+            default: {
+                donator: false,
+                voter: false
+            }
         }
     }
 };

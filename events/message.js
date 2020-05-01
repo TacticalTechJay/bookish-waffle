@@ -16,12 +16,9 @@ module.exports = {
         const user = await client.utils.database.user(client, message.author.id);
 
         if (!command) return;
-        if (typeof client.dbl !== 'undefined') {
-            const voted = await client.dbl.hasVoted(message.author.id);
-            if (command.voterOnly && !command.donatorOnly && !voted) return message.channel.send('Woah there! This command is for voters only! Vote on DBL to use this command. Vote here!\n<https://top.gg/bot/628802763123589160/vote>');
-            if (command.donatorOnly && !command.voterOnly && !user.donator) return message.channel.send(`Woah there! This command is for donators only! Donate more than one cup of coffee on KoFi to use these commands (Be sure to include your user ID: \`${message.author.id}\`). Donation link: <https://www.ko-fi.com/earthchandiscord>`);
-            if (command.voterOnly && command.donatorOnly && !voted && !user.donator) return message.channel.send(`Woah there! This command is only for voters/donators! Vote on Discord Bot List to use this command or donate more than just a cup off coffee on KoFi with your user ID in the message (\`${message.author.id}\`) included in the message.\nDonation link: <https://www.ko-fi.com/earthchandiscord>\nVote link: <https://top.gg/bot/628802763123589160/vote>`);
-        }
+        if (command.voterOnly && !command.donatorOnly && !user.voted) return message.channel.send('Woah there! This command is for voters only! Vote on DBL to use this command. Vote here!\n<https://top.gg/bot/628802763123589160/vote>');
+        if (command.donatorOnly && !command.voterOnly && !user.donator) return message.channel.send(`Woah there! This command is for donators only! Donate more than one cup of coffee on KoFi to use these commands (Be sure to include your user ID: \`${message.author.id}\`). Donation link: <https://www.ko-fi.com/earthchandiscord>`);
+        if (command.voterOnly && command.donatorOnly && !user.voted && !user.donator) return message.channel.send(`Woah there! This command is only for voters/donators! Vote on Discord Bot List to use this command or donate more than just a cup off coffee on KoFi with your user ID in the message (\`${message.author.id}\`) included in the message.\nDonation link: <https://www.ko-fi.com/earthchandiscord>\nVote link: <https://top.gg/bot/628802763123589160/vote>`);
         if (command.category == 'dev' && !sys.groups[command.group].includes(message.author.id)) return;
 
         if (command.args && !args.length) {

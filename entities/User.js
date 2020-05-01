@@ -12,6 +12,10 @@ module.exports = {
         donator: {
             type: 'boolean',
             default: false
+        },
+        voted: {
+            type: 'boolean',
+            default: false
         }
     }
 };

@@ -58,7 +58,6 @@ const client = new Client({ disableMentions: 'everyone', messageCacheMaxSize: 10
 });
 const { KoFi } = require('kofi.js');
 const DBL = require('dblapi.js');
-const dblToken = MODE ? stable.dblToken : beta.dblToken;
 
 client.utils = require('./utils/index.js');
 client.queue = new Map();
@@ -88,23 +87,6 @@ if (MODE) {
 		return await client.orm.repos.user.save();
 	});
 }
-
-if (dblToken) client.dbl = new DBL(dblToken, client);
-let b = 0;
-async function usefullness() {
-	if (!dblToken) throw 'No DBL token was provided';
-	client.dbl.on('error', e => {
-		console.error(e);
-		delete client.dbl;
-		if (b == 5) throw'DBL won\'t get initialized after 5 errors. Remaining yeeted.';
-		b++;
-		setTimeout(() => {
-			client.dbl = new DBL(dblToken, client);
-			return usefullness();
-		}, 3600000);
-	});
-}
-usefullness();
 
 client.login(process.env.DISCORD_TOKEN);
 

@@ -2,19 +2,34 @@ const { stable, beta, sys } = require('./config.json');
 const Sentry = require('@sentry/node');
 Sentry.init({ dsn: sys.dsn });
 
-String.prototype.titleCase = function() {
-	const splitStr = this.toLowerCase().split(' ');
-	for (let i = 0; i < splitStr.length; i++) {
-		splitStr[i] = splitStr[i].charAt(0).toUpperCase() + splitStr[i].substring(1);
+Reflect.defineProperty(String.prototype, 'titleCase', {
+	value: function() {
+		const splitStr = this.toLowerCase().split(' ');
+		for (let i = 0; i < splitStr.length; i++) {
+			splitStr[i] = splitStr[i].charAt(0).toUpperCase() + splitStr[i].substring(1);
+		}
+		return splitStr.join(' ');
 	}
-	return splitStr.join(' ');
-};
-Array.prototype.random = function() {
-    return this[Math.floor(Math.random() * this.length)];
-};
-String.prototype.toProperCase = function() {
-	return this.toLowerCase().replace(/(^|[\s.])[^\s.]/gm, (s) => s.toUpperCase());
-};
+});
+Reflect.defineProperty(Array.prototype, 'random', {
+	value: function() {
+		return this[Math.floor(Math.random() * this.length)];
+	}
+});
+Reflect.defineProperty(String.prototype, 'toProperCase', {
+	value: function() {
+		return this.toLowerCase().replace(/(^|[\s.])[^\s.]/gm, (s) => s.toUpperCase());
+	}
+});
+Reflect.defineProperty(Array.prototype, 'shuffle', {
+    value: function() {
+        for (let i = this.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [this[i], this[j]] = [this[j], this[i]];
+        }
+        return this;
+    }
+});
 
 const MODE = Number(process.env.MODE);
 const prefix = MODE ? stable.prefix : beta.prefix;
@@ -62,6 +77,7 @@ client.utils = require('./utils/index.js');
 client.queue = new Map();
 client.prefix = MODE ? stable.prefix : beta.prefix;
 client.commands = new Collection();
+client.utils.orm(client);
 
 if (MODE) {
 	const kofi = new KoFi(sys.kofi.webhook, sys.kofi.port);

@@ -47,7 +47,7 @@ module.exports = async (client) => {
             }
         });
     });
-    
+
     Object.entries(client.nekosSafe).filter(x => !client.commands.has(x[0]) && images.includes(x[0]) && !excludes.includes(x[0])).map(x => {
         client.commands.set(x[0].toLowerCase(), {
             name: x[0].toLowerCase(),

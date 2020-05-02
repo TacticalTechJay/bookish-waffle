@@ -6,8 +6,9 @@ module.exports = async (message, track, client) => {
 		player.play(track);
 		player.once('end', async (LavalinkEvent) => {
 			if (LavalinkEvent.reason == 'LOAD_FAILED') return client.manager.switch(player, client.manager.nodes.get('fallback')).then(() => {
-					return client.utils.music.play(message, track, client);
-				});
+				message.channel.send('It appears a lavalink node is down. Using fallback...');
+				return client.utils.music.play(message, track, client);
+			});
 			if (queue.looping == 'song') {
 				require('./play.js')(message, queue.songs[0].track, client);
 				const thu = queue.songs[0].info.identifier;

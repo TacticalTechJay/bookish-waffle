@@ -15,6 +15,7 @@
         database: {
             user: require('./database/user.js')
         },
+        bin: require('./bin.js'),
         orm: require('./initializeORM.js'),
-        parseFlags: require('./parseFlags.js')
+        parseFlags: require('./parseFlags.js'),
     };

@@ -6,18 +6,14 @@ module.exports = {
     testing: false,
     args: false,
     cooldown: 3,
-    usage: '<mention>',
+    usage: '[String:Mention | Int:ID]',
     async execute(message, args) {
         const fetch = require('node-fetch');
-        const { MessageEmbed } = require('discord.js');
         const target = message.mentions.members.first() || message.guild.members.cache.get(args[0]);
         const res = await fetch('https://api.ksoft.si/images/random-image?tag=pat', {
             headers: { 'Authorization': `Bearer ${ksoftapi}` }
         });
         const { url } = await res.json();
-        const embed = new MessageEmbed()
-            .setDescription(target ? `${target} was patted by ${message.author}!` : `${message.author} seems lonely. How about I help with this!`)
-            .setImage(url);
-        message.channel.send(embed);
+        message.channel.send({ content: `${target ? `${target} was slapped by ${message.author}!` : `${message.author} you wanted it, so you'll get it.`}`, embed: { image: { url: url } } });
     }
 };

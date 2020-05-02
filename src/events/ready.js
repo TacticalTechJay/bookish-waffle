@@ -1,6 +1,4 @@
-
-
-const { Event } = require('../structures/Event');
+const Event = require('../structures/Event');
 const { Manager } = require('@lavacord/discord.js');
 const config = require('../../config.json');
 

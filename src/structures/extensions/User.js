@@ -3,7 +3,7 @@ module.exports = Class =>
         constructor(client, data) {
             super(client, data);
         }
-        async settings() {
-            return await this.client.util.guild(this.id);
+        async data() {
+            return await this.client.util.user(this.id);
         }
     };

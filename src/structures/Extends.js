@@ -7,4 +7,4 @@ class Extends {
     }
 }
 
-module.exports = { Extends };
+module.exports = Extends;

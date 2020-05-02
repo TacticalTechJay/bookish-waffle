@@ -1,4 +1,4 @@
-const { Event } = require('../structures/Event');
+const Event = require('../structures/Event');
 
 module.exports = class Message extends Event {
     constructor(client) {
@@ -13,7 +13,7 @@ module.exports = class Message extends Event {
         message.flags = flags;
         const guild = await message.guild.settings()
         if (!message.content.toLowerCase().startsWith(guild.prefix)) return;
-        const args = message.content.toLowerCase().slice(guild.prefix.length).split(/ +/);
+        const args = message.content.slice(guild.prefix.length).split(/ +/);
         const command = args.shift().toLowerCase();
         const cmd = this.client.handler.commands.get(command) || this.client.handler.commands.get(this.client.handler.aliases.get(command));
         if (!cmd) return;

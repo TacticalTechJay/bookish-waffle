@@ -151,4 +151,4 @@ class Music {
     }
 }
 
-module.exports.Music = Music;
+module.exports = Music;

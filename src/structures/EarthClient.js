@@ -1,5 +1,5 @@
-const { Handler } = require('./Handler');
-const { Util } = require('./Util');
+const Handler = require('./Handler');
+const Util = require('./Util');
 const { Client } = require('discord.js');
 
 class EarthClient extends Client {
@@ -15,11 +15,10 @@ class EarthClient extends Client {
         this.util = new Util(this);
 
         this.util.initPG();
+        this.handler.loadCommandsNeko();
         this.handler.loadCommands();
         this.handler.loadEvents();
     }
 }
 
-module.exports = {
-    EarthClient
-}
+module.exports = EarthClient;

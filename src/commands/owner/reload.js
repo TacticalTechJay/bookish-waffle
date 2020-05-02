@@ -1,7 +1,7 @@
-const { Command } = require('../../structures/Command');
+const Command = require('../../structures/Command');
 const { inspect } = require('util');
 
-module.exports = class Help extends Command {
+module.exports = class Reload extends Command {
     constructor(client) {
         super(client, {
             name: 'reload',

@@ -1,7 +1,7 @@
-const { Command } = require('../../structures/Command');
+const Command = require('../../structures/Command');
 const { inspect } = require('util');
 
-module.exports = class Help extends Command {
+module.exports = class Evaluation extends Command {
     constructor(client) {
         super(client, {
             name: 'eval',
@@ -35,7 +35,7 @@ module.exports = class Help extends Command {
                 dataType += dataTypes.map(s => s[0].toUpperCase() + s.slice(1)).join(", ") + ">";
             }
             if (evaluation.length >= 1000) {
-                const url = (await this.client.ext.uploadToHastebin(evaluation)).url;
+                const url = (await this.client.util.uploadToHastebin(evaluation)).url;
                 return message.channel.send(url);
             }
             return await message.channel.send(`**Done Evaluation:** \`\`\`js\n${evaluation}\`\`\`\n`);

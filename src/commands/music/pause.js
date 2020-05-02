@@ -1,10 +1,12 @@
 const Command = require('../../structures/Command');
 const { MessageEmbed, Util } = require('discord.js');
+const moment = require('moment');
+require('moment-duration-format');
 
-module.exports = class Skip extends Command {
+module.exports = class Pause extends Command {
     constructor(client) {
         super(client, {
-            name: 'skip',
+            name: 'pause',
             category: 'music'
         });
     }
@@ -13,7 +15,8 @@ module.exports = class Skip extends Command {
         if (!message.member.voice.channel) return message.channel.send(`Are you in a voice channel?`)
         if (!message.guild.player) return message.channel.send(`There is no vibe going on right now!`)
         if (message.member.voice.channel.id !== message.guild.me.voice.channel.id) return message.channel.send(`You can't run that in a channel with no vibe.`);
-        player.stop();
-        return message.channel.send(`I've skipped the song that you were vibing to.`)
+        if (message.guild.player.paused) return message.channel.send(`You can't pause what has already been paused...`);
+        message.guild.player.pause(true);
+        return message.channel.send(`I've paused the vibe.`)
     }
 }

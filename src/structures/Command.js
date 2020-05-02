@@ -1,5 +1,3 @@
-const { EarthClient } = require('./EarthClient');
-
 class Command {
     constructor(client, options = {
         name: null,
@@ -19,4 +17,4 @@ class Command {
     }
 }
 
-module.exports = { Command };
+module.exports = Command;

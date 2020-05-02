@@ -1,13 +1,14 @@
-const { Command } = require('../../structures/Command');
+const Command = require('../../structures/Command');
 const { MessageEmbed, Util } = require('discord.js');
 const moment = require('moment');
 require('moment-duration-format');
 
-module.exports = class Stop extends Command {
+module.exports = class NowPlaying extends Command {
     constructor(client) {
         super(client, {
             name: 'nowplaying',
-            aliases: ['np']
+            aliases: ['np'],
+            category: 'music'
         });
     }
 
@@ -25,8 +26,8 @@ module.exports = class Stop extends Command {
         }
         const embed = new MessageEmbed()
             .setColor(this.client.color)
-            .setTitle(`Now Playing - ${song.info.title}`)
-            .setDescription(`[**Loop**] \`${player.settings.loop.toProperCase()}\`\n[**Notifications**] \`${player.settings.notifications ? 'Enabled' : 'Disabled'}\`\n[**Time**] \`${timeDisplay} ${timeBar.join("")}\``)
+            .setTitle(`Now Playing in ${message.guild.me.voice.channel.name}`)
+            .setDescription(`[**Title**] [${song.info.title}](${song.info.uri})\n[**Loop**] \`${player.settings.loop.toProperCase()}\`\n[**Notifications**] \`${player.settings.notifications ? 'Enabled' : 'Disabled'}\`\n[**Time**] \`${timeDisplay} ${timeBar.join("")}\``)
         return message.channel.send(embed);
     }
 }

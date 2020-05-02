@@ -1,7 +1,7 @@
-const { Command } = require('../../structures/Command');
+const Command = require('../../structures/Command');
 const { execSync } = require('child_process');
 
-module.exports = class Help extends Command {
+module.exports = class Execute extends Command {
     constructor(client) {
         super(client, {
             name: 'exec',

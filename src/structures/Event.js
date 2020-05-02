@@ -1,4 +1,4 @@
-const { EarthClient } = require('./EarthClient');
+const EarthClient = require('./EarthClient');
 
 class Event {
     constructor(client, options = {
@@ -9,4 +9,4 @@ class Event {
     }
 }
 
-module.exports = { Event };
+module.exports = Event;

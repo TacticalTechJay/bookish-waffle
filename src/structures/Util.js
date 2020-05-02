@@ -1,11 +1,14 @@
 const config = require('../../config.json');
 const { createConnection, EntitySchema } = require('typeorm');
-const { Music } = require('./Music');
+const Music = require('./Music');
+const UserUtil = require('./UserUtil');
+const { UserFlags } = require('discord.js');
 
 class Util {
     constructor(client) {
         this.client = client;
         this.music = new Music(this.client);
+        this.user = new UserUtil(this.client);
     }
     async initPG() {
         const connection = await createConnection({
@@ -68,6 +71,39 @@ class Util {
         str += `${ms / 1000 | 0}`.padStart(2, '0');
         return str;
     }
+    async uploadToHastebin(body, options = { url: 'https://bin.lunasrv.com' }) {
+        const res = await require('node-fetch')(`${options.url}/documents`, {
+            body,
+            method: 'POST',
+            headers: {
+                'Content-Type': 'text/plain'
+            }
+        });
+        const json = await res.json();
+        return {
+            key: json.key,
+            url: `${options.url}/${json.key}`
+        }
+    }
+    userFlagsToEmoji(h) {
+        const e = {
+            DISCORD_EMPLOYEE: '<:discord_employee:705940105604366346>',
+            DISCORD_PARTNER: '<:discord_partner:705940105562423406>',
+            HYPESQUAD_EVENTS: '<:discord_hypesquad:705940105306570842>',
+            BUGHUNTER_LEVEL_1: '<:discord_bug_hunter:705940105344581652>',
+            HOUSE_BRAVERY: '<:discord_bravery:705940105164095518>',
+            HOUSE_BRILLIANCE: '<:discord_brilliance:705940104858042450>',
+            HOUSE_BALANCE: '<:discord_balance:705940105222815816>',
+            EARLY_SUPPORTER: '<:discord_early_supporter:705940105142992948>',
+            TEAM_USER: '',
+            SYSTEM: '<:discord_system:705940105273016456>',
+            BUGHUNTER_LEVEL_2: '<:discord_bug_hunter_2:705940105285599312>',
+            VERIFIED_BOT: '<:discord_verified_bot:705940105612886037>',
+            VERIFIED_DEVELOPER: '<:discord_verified_developer:705940105575268453>'
+        }
+        const em = []; for (const k of h) em.push(e[k]);
+        return em;
+    }
 }
 
-module.exports = { Util };
+module.exports = Util;

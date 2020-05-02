@@ -1,11 +1,12 @@
-const { Command } = require('../../structures/Command');
+const Command = require('../../structures/Command');
 const { MessageEmbed } = require('discord.js');
 
 module.exports = class Play extends Command {
     constructor(client) {
         super(client, {
             name: 'play',
-            aliases: ['p']
+            aliases: ['p'],
+            category: 'music'
         });
     }
 

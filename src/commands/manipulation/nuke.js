@@ -14,7 +14,7 @@ module.exports = class Nuke extends Command {
         let member = null;
         if (!args[0]) member = message.member;
         else {
-            const members = this.client.util.user.findMember(args[0], message.guild.members.cache, { multiple: true });
+            const members = this.client.util.users.findMember(args[0], message.guild.members.cache, { multiple: true });
             if (members.size === 1) member = members.first();
             else {
                 let i = 1;

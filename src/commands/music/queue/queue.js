@@ -18,8 +18,8 @@ module.exports = class Queue extends Command {
             let i = 0;
             const embed = new MessageEmbed()
                 .setColor(this.client.color)
-                .setTitle(`(${player.songs.length}) Queue`)
-                .setDescription(`**Volume:** ${player.state.volume}% | **Loop:** ${player.settings.loop}\n${player.songs.slice(((page - 1) * 10) || 0, (page * 10) || 0).map(c => `**${player.songs.findIndex(b => b === c) + 1}.** ${player.position === player.songs.findIndex(b => b === c) ? `**[${Util.escapeMarkdown(c ? c.info.title : 'Error')}](${c ? c.info.uri : 'Error'})**` : `[${Util.escapeMarkdown(c ? c.info.title : 'Error')}](${c ? c.info.uri : 'Error'})`}`).join('\n')}`)
+                .setTitle(`(${player.songs.length}) Queue${player.loaded ? ` - (${player.loaded.name})` : ''}`)
+                .setDescription(`${player.loaded ? `${player.loaded.locked ? `**Queue is locked by ${this.client.users.cache.get(player.loaded.user).tag}**` : ''}` : 'b'}**Volume:** ${player.state.volume}% | **Loop:** ${player.settings.loop}\n${player.songs.slice(((page - 1) * 10) || 0, (page * 10) || 0).map(c => `**${player.songs.findIndex(b => b === c) + 1}.** ${player.position === player.songs.findIndex(b => b === c) ? `**[${Util.escapeMarkdown(c ? c.info.title : 'Error')}](${c ? c.info.uri : 'Error'})**` : `[${Util.escapeMarkdown(c ? c.info.title : 'Error')}](${c ? c.info.uri : 'Error'})`}`).join('\n')}`)
                 .setFooter(`Currently page ${page}`);
             return message.channel.send(embed);
         } else {
@@ -28,8 +28,8 @@ module.exports = class Queue extends Command {
             let i = 0;
             const embed = new MessageEmbed()
                 .setColor(this.client.color)
-                .setTitle(`(${player.songs.length}) Queue`)
-                .setDescription(`**Volume:** ${player.state.volume}% | **Loop:** ${player.settings.loop}\n${player.songs.slice(((page - 1) * 10) || 0, (page * 10) || 0).map(c => `**${player.songs.findIndex(b => b === c) + 1}.** [${Util.escapeMarkdown(c ? c.info.title : 'Error')}](${c ? c.info.uri : 'Error'})`).join('\n')}`)
+                .setTitle(`(${player.songs.length}) Queue${player.loaded ? ` - (${player.loaded.name})` : ''}`)
+                .setDescription(`${player.loaded ? `${player.loaded.locked ? `**Queue is locked by ${this.client.users.cache.get(player.loaded.user).tag}**\n` : ''}` : ''}**Volume:** ${player.state.volume}% | **Loop:** ${player.settings.loop}\n${player.songs.slice(((page - 1) * 10) || 0, (page * 10) || 0).map(c => `**${player.songs.findIndex(b => b === c) + 1}.** [${Util.escapeMarkdown(c ? c.info.title : 'Error')}](${c ? c.info.uri : 'Error'})`).join('\n')}`)
                 .setFooter(`Currently page ${page}`);
             return message.channel.send(embed);
         }

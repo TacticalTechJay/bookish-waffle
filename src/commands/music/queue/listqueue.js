@@ -11,7 +11,8 @@ module.exports = class ListQueue extends Command {
     }
 
     async exec(message, args) {
-        const user = await this.client.util.user(message.author.id);
+        const user = await this.client.util.
+        user(message.author.id);
         if (!args[0]) return message.channel.send(`Saved queues: ${Object.keys(user.queues).map(c => Util.escapeMarkdown(c)).join(', ')}`)
         const queue = user.queues[args.join(' ')];
 

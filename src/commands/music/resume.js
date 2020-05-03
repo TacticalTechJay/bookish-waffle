@@ -16,6 +16,8 @@ module.exports = class Resume extends Command {
         if (!message.guild.player) return message.channel.send(`There is no vibe going on right now!`)
         if (message.member.voice.channel.id !== message.guild.me.voice.channel.id) return message.channel.send(`You can't run that in a channel with no vibe.`);
         if (!message.guild.player.paused) return message.channel.send(`You can't resume what has already been resumed...`);
+        if (message.guild.player && message.guild.player.loaded && message.guild.player.loaded.locked && message.guild.player.loaded.user !== message.author.id) return message.channel.send(`This queue is locked, therefore you can't modify it.`);
+
         message.guild.player.pause(false);
         return message.channel.send(`I've resumed the vibe, enjoy!`)
     }

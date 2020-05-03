@@ -8,7 +8,7 @@ class Util {
     constructor(client) {
         this.client = client;
         this.music = new Music(this.client);
-        this.user = new UserUtil(this.client);
+        this.users = new UserUtil(this.client);
     }
     async initPG() {
         const connection = await createConnection({

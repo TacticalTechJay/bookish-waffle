@@ -21,6 +21,7 @@ class Music {
         const res = await this.getTracks(query);
         if (res.exception || res.error) return message.channel.send(`${res.exception || res.error}`);
         let player = this.client.manager.players.get(message.guild.id);
+        if (player && player.loaded && player.loaded.locked && player.loaded.user !== message.author.id) return message.channel.send(`This queue is locked, therefore you can't modify it.`);
         if (!player) {
             player = await this.client.manager.join({
                 guild: message.guild.id,
@@ -32,6 +33,7 @@ class Music {
             player.volume(50);
             this.client.logger.info(`player spawned in ${message.guild.id}`)
         }
+        if (player.loaded && player.loaded.locked && player.locked.user !== message.author.user) return message.channel.send(`This queue is locked, therefore you can't modify it.`);
         player.textChannel = message.channel;
         if (!res.tracks[0] || !res.tracks[0].info) return message.channel.send(`There were no songs found! :/`);
         if (player.playing === false) {

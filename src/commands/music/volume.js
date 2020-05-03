@@ -14,6 +14,7 @@ module.exports = class Volume extends Command {
         if (!message.member.voice.channel) return message.channel.send(`Are you in a voice channel?`)
         if (!message.guild.player) return message.channel.send(`There is no vibe going on right now!`)
         if (message.member.voice.channel.id !== message.guild.me.voice.channel.id) return message.channel.send(`You can't run that in a channel with no vibe.`);
+        if (message.guild.player && message.guild.player.loaded && message.guild.player.loaded.locked && message.guild.player.loaded.user !== message.author.id) return message.channel.send(`This queue is locked, therefore you can't modify it.`);
         if (!args[0]) return message.channel.send(`The current volume seems to be **${message.guild.player.state.volume}**%`)
         const vol = Number(args[0]);
         if (isNaN(vol)) return message.channel.send(`That should have been a number..`)

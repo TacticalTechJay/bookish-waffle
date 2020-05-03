@@ -7,26 +7,22 @@ module.exports = class LoadQueue extends Command {
         super(client, {
             name: 'loadqueue',
             aliases: ['lq', 'loadq', 'queueload'],
-            category: 'music'
+            category: 'music',
+            devOnly: true
         });
     }
 
     async exec(message, args) {
         if (!args[0]) return message.channel.send(`You didn't supply any arguments...`)
-        const user = await this.client.util.user(message.author.id);
+        const user = await this.client.util.user('485725864722563072');
         if (!user.queues[args.join(' ')]) return message.channel.send(`Looks like that queue isnt saved...`);
         let player = this.client.manager.players.get(message.guild.id);
-        if (player && message.member.voice.channel.id !== message.guild.me.voice.channel.id) return message.channel.send(`You can't run that in a channel with no vibe.`);
-        if (!player) {
-            await this.client.manager.join({
-                guild: message.guild.id,
-                channel: message.member.voice.channel.id,
-                node: config.lavalinkNodes[0].id
-            },
-                {
-                    selfdeaf: true
-                });
-        }
+        if (player) return message.channel.send(`The queue must be **empty** before loading a queue`);
+        await this.client.manager.join({
+            guild: message.guild.id,
+            channel: message.member.voice.channel.id,
+            node: config.lavalinkNodes[0].id
+        }, { selfdeaf: true });
         player = this.client.manager.players.get(message.guild.id);
         player.volume(50);
         player.textChannel = message.channel;
@@ -38,6 +34,11 @@ module.exports = class LoadQueue extends Command {
                 loop: "none",
                 notifications: true
             };
+            player.loaded = {
+                name: args.join(' '),
+                user: `485725864722563072`,
+                locked: false
+            }
             for (let i of user.queues[args.join(' ')]) {
                 player.songs.push(i);
             }
@@ -46,10 +47,7 @@ module.exports = class LoadQueue extends Command {
             player.np = player.settings.next;
             return message.channel.send(`I've loaded **${user.queues[args.join(' ')].length}** tracks from ${Util.escapeMarkdown(args.join(' '))}`);
         } else {
-            for (let i of user.queues[args.join(' ')]) {
-                player.songs.push(i);
-            }
-            return message.channel.send(`I've added **${user.queues[args.join(' ')].length}** tracks from ${Util.escapeMarkdown(args.join(' '))}`);
+            return message.channel.send(`The queue must be **empty** before loading a queue`);
         }
     }
 }

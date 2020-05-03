@@ -22,7 +22,7 @@ module.exports = class Message extends Event {
             this.client.logger.info(`command "${cmd.name}" executed in ${message.guild.id}`)
             return cmd.exec(message, args);
         } catch (e) {
-            message.channel.send(e);
+            return message.channel.send(`Boo! Something went wrong when running that command, but it has been reported to my developers, so you are safe!`)
         }
     }
 }

@@ -14,7 +14,7 @@ module.exports = class LoadQueue extends Command {
 
     async exec(message, args) {
         if (!args[0]) return message.channel.send(`You didn't supply any arguments...`)
-        const user = await this.client.util.user('485725864722563072');
+        const user = await this.client.util.user(message.author.id);
         if (!user.queues[args.join(' ')]) return message.channel.send(`Looks like that queue isnt saved...`);
         let player = this.client.manager.players.get(message.guild.id);
         if (player) return message.channel.send(`The queue must be **empty** before loading a queue`);
@@ -36,7 +36,7 @@ module.exports = class LoadQueue extends Command {
             };
             player.loaded = {
                 name: args.join(' '),
-                user: `485725864722563072`,
+                user: message.author.id,
                 locked: false
             }
             for (let i of user.queues[args.join(' ')]) {

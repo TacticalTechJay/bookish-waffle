@@ -5,6 +5,7 @@
   "main": "index.js",
   "dependencies": {
     "@lavacord/discord.js": "0.0.6",
+    "@sentry/node": "^5.15.5",
     "discord.js": "^12.2.0",
     "jimp": "^0.10.3",
     "moment": "^2.25.0",

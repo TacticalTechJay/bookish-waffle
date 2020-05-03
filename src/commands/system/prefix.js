@@ -15,8 +15,8 @@ module.exports = class Ping extends Command {
         if (!args[0]) return message.channel.send(`You are missing an argument!`);
         const guild = await message.guild.settings();
         if (args[0].toLowerCase() === 'reset') guild.prefix = process.env.DEVELOPMENT ? config.prefixes.dev : config.prefixes.prod;
-        guild.prefix = args.join(' ');
+        else guild.prefix = args.join(' ');
         this.client.orm.repos.guild.save(guild);
-        return message.channel.send(`Alright, you can now use \`${args.join(' ')}\` as my prefix.`)
+        return message.channel.send(`Alright, you can now use \`${guild.prefix}\` as my prefix.`)
     }
 }

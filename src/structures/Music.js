@@ -30,6 +30,7 @@ class Music {
                 selfdeaf: true
             });
             player.volume(50);
+            this.client.logger.info(`player spawned in ${message.guild.id}`)
         }
         player.textChannel = message.channel;
         if (!res.tracks[0] || !res.tracks[0].info) return message.channel.send(`There were no songs found! :/`);
@@ -142,6 +143,7 @@ class Music {
     }
     async finish(message) {
         this.client.manager.leave(message.guild.id);
+        this.client.logger.info(`player despawned in ${message.guild.id}`)
         return message.channel.send(`Looks like I ran out of songs to vibe to...`);
     }
 }

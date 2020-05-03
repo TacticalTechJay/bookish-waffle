@@ -30,6 +30,7 @@ class Util {
                 guild: connection.getRepository('Guild')
             }
         };
+        this.client.logger.info(`initialized database`);
     }
     async user(id) {
         const user = await this.client.orm.repos.user.findOne({ id });

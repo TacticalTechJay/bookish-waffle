@@ -1,5 +1,5 @@
 module.exports = {
-    name: 'mylist',
+    name: 'qlist',
     description: 'List your saved queues in case you have forgotten any of them!',
     args: false,
     cooldown: 15,

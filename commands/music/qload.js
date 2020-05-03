@@ -1,11 +1,11 @@
 const wait = require('util').promisify(setTimeout);
 module.exports = {
-    name: 'lq',
+    name: 'qload',
     description: 'Import the queue that you have previously saved.',
     cooldown: 15,
     args: true,
     usage: '<String>',
-    aliases: ['qadd', 'qim', 'loadqueue', 'import'],
+    aliases: ['qadd', 'qim', 'loadqueue', 'import', 'lq'],
     async execute(message, args, client, user) {
         let queue = client.queue.get(message.guild.id);
         if (!message.member.voice.channel) return message.channel.send('You need to be in a voice channel to use this command.');

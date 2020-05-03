@@ -6,7 +6,7 @@ module.exports = {
   args: false,
   group: 'trusted',
   async execute(message, args, client) {
-    client.commands.filter(c => c.category !== 'nsfw').forEach(c => {
+    client.commands.filter(c => c.category !== 'nsfw' && c.category !== 'img').forEach(c => {
       delete require.cache[require.resolve(`../${c.category}/${c.name}.js`)];
     });
     client.commands = new (require('discord.js').Collection)();

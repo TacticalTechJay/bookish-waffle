@@ -27,7 +27,13 @@ module.exports = class NowPlaying extends Command {
         const embed = new MessageEmbed()
             .setColor(this.client.color)
             .setTitle(`Now Playing in ${message.guild.me.voice.channel.name}`)
-            .setDescription(`[**Title**] [${song.info.title}](${song.info.uri})\n[**Loop**] \`${player.settings.loop.toProperCase()}\`\n[**Notifications**] \`${player.settings.notifications ? 'Enabled' : 'Disabled'}\`\n[**Time**] \`${timeDisplay} ${timeBar.join("")}\``)
+            .setDescription(`
+[**Title**] [${song.info.title}](${song.info.uri})
+[**Loop**] \`${player.settings.loop.toProperCase()}\`
+[**Volume**] \`${player.state.volume}\`
+[**Notifications**] \`${player.settings.notifications ? 'Enabled' : 'Disabled'}\`
+[**Time**] \`${song.info.isStream ? `Can't show timestamps for a Live Stream` : `${timeDisplay} ${timeBar.join("")}`}\`
+`)
         return message.channel.send(embed);
     }
 }

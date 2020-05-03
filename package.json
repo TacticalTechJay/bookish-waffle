@@ -13,7 +13,8 @@
     "ms": "^2.1.2",
     "nekos.life": "^2.0.7",
     "pg": "^8.0.3",
-    "typeorm": "^0.2.24"
+    "typeorm": "^0.2.24",
+    "winston": "^3.2.1"
   },
   "devDependencies": {},
   "scripts": {

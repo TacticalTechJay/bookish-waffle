@@ -8,10 +8,10 @@ module.exports = class Message extends Event {
     }
     async exec(message) {
         if (message.author.bot || !message.guild) return;
+        const guild = await message.guild.settings()
         const { content, flags } = this.client.util.parseFlags(message.content);
         message.content = content;
         message.flags = flags;
-        const guild = await message.guild.settings()
         if (!message.content.toLowerCase().startsWith(guild.prefix)) return;
         const args = message.content.slice(guild.prefix.length).split(/ +/);
         const command = args.shift().toLowerCase();
@@ -19,7 +19,8 @@ module.exports = class Message extends Event {
         if (!cmd) return;
         if (cmd.devOnly && !this.client.devs.includes(message.author.id)) return;
         try {
-            cmd.exec(message, args);
+            this.client.logger.info(`command "${cmd.name}" executed in ${message.guild.id}`)
+            return cmd.exec(message, args);
         } catch (e) {
             message.channel.send(e);
         }

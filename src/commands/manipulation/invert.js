@@ -1,5 +1,5 @@
 const Command = require('../../structures/Command');
-const { MessageEmbed, MessageAttachment } = require('discord.js');
+const { MessageEmbed, MessageAttachment, Util } = require('discord.js');
 const Jimp = require("jimp");
 
 module.exports = class Invert extends Command {

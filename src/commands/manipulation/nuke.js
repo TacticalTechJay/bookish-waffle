@@ -1,5 +1,5 @@
 const Command = require('../../structures/Command');
-const { MessageEmbed, MessageAttachment } = require('discord.js');
+const { MessageEmbed, MessageAttachment, Util } = require('discord.js');
 const Jimp = require("jimp");
 
 module.exports = class Nuke extends Command {
@@ -33,7 +33,7 @@ module.exports = class Nuke extends Command {
             if (e) return message.channel.send(`:/ I wasn't able to process the image..`)
             return message.channel.send(
                 new MessageEmbed()
-                    .setTitle('Your Sepia Image:')
+                    .setTitle('Your Nuked Image:')
                     .setColor(this.client.color)
                     .attachFiles(new MessageAttachment(b, 'image.png'))
                     .setImage(`attachment://image.png`)

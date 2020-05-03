@@ -104,6 +104,9 @@ class Util {
         const em = []; for (const k of h) em.push(e[k]);
         return em;
     }
+    findNode(id) {
+        return config.lavalinkNodes.find(c => c.id === id);
+    }
 }
 
 module.exports = Util;

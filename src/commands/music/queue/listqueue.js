@@ -1,4 +1,4 @@
-const Command = require('../../../structures/Commandand');
+const Command = require('../../../structures/Command');
 const { MessageEmbed, Util } = require('discord.js');
 
 module.exports = class ListQueue extends Command {

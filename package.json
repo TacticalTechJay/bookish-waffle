@@ -1,40 +1,32 @@
 {
-  "name": "earth-chan",
-  "version": "1.0.1",
-  "description": "This is a simple bot for all your simple needs.",
+  "name": "plana",
+  "version": "3.0.7-b1",
+  "description": "",
   "main": "index.js",
   "dependencies": {
-    "@lavacord/discord.js": "0.0.2",
-    "@sentry/node": "^5.15.4",
-    "array-move": "^2.2.0",
-    "bytes": "^3.1.0",
-    "chalk": "^4.0.0",
-    "discord.js": "github:discordjs/discord.js",
-    "fs": "^0.0.1-security",
-    "kofi.js": "^0.1.6",
-    "lavalink": "^2.8.2",
-    "moment": "^2.24.0",
+    "@lavacord/discord.js": "0.0.6",
+    "@sentry/node": "^5.15.5",
+    "discord.js": "^12.2.0",
+    "jimp": "^0.10.3",
+    "moment": "^2.25.0",
     "moment-duration-format": "^2.3.2",
+    "moment-timezone": "^0.5.28",
     "ms": "^2.1.2",
-    "nekos.life": "^2.0.4",
-    "node-fetch": "^2.6.0",
+    "nekos.life": "^2.0.7",
     "pg": "^8.0.3",
-    "quick.pg": "^1.0.1",
-    "shelljs": "^0.8.3",
-    "snekfetch": "^4.0.4",
     "typeorm": "^0.2.24",
-    "url": "^0.11.0",
-    "walk": "^2.3.14"
+    "winston": "^3.2.1"
   },
   "devDependencies": {},
   "scripts": {
-    "test": "node index.js"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/TacticalTechJay/bookish-waffle.git"
   },
-  "author": "Jay",
+  "keywords": [],
+  "author": "",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/TacticalTechJay/bookish-waffle/issues"

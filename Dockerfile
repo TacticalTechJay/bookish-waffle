@@ -1,16 +1,6 @@
 FROM node:14
-
-RUN mkdir -p /home/container/earth-chan
-WORKDIR /home/container/earth-chan
-
-# Copy and Install our bot
-COPY package.json /home/container/earth-chan
-RUN npm install
-
-# Our precious bot
-COPY . /home/container/earth-chan
-
-ENV MODE 1
-
-# Start me!
-CMD ["node", "index.js"]
+RUN mkdir -p /home/container
+WORKDIR /home/container
+COPY . /home/container
+RUN npm i
+CMD ["node", "src"]

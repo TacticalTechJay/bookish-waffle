@@ -10,3 +10,10 @@ List of releases for Earth-chan
 - Updated the year on our license.
 - Updated the `index.js` to improve load times.
 - Improved some of the utilities  
+
+# 3.0.0 - Monday, May 4
+**Breaking:** Yes.
+
+**Type:** Major
+
+- The entirety of Earth-Chan was rewritten.

@@ -10,9 +10,9 @@ const Sentry = require('@sentry/node');
 Sentry.init({ dsn: config.sentry.dsn });
 
 const client = new EarthClient(process.env.DEVELOPMENT ? config.tokens.dev : config.tokens.prod, {
-    // ws: {
-    //     intents: 901
-    // },
+    ws: {
+        intents: 1801
+    },
     disableEveryone: true
 });
 

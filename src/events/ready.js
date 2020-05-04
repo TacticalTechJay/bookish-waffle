@@ -17,5 +17,6 @@ module.exports = class Ready extends Event {
         });
         await this.client.manager.connect();
         this.client.logger.info(`initialized lavalink nodes ${config.lavalinkNodes.map(c => c.id).join(', ')}`)
+        this.client.user.setActivity('people type "plana help"', { type: 'WATCHING' })
     }
 }

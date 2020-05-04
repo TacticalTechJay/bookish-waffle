@@ -11,8 +11,11 @@ Sentry.init({ dsn: config.sentry.dsn });
 
 const client = new EarthClient(process.env.DEVELOPMENT ? config.tokens.dev : config.tokens.prod, {
     ws: {
-        intents: 1801
+        intents: 1925
     },
+    messageCacheMaxSize: 100,
+    messageCacheLifetime: 3600,
+    messageSweepInterval: 7200,
     disableEveryone: true
 });
 

@@ -11,7 +11,7 @@ class Command {
         this.name = options.name || null;
         this.aliases = options.aliases || []
         this.description = options.description || null;
-        this.usage = `${this.name} ${options.usage}` || this.name;
+        this.usage = options.usage ? `${this.name} ${options.usage}` : this.name;
         this.category = options.category || 'system';
         this.devOnly = options.devOnly;
     }

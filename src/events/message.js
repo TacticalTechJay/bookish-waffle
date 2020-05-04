@@ -9,7 +9,7 @@ module.exports = class Message extends Event {
     }
     async exec(message) {
         if (message.author.bot || !message.guild) return;
-        const guild = await message.guild.settings()
+        const guild = await message.guild.settings();
         const { content, flags } = this.client.util.parseFlags(message.content);
         message.content = content;
         message.flags = flags;

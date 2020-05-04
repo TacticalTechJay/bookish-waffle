@@ -1,3 +1,5 @@
+const config = require('../../config.json');
+
 module.exports = {
     name: 'Guild',
     columns: {
@@ -7,7 +9,7 @@ module.exports = {
         },
         prefix: {
             type: 'text',
-            default: 'pluto '
+            default: process.env.DEVELOPMENT ? config.prefixes.dev : config.prefixes.prod
         }
     }
 };

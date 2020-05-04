@@ -6,7 +6,9 @@ module.exports = class ListQueue extends Command {
         super(client, {
             name: 'removequeue',
             aliases: ['rmqueue', 'rmq', 'rmls', 'rmqs'],
-            category: 'music'
+            category: 'music',
+            description: `Remove a queue that you have saved, you will not be able to retrieve them again`,
+            usage: '[Name]'
         });
     }
 

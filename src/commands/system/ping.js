@@ -4,7 +4,8 @@ const { MessageEmbed } = require('discord.js');
 module.exports = class Ping extends Command {
     constructor(client) {
         super(client, {
-            name: 'ping'
+            name: 'ping',
+            description: `Check my response times.`
         });
     }
 

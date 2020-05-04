@@ -6,7 +6,9 @@ module.exports = class Queue extends Command {
         super(client, {
             name: 'queue',
             aliases: ['q'],
-            category: 'music'
+            category: 'music',
+            description: `View all songs that are playing right now!`,
+            usage: '[Page?]'
         });
     }
 

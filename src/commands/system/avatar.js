@@ -6,7 +6,9 @@ module.exports = class Avatar extends Command {
     constructor(client) {
         super(client, {
             name: 'avatar',
-            aliases: ['a', 'useravatar']
+            aliases: ['a', 'useravatar'],
+            description: `Get a users avatar`,
+            usage: '[User?]'
         });
     }
 

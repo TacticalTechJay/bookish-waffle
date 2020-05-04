@@ -6,7 +6,9 @@ module.exports = class Flip extends Command {
     constructor(client) {
         super(client, {
             name: 'flip',
-            category: 'imgmanip'
+            category: 'imgmanip',
+            description: `Flip a users image horizontally or vertically!`,
+            usage: '[User?]'
         });
     }
 

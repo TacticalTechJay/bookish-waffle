@@ -4,7 +4,8 @@ const { MessageEmbed } = require('discord.js');
 module.exports = class UpVote extends Command {
     constructor(client) {
         super(client, {
-            name: 'upvote'
+            name: 'upvote',
+            description: `Upvote for me on many botlists`
         });
     }
 

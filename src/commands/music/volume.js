@@ -6,7 +6,9 @@ module.exports = class Volume extends Command {
         super(client, {
             name: 'volume',
             category: 'music',
-            aliases: ['vol']
+            aliases: ['vol'],
+            description: `Change the volume, so that you dont damage your ears. -_-`,
+            usage: '[Volume?]'
         });
     }
 

@@ -5,7 +5,8 @@ module.exports = class Stop extends Command {
     constructor(client) {
         super(client, {
             name: 'stop',
-            category: 'music'
+            category: 'music',
+            description: `Stop the song that is currently playing, which will make me leave the voice channel also!`
         });
     }
 

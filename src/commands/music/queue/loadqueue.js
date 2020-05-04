@@ -7,7 +7,9 @@ module.exports = class LoadQueue extends Command {
         super(client, {
             name: 'loadqueue',
             aliases: ['lq', 'loadq', 'queueload'],
-            category: 'music'
+            category: 'music',
+            description: 'Load a queue from your saved queues!',
+            usage: '[Name]'
         });
     }
 

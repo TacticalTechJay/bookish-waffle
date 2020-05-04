@@ -5,7 +5,8 @@ module.exports = class Stats extends Command {
     constructor(client) {
         super(client, {
             name: 'stats',
-            aliases: ['s', 'botinfo', 'bi']
+            aliases: ['s', 'botinfo', 'bi'],
+            description: `Get out my stats, it's pretty cool`
         });
     }
 

@@ -8,7 +8,8 @@ module.exports = class NowPlaying extends Command {
         super(client, {
             name: 'nowplaying',
             aliases: ['np'],
-            category: 'music'
+            category: 'music',
+            description: `View the song that is currently playing`
         });
     }
 

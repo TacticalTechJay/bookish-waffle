@@ -5,7 +5,8 @@ module.exports = class GetID extends Command {
     constructor(client) {
         super(client, {
             name: 'id',
-            aliases: ['userid']
+            aliases: ['userid'],
+            description: `Get your ID!`
         });
     }
 

@@ -5,7 +5,8 @@ module.exports = class Skip extends Command {
     constructor(client) {
         super(client, {
             name: 'skip',
-            category: 'music'
+            category: 'music',
+            description: `Skip the song that is playing.`
         });
     }
 

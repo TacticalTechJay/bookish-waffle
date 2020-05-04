@@ -7,7 +7,8 @@ module.exports = class Resume extends Command {
     constructor(client) {
         super(client, {
             name: 'resume',
-            category: 'music'
+            category: 'music',
+            description: `Resume the current song!`
         });
     }
 

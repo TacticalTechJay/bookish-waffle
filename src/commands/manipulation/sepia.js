@@ -6,7 +6,9 @@ module.exports = class Sepia extends Command {
     constructor(client) {
         super(client, {
             name: 'sepia',
-            category: 'imgmanip'
+            category: 'imgmanip',
+            description: `Make a users avatar sepia-ified`,
+            usage: '[User?]'
         });
     }
 

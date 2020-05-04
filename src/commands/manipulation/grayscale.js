@@ -7,7 +7,9 @@ module.exports = class GrayScale extends Command {
         super(client, {
             name: 'grayscale',
             aliases: ['gray', 'grey'],
-            category: 'imgmanip'
+            category: 'imgmanip',
+            description: `Make a users avatar grayscale`,
+            usage: '[User?]'
         });
     }
 

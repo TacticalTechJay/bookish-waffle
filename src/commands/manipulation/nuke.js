@@ -6,7 +6,9 @@ module.exports = class Nuke extends Command {
     constructor(client) {
         super(client, {
             name: 'nuke',
-            category: 'imgmanip'
+            category: 'imgmanip',
+            description: `DEEP FRY TIME!`,
+            usage: '[User?]'
         });
     }
 

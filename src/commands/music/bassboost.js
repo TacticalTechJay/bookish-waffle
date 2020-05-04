@@ -6,7 +6,9 @@ module.exports = class Volume extends Command {
         super(client, {
             name: 'bassboost',
             category: 'music',
-            aliases: ['bb']
+            aliases: ['bb'],
+            description: `Get some bass, so you can vibe harder.`,
+            usage: '[Level = highaf, high, medium, low, none]'
         });
     }
 

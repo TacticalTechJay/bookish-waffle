@@ -6,7 +6,8 @@ module.exports = class ServerInfo extends Command {
     constructor(client) {
         super(client, {
             name: 'serverinfo',
-            aliases: ['si', 'guildinfo', 'gi']
+            aliases: ['si', 'guildinfo', 'gi'],
+            description: `Get info on the server we are in right now`
         });
     }
 

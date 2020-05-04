@@ -6,7 +6,9 @@ module.exports = class Invert extends Command {
     constructor(client) {
         super(client, {
             name: 'invert',
-            category: 'imgmanip'
+            category: 'imgmanip',
+            description: `Invert or negatify a users avatar`,
+            usage: '[User?]'
         });
     }
 

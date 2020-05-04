@@ -5,7 +5,8 @@ module.exports = class SaveQueue extends Command {
     constructor(client) {
         super(client, {
             name: 'lock',
-            category: 'music'
+            category: 'music',
+            description: `Lock a queue so prople don't try to ruin your vibe!`
         });
     }
 

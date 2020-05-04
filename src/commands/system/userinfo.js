@@ -6,7 +6,9 @@ module.exports = class UserInfo extends Command {
     constructor(client) {
         super(client, {
             name: 'userinfo',
-            aliases: ['ui', 'info']
+            aliases: ['ui', 'info'],
+            description: `Get info on a user`,
+            usage: '[User?]'
         });
     }
 

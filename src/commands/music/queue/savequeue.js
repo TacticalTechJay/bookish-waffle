@@ -6,7 +6,9 @@ module.exports = class SaveQueue extends Command {
         super(client, {
             name: 'savequeue',
             aliases: ['sq', 'saveq', 'queuesave', 'qs'],
-            category: 'music'
+            category: 'music',
+            description: `Save the the songs in the queue so that you can easily load them back and enjoy.`,
+            usage: '[Name]'
         });
     }
 

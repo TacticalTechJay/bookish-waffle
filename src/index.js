@@ -17,7 +17,7 @@ const client = new EarthClient(process.env.DEVELOPMENT ? config.tokens.dev : con
     messageCacheLifetime: 3600,
     messageSweepInterval: 7200,
     fetchAllMembers: true,
-    disableEveryone: true
+    disableMentions: 'everyone'
 });
 
 client.login();

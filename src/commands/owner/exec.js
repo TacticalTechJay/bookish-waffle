@@ -12,13 +12,13 @@ module.exports = class Execute extends Command {
     }
 
     async exec(message, args) {
-        if (!args[0]) return message.channel.send(`evaluation needed`);
+        if (!args[0]) return message.channel.send('evaluation needed');
         let input = args.join(' ');
         try {
             const out = execSync(input);
-            return message.channel.send(out.toString());
+            return message.channel.send(`\`\`\`${out.toString()}\`\`\``);
         } catch (e) {
             return message.channel.send(e.message);
         }
     }
-}
+};

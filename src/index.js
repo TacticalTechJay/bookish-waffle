@@ -16,7 +16,6 @@ const client = new EarthClient(process.env.DEVELOPMENT ? config.tokens.dev : con
     messageCacheMaxSize: 100,
     messageCacheLifetime: 3600,
     messageSweepInterval: 7200,
-    fetchAllMembers: true,
     disableMentions: 'everyone'
 });
 

@@ -17,3 +17,10 @@ List of releases for Earth-chan
 **Type:** Major
 
 - The entirety of Earth-Chan was rewritten.
+
+# 3.1.0 - N/A
+**Breaking:** Yes.
+
+**Type:** Major
+
+- Everything has been uplifted after extensive testing.

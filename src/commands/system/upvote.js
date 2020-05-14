@@ -5,11 +5,11 @@ module.exports = class UpVote extends Command {
     constructor(client) {
         super(client, {
             name: 'upvote',
-            description: `Upvote for me on many botlists`
+            description: 'Upvote for me on many botlists'
         });
     }
 
-    async exec(message, args) {
+    async exec(message) {
         return message.channel.send(
             new MessageEmbed()
                 .setTitle('Thank you for choosing to vote!')
@@ -21,4 +21,4 @@ module.exports = class UpVote extends Command {
                 .addField('Discord Labs Bot List', `[Here! 🎉](https://bots.discordlabs.org/bot/${this.client.user.id}/vote)`)
         );
     }
-}
+};

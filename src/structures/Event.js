@@ -1,5 +1,3 @@
-const EarthClient = require('./EarthClient');
-
 class Event {
     constructor(client, options = {
         name: null,

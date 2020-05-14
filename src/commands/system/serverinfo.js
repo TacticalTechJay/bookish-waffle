@@ -7,11 +7,11 @@ module.exports = class ServerInfo extends Command {
         super(client, {
             name: 'serverinfo',
             aliases: ['si', 'guildinfo', 'gi'],
-            description: `Get info on the server we are in right now`
+            description: 'Get info on the server we are in right now'
         });
     }
 
-    async exec(message, args) {
+    async exec(message) {
         const embed = new MessageEmbed()
             .setColor(this.client.color)
             .setAuthor(message.guild.name, message.guild.iconURL({ dynamic: true }))
@@ -24,9 +24,9 @@ module.exports = class ServerInfo extends Command {
 **Partner Status:** ${message.guild.partnered ? 'Partnered' : 'Not partnered'}
 **Nitro Boost:** Level **${message.guild.premiumTier}**, with **${message.guild.premiumSubscriptionCount}** Boosts
 **Created At:** ${moment.utc(message.guild.createdAt).format('LLL')} (${moment.utc(message.guild.createdAt).fromNow()})
-`).addField(`Users (${message.guild.members.cache.size})`, `
+`).addField(`Users (${message.guild.memberCount})`, `
 **Online:** ${message.guild.members.cache.filter(m => m.user.presence.status === 'online').size}
-**Offline:** ${message.guild.members.cache.filter(m => m.user.presence.status === 'oflfine').size}
+**Offline:** ${message.guild.members.cache.filter(m => m.user.presence.status === 'offline').size}
 **Do not Disturb:** ${message.guild.members.cache.filter(m => m.user.presence.status === 'dnd').size}
 **Idling:** ${message.guild.members.cache.filter(m => m.user.presence.status === 'idle').size}
 `, true).addField(`Channels (${message.guild.channels.cache.size})`, `
@@ -36,4 +36,4 @@ module.exports = class ServerInfo extends Command {
 `, true).addField(`Roles (${message.guild.roles.cache.size})`, message.guild.roles.cache.map(x => x.toString()).join(' ').substring(0, 1024).replace(/\s\S+[^>]$/, ''));
         message.channel.send(embed);
     }
-}
+};

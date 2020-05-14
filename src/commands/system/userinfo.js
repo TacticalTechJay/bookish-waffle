@@ -7,7 +7,7 @@ module.exports = class UserInfo extends Command {
         super(client, {
             name: 'userinfo',
             aliases: ['ui', 'info'],
-            description: `Get info on a user`,
+            description: 'Get info on a user',
             usage: '[User?]'
         });
     }
@@ -23,14 +23,14 @@ module.exports = class UserInfo extends Command {
                 message.channel.send(new MessageEmbed()
                     .setColor(this.client.color)
                     .setTitle('Multiple users found!')
-                    .setDescription(`Looks like there were **${members.size}** users found when searching for ${Util.escapeMarkdown(args[0])}, pick a number in **1 minute** to get info on them.\n\n${members.map(m => `**${i++}.** ${m.user.tag} (**${m.id}**)`).join('\n')}`))
+                    .setDescription(`Looks like there were **${members.size}** users found when searching for ${Util.escapeMarkdown(args[0])}, pick a number in **1 minute** to get info on them.\n\n${members.map(m => `**${i++}.** ${m.user.tag} (**${m.id}**)`).join('\n')}`));
                 const c = await message.channel.awaitMessages(m => m.author.id === message.author.id, { max: 1, time: 60000, errors: ['time'] });
                 if (members.array()[Number(c.first().content) - 1]) member = members.array()[Number(c.first().content) - 1];
-                else return message.channel.send(`Bummer, looks like that user doesn't exist.`)
+                else return message.channel.send('Bummer, looks like that user doesn\'t exist.');
             }
         }
-        if (!member) return message.channel.send(`Bummer, looks like that user doesn't exist.`)
-        const presenceStatus = { online: 'Online', offline: 'Offline', dnd: 'Do not Disturb', idle: 'Idling' }
+        if (!member) return message.channel.send('Bummer, looks like that user doesn\'t exist.');
+        const presenceStatus = { online: 'Online', offline: 'Offline', dnd: 'Do not Disturb', idle: 'Idling' };
         const embed = new MessageEmbed()
             .setColor(member.roles.highest.color ? member.roles.highest.color : this.client.color)
             .setAuthor(member.user.tag, member.user.displayAvatarURL({ dynamic: true }))
@@ -50,7 +50,6 @@ module.exports = class UserInfo extends Command {
             .addField(`Roles (${member.roles.cache.filter(c => c.name !== '@everyone').size})`, member.roles.cache ? member.roles.cache.map(x => x.toString()).join(' ').substring(0, 1024).replace(/\s\S+[^>]$/, '') : 'None');
 
 
-
         message.channel.send(embed);
     }
-}
+};

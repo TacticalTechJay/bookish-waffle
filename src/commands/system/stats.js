@@ -6,11 +6,11 @@ module.exports = class Stats extends Command {
         super(client, {
             name: 'stats',
             aliases: ['s', 'botinfo', 'bi'],
-            description: `Get out my stats, it's pretty cool`
+            description: 'Get out my stats, it\'s pretty cool'
         });
     }
 
-    async exec(message, args) {
+    async exec(message) {
         const guild = await this.client.util.guild(message.guild.id);
         return message.channel.send(
             new MessageEmbed()
@@ -35,4 +35,4 @@ module.exports = class Stats extends Command {
 `, true)
         );
     }
-}
+};

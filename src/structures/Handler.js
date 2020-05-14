@@ -12,7 +12,7 @@ class Handler {
     }
 
     readdir(directory) {
-        if (!directory) throw new Error('No diretory provided.')
+        if (!directory) throw new Error('No diretory provided.');
         const result = [];
         (function read(dir) {
             const files = readdirSync(dir);
@@ -36,7 +36,7 @@ class Handler {
                 try {
                     const command = new (require(file))(this.client);
                     for (const alias of command.aliases) {
-                        this.aliases.set(alias, command.name)
+                        this.aliases.set(alias, command.name);
                     }
                     this.commands.set(command.name, command);
                 } catch (e) {
@@ -52,7 +52,7 @@ class Handler {
         this.client.nekosSafe = nekosLife.sfw;
         this.client.nekosUnSafe = nekosLife.nsfw;
         const actions = ['tickle', 'poke', 'feed', 'cuddle', 'hug', 'pat'];
-        const images = ['lizard', 'meow', 'smug', 'baka', 'woof'];
+        const images = ['lizard', 'meow', 'smug', 'baka', 'woof', 'neko'];
         const excludes = ['foxGirl', '8ball', 'why', 'catText', 'OwOify', 'fact', 'chat', 'nekoGif', 'spoiler'];
         delete this.client.nekosUnSafe.neko;
         delete this.client.nekosUnSafe.avatar;
@@ -63,10 +63,10 @@ class Handler {
                 description: 'Just your average lewd',
                 category: 'nsfw'
             });
-            cmd.exec = async function (message, args) {
+            cmd.exec = async function(message) {
                 if (!message.channel.nsfw) return message.channel.send('Nope. It\'s lewd. (Use the command in an nsfw channel.)');
                 message.channel.send(new (require('discord.js').MessageEmbed)().setImage((await x[1]()).url));
-            }
+            };
             this.client.handler.commands.set(cmd.name, cmd);
         });
         Object.entries(this.client.nekosSafe).filter(x => !this.client.handler.commands.has(x[0]) && actions.includes(x[0]) && !excludes.includes(x[0])).map(x => {
@@ -75,10 +75,10 @@ class Handler {
                 description: 'Enact an action upon the other user!',
                 category: 'image'
             });
-            cmd.exec = async function (message, args) {
-                const target = message.mentions.members.first() || message.guild.members.cache.get(args[0]);//(await x[1]()).url
+            cmd.exec = async function(message, args) {
+                const target = message.mentions.members.first() || message.guild.members.cache.get(args[0]);
                 message.channel.send(`${target ? `${message.author} has enacted ${x[0]} on ${target}!` : `Guess it's my turn to ${x[0]} you, ${message.author}! >:3 `}`, new (require('discord.js').MessageEmbed)().setColor(this.client.color).setImage((await x[1]()).url));
-            }
+            };
             this.client.handler.commands.set(cmd.name, cmd);
         });
         Object.entries(this.client.nekosSafe).filter(x => !this.client.handler.commands.has(x[0]) && images.includes(x[0]) && !excludes.includes(x[0])).map(x => {
@@ -87,9 +87,9 @@ class Handler {
                 description: 'Your everyday images',
                 category: 'image'
             });
-            cmd.exec = async function (message, args) {
+            cmd.exec = async function(message) {
                 message.channel.send(new (require('discord.js').MessageEmbed)().setColor(this.client.color).setImage((await x[1]()).url));
-            }
+            };
             this.client.handler.commands.set(cmd.name, cmd);
         });
     }

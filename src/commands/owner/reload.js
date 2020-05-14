@@ -1,5 +1,4 @@
 const Command = require('../../structures/Command');
-const { inspect } = require('util');
 
 module.exports = class Reload extends Command {
     constructor(client) {
@@ -11,13 +10,13 @@ module.exports = class Reload extends Command {
         });
     }
 
-    async exec(message, args) {
+    async exec(message) {
 
         try {
             this.client.handler.loadCommands();
-            return message.channel.send(`I reloaded everything.`);
+            return message.channel.send('I reloaded everything.');
         } catch (e) {
             return await message.channel.send(`**Error:** \`\`\`js\n${e.message}\`\`\``);
         }
     }
-}
+};

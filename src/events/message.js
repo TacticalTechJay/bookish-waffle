@@ -20,12 +20,12 @@ module.exports = class Message extends Event {
         if (!cmd) return;
         if (cmd.devOnly && !this.client.devs.includes(message.author.id)) return;
         try {
-            this.client.logger.info(`command "${cmd.name}" executed in ${message.guild.id}`)
+            this.client.logger.info(`command "${cmd.name}" executed in ${message.guild.id}`);
             return cmd.exec(message, args);
         } catch (e) {
             Sentry.captureException(e);
             this.client.logger.error(`sentry exception captured from "${cmd.name}": ${e}`);
-            return message.channel.send(`Boo! Something went wrong when running that command, but it has been reported to my developers, so you are safe!`)
+            return message.channel.send('Boo! Something went wrong when running that command, but it has been reported to my developers, so you are safe!');
         }
     }
-}
+};

@@ -1,5 +1,4 @@
 const Command = require('../../structures/Command');
-const { MessageEmbed } = require('discord.js');
 
 module.exports = class Restart extends Command {
     constructor(client) {
@@ -9,7 +8,7 @@ module.exports = class Restart extends Command {
         });
     }
 
-    async exec(message, args) {
-        message.channel.send(`👋 Deed is active.`).then(_ => process.exit(1));
+    async exec(message) {
+        message.channel.send('👋 Deed is active.').then(() => process.exit(1));
     }
-}
+};

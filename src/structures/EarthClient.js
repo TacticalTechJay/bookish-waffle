@@ -10,7 +10,7 @@ class EarthClient extends Client {
 
         this.devs = ['328983966650728448', '127888387364487168'];
         this.manager = null;
-        this.color = "RANDOM";
+        this.color = 'RANDOM';
 
         this.handler = new Handler(this);
         this.util = new Util(this);

@@ -2,7 +2,6 @@ const config = require('../../config.json');
 const { createConnection, EntitySchema } = require('typeorm');
 const Music = require('./Music');
 const UserUtil = require('./UserUtil');
-const { UserFlags } = require('discord.js');
 
 class Util {
     constructor(client) {
@@ -30,7 +29,7 @@ class Util {
                 guild: connection.getRepository('Guild')
             }
         };
-        this.client.logger.info(`initialized database`);
+        this.client.logger.info('initialized database');
     }
     async user(id) {
         const user = await this.client.orm.repos.user.findOne({ id });
@@ -84,7 +83,7 @@ class Util {
         return {
             key: json.key,
             url: `${options.url}/${json.key}`
-        }
+        };
     }
     userFlagsToEmoji(h) {
         const e = {
@@ -101,7 +100,7 @@ class Util {
             BUGHUNTER_LEVEL_2: '<:discord_bug_hunter_2:705940105285599312>',
             VERIFIED_BOT: '<:discord_verified_bot:705940105612886037>',
             VERIFIED_DEVELOPER: '<:discord_verified_developer:705940105575268453>'
-        }
+        };
         const em = []; for (const k of h) em.push(e[k]);
         return em;
     }

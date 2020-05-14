@@ -4,7 +4,7 @@ module.exports = Class =>
             super(client, data);
         }
         get player() {
-            return this.client.manager.players.get(this.id)
+            return this.client.manager.players.get(this.id);
         }
         async settings() {
             return await this.client.util.guild(this.id);

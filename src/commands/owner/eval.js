@@ -12,27 +12,27 @@ module.exports = class Evaluation extends Command {
     }
 
     async exec(message, args) {
-        if (!args[0]) return message.channel.send(`evaluation needed`);
+        if (!args[0]) return message.channel.send('evaluation needed');
         let input = args.join(' ');
-        if (input.startsWith('\`\`\`js') || input.startsWith('\`\`\`') && input.endsWith('\`\`\`')) {
+        if (input.startsWith('```js') || input.startsWith('```') && input.endsWith('```')) {
             input = input.replace(/`/gi, '')
                 .replace(/js/gi, '');
         }
         try {
             let evaled;
             if (message.flags.a || message.flags.async) {
-                evaled = await eval(`(async() => { ${input} })()`)
+                evaled = await eval(`(async() => { ${input} })()`);
             } else {
                 evaled = await eval(input);
             }
             let evaluation = inspect(evaled, { depth: message.flags.depth || 0 });
-            let dataType = Array.isArray(evaled) ? "Array<" : typeof evaled, dataTypes = [];
-            if (~dataType.indexOf("<")) {
+            let dataType = Array.isArray(evaled) ? 'Array<' : typeof evaled, dataTypes = [];
+            if (~dataType.indexOf('<')) {
                 evaled.forEach(d => {
-                    if (~dataTypes.indexOf(Array.isArray(d) ? "Array" : typeof d)) return;
-                    dataTypes.push(Array.isArray(d) ? "Array" : typeof d);
+                    if (~dataTypes.indexOf(Array.isArray(d) ? 'Array' : typeof d)) return;
+                    dataTypes.push(Array.isArray(d) ? 'Array' : typeof d);
                 });
-                dataType += dataTypes.map(s => s[0].toUpperCase() + s.slice(1)).join(", ") + ">";
+                dataType += dataTypes.map(s => s[0].toUpperCase() + s.slice(1)).join(', ') + '>';
             }
             if (evaluation.length >= 1000) {
                 const url = (await this.client.util.uploadToHastebin(evaluation)).url;
@@ -43,4 +43,4 @@ module.exports = class Evaluation extends Command {
             return await message.channel.send(`**Error:** \`\`\`js\n${e.message}\`\`\``);
         }
     }
-}
+};

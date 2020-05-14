@@ -21,7 +21,8 @@ module.exports = class Remove extends Command {
             message.guild.player.songs.pop();
             return message.channel.send('Removed the last song of the queue.');
         }
-        const toRemove = Number(args[0]);
+        let toRemove = Number(args[0]);
+        --toRemove;
         if (!message.member.voice.channel) return message.channel.send('You need to be in a voice channel to use this command!');
         if (!message.guild.me.voice.channel) return message.channel.send('I am not in a voice channel. :thinking:');
         if (!toRemove) return message.channel.send('That is not a number. :neutral_face:');

@@ -34,7 +34,7 @@ module.exports = class Evaluation extends Command {
                 });
                 dataType += dataTypes.map(s => s[0].toUpperCase() + s.slice(1)).join(', ') + '>';
             }
-            if (evaluation.length >= 1000) {
+            if (evaluation.length >= 2000) {
                 const url = (await this.client.util.uploadToHastebin(evaluation)).url;
                 return message.channel.send(url);
             }

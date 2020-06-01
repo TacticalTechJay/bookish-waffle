@@ -47,7 +47,6 @@ class Music {
             this.client.logger.info(`player spawned in ${message.guild.id}`);
         }
         if (player.loaded && player.loaded.locked && player.locked.user !== message.author.user) return message.channel.send('This queue is locked, therefore you can\'t modify it.');
-        if (message.member.voice.channel.id !== message.guild.me.voice.channel.id) return message.channel.send('You need to be in the same voice channel as me.');
         player.textChannel = message.channel;
         if (!res.tracks[0] || !res.tracks[0].info) return message.channel.send('There were no songs found! :/');
         if (player.playing === false) {
@@ -58,7 +57,7 @@ class Music {
                 loop: 'none',
                 notifications: true
             };
-            if (search === true) {
+            if (search) {
                 let i = 0;
                 res.tracks.length = 10;
                 const em1 = new MessageEmbed()
@@ -80,15 +79,29 @@ class Music {
                         return message.channel.send("No response provided.");
                     }
                 }
-                if (response.first().content.toLowerCase() == `${prefix}play -s`) return;
+                if (response.first().content.toLowerCase() == `${prefix.toLowerCase()}play -s`) return;
                 else if (response.first().content.toLowerCase() == 'cancel') {
                     m.delete();
                     this.client.manager.leave(player.id);
                     return message.channel.send("Cancelled!");
                 }
-                var r = response.first().content - 1;
-            }
-            if (res.playlistInfo.name) {
+                const r = response.first().content - 1;
+                await this.play(message, res.tracks[r], res);
+                player.songs.push(res.tracks[r]);
+                ++player.settings.next;
+                player.position = player.settings.next;
+                if (Math.random() > .3) message.channel.send(
+                    new MessageEmbed()
+                        .setDescription('If you are enjoying Earth-chan, make sure to vote [here](https://top.gg/bot/628802763123589160/vote)')
+                );
+                return message.channel.send(
+                    new MessageEmbed()
+                        .setColor(this.client.color)
+                        .setTitle('Now Playing')
+                        .setThumbnail(`https://img.youtube.com/vi/${res.tracks[r].info.identifier}/maxresdefault.jpg`)
+                        .setDescription(`[**${res.tracks[r].info.isStream ? 'Live Stream' : this.client.util.duration(res.tracks[r].info.length, { days: true })}**] [${res.tracks[r].info.title}](${res.tracks[r].info.uri})`)
+                );
+            } else if (res.playlistInfo.name) {
                 await this.play(message, res.tracks[0], res);
                 res.tracks.forEach(c => player.songs.push(c));
                 ++player.settings.next;
@@ -98,24 +111,27 @@ class Music {
                         .setColor(this.client.color)
                         .addField('Loaded Playlist', `${Util.escapeMarkdown(res.playlistInfo.name)}`)
                 );
+            } else {
+                console.log("Checkpoint!");
+                await this.play(message, res.tracks[0], res);
+                player.songs.push(res.tracks[0]);
+                ++player.settings.next;
+                player.position = player.settings.next;
+                if (Math.random() > .3) message.channel.send(
+                    new MessageEmbed()
+                        .setDescription('If you are enjoying Earth-chan, make sure to vote [here](https://top.gg/bot/628802763123589160/vote)')
+                );
+                return message.channel.send(
+                    new MessageEmbed()
+                        .setColor(this.client.color)
+                        .setTitle('Now Playing')
+                        .setThumbnail(`https://img.youtube.com/vi/${res.tracks[0].info.identifier}/maxresdefault.jpg`)
+                        .setDescription(`[**${res.tracks[0].info.isStream ? 'Live Stream' : this.client.util.duration(res.tracks[0].info.length, { days: true })}**] [${res.tracks[0].info.title}](${res.tracks[0].info.uri})`)
+                );
             }
-            await this.play(message, res.tracks[r || 0], res, (r || 0));
-            player.songs.push(res.tracks[r || 0]);
-            ++player.settings.next;
-            player.position = player.settings.next;
-            if (Math.random() > .3) message.channel.send(
-                new MessageEmbed()
-                    .setDescription('If you are enjoying Earth-chan, make sure to vote [here](https://top.gg/bot/628802763123589160/vote)')
-            );
-            return message.channel.send(
-                new MessageEmbed()
-                    .setColor(this.client.color)
-                    .setTitle('Now Playing')
-                    .setThumbnail(`https://img.youtube.com/vi/${res.tracks[r || 0].info.identifier}/maxresdefault.jpg`)
-                    .setDescription(`[**${res.tracks[r || 0].info.isStream ? 'Live Stream' : this.client.util.duration(res.tracks[r || 0].info.length, { days: true })}**] [${res.tracks[r || 0].info.title}](${res.tracks[r || 0].info.uri})`)
-            );
         } else {
-            if (search === true) {
+            if (message.member.voice.channel.id !== message.guild.me.voice.channel.id) return message.channel.send('You need to be in the same voice channel as me.');
+            if (search) {
                 let i = 0;
                 res.tracks.length = 10;
                 const em1 = new MessageEmbed()
@@ -133,19 +149,30 @@ class Music {
                 } catch (e) {
                     if (!e) {
                         m.delete();
-                        this.client.manager.leave(player.id);
                         return message.channel.send("No response provided.");
                     }
                 }
                 if (response.first().content.toLowerCase() == `${prefix}play -s`) return;
                 else if (response.first().content.toLowerCase() == 'cancel') {
                     m.delete();
-                    this.client.manager.leave(player.id);
                     return message.channel.send("Cancelled!");
                 }
-                var r = response.first().content - 1;
-            }
-            if (res.playlistInfo.name) {
+                const r = response.first().content - 1;
+                player.songs.push(res.tracks[r]);
+                ++player.settings.next;
+                player.position = player.settings.next;
+                if (Math.random() > .3) message.channel.send(
+                    new MessageEmbed()
+                        .setDescription('If you are enjoying Earth-chan, make sure to vote [here](https://top.gg/bot/628802763123589160/vote)')
+                );
+                return message.channel.send(
+                    new MessageEmbed()
+                        .setColor(this.client.color)
+                        .setTitle('Now Playing')
+                        .setThumbnail(`https://img.youtube.com/vi/${res.tracks[typeof r === "undefined" ? 0 : r].info.identifier}/maxresdefault.jpg`)
+                        .setDescription(`[**${res.tracks[r].info.isStream ? 'Live Stream' : this.client.util.duration(res.tracks[r].info.length, { days: true })}**] [${res.tracks[r].info.title}](${res.tracks[r].info.uri})`)
+                );
+            } else if (res.playlistInfo.name) {
                 res.tracks.forEach(c => player.songs.push(c));
                 if (Math.random() > .3) message.channel.send(
                     new MessageEmbed()
@@ -157,7 +184,7 @@ class Music {
                         .addField('Loaded Playlist', `${Util.escapeMarkdown(res.playlistInfo.name)}`)
                 );
             }
-            player.songs.push(res.tracks[r || 0]);
+            player.songs.push(res.tracks[0]);
             if (Math.random() > .3) message.channel.send(
                 new MessageEmbed()
                     .setDescription('If you are enjoying Earth-chan, make sure to vote [here](https://top.gg/bot/628802763123589160/vote)')
@@ -166,14 +193,15 @@ class Music {
                 new MessageEmbed()
                     .setColor(this.client.color)
                     .setTitle('Added To Queue')
-                    .setThumbnail(`https://img.youtube.com/vi/${res.tracks[r || 0].info.identifier}/maxresdefault.jpg`)
-                    .setDescription(`[**${res.tracks[r || 0].info.isStream ? 'Live Stream' : this.client.util.duration(res.tracks[r || 0].info.length, { days: true })}**] [${res.tracks[r || 0].info.title}](${res.tracks[r || 0].info.uri})`)
+                    .setThumbnail(`https://img.youtube.com/vi/${res.tracks[0].info.identifier}/maxresdefault.jpg`)
+                    .setDescription(`[**${res.tracks[0].info.isStream ? 'Live Stream' : this.client.util.duration(res.tracks[0].info.length, { days: true })}**] [${res.tracks[0].info.title}](${res.tracks[0].info.uri})`)
             );
         }
     }
-    async play(message, track, res, r) {
+    async play(message, track, res) {
         try {
             const player = await this.client.manager.players.get(message.guild.id);
+            player.play(track.track);
             player.once('end', async () => {
                 if (player.settings.loop === 'none') player.songs.shift();
                 if (player.settings.loop === 'queue') {

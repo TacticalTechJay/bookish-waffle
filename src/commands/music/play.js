@@ -20,7 +20,7 @@ module.exports = class Play extends Command {
             if (args.join(' ').startsWith('http')) return message.channel.send('You can\'t search URLs.');
             return await this.client.util.music.tracksPrompt(`ytsearch:${encodeURIComponent(args.join(' '))}`, message, true);
         }
-        if (args.join(' ').startsWith('http')) await this.client.util.music.tracksPrompt(args.join(' '), message);
-        else await this.client.util.music.tracksPrompt(`ytsearch:${encodeURIComponent(args.join(' '))}`, message);
+        if (args.join(' ').startsWith('http')) await this.client.util.music.tracksPrompt(args.join(' '), message, false);
+        else await this.client.util.music.tracksPrompt(`ytsearch:${encodeURIComponent(args.join(' '))}`, message, false);
     }
 };

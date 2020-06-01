@@ -1,5 +1,8 @@
+/* eslint-disable no-unused-vars */
 const Command = require('../../structures/Command');
 const { inspect } = require('util');
+const fetch = require('node-fetch');
+const { MessageEmbed, Intents, Collection, MessageCollector, ReactionCollector, Util, UserFlags } = require('discord.js');
 
 module.exports = class Evaluation extends Command {
     constructor(client) {

@@ -4,12 +4,14 @@
   "description": "",
   "main": "index.js",
   "dependencies": {
-    "@lavacord/discord.js": "0.0.6",
+    "@lavacord/discord.js": "0.0.7",
     "@sentry/node": "^5.15.5",
     "array-move": "^2.2.1",
     "body-parser": "^1.19.0",
+    "bufferutil": "^4.0.1",
     "cors": "^2.8.5",
     "discord.js": "github:discordjs/discord.js",
+    "erlpack": "github:discordapp/erlpack",
     "express": "^4.17.1",
     "jimp": "^0.10.3",
     "moment": "^2.25.0",
@@ -19,7 +21,9 @@
     "nekos.life": "^2.0.7",
     "pg": "^8.0.3",
     "typeorm": "^0.2.24",
-    "winston": "^3.2.1"
+    "utf-8": "^2.0.0",
+    "winston": "^3.2.1",
+    "zlib": "^1.0.5"
   },
   "devDependencies": {},
   "scripts": {

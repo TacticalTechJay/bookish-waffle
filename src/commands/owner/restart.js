@@ -9,6 +9,6 @@ module.exports = class Restart extends Command {
     }
 
     async exec(message) {
-        message.channel.send('👋 Deed is active.').then(() => process.exit(1));
+        message.channel.send('👋 Deed is done.').then(() => process.exit(1));
     }
 };

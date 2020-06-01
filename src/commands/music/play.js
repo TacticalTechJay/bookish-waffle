@@ -16,7 +16,11 @@ module.exports = class Play extends Command {
         if (!message.guild.player)
             if (!args[0]) return message.channel.send('No query provided.');
         if (!args[0]) return message.channel.send('No query provided.');
+        if (message.flags.S || message.flags.s) {
+            if (args.join(' ').startsWith('http')) return message.channel.send('You can\'t search URLs.');
+            return await this.client.util.music.tracksPrompt(`ytsearch:${encodeURIComponent(args.join(' '))}`, message, true);
+        }
         if (args.join(' ').startsWith('http')) await this.client.util.music.tracksPrompt(args.join(' '), message);
-        else await this.client.util.music.tracksPrompt(`ytsearch:${args.join(' ')}`, message);
+        else await this.client.util.music.tracksPrompt(`ytsearch:${encodeURIComponent(args.join(' '))}`, message);
     }
 };

@@ -28,7 +28,9 @@ class Music {
         if (json.tracks.length < 0) return { error: 'There were no tracks found...' };
         return json;
     }
-    async tracksPrompt(query, message) {
+
+    async tracksPrompt(query, message, search) {
+        if (!message.member.voice.channel) return message.channel.send('You are not in a voice channel.')
         let res = await this.getTracks(query);
         if (res.exception || res.error) return message.channel.send(`${res.exception || res.error}`);
         let player = this.client.manager.players.get(message.guild.id);
@@ -45,6 +47,7 @@ class Music {
             this.client.logger.info(`player spawned in ${message.guild.id}`);
         }
         if (player.loaded && player.loaded.locked && player.locked.user !== message.author.user) return message.channel.send('This queue is locked, therefore you can\'t modify it.');
+        if (message.member.voice.channel.id !== message.guild.me.voice.channel.id) return message.channel.send('You need to be in the same voice channel as me.');
         player.textChannel = message.channel;
         if (!res.tracks[0] || !res.tracks[0].info) return message.channel.send('There were no songs found! :/');
         if (player.playing === false) {
@@ -55,6 +58,36 @@ class Music {
                 loop: 'none',
                 notifications: true
             };
+            if (search === true) {
+                let i = 0;
+                res.tracks.length = 10;
+                const em1 = new MessageEmbed()
+                    .setTitle('Pick a song!')
+                    .setDescription(res.tracks.map(t => `**${++i}** - ${Util.escapeMarkdown(t.info.title)} by ${Util.escapeMarkdown(t.info.author)}`).join('\n'))
+                    .setFooter('Say "cancel" to cancel the selection!');
+                const m = await message.channel.send(em1);
+                try {
+                    var prefix = (await message.guild.settings()).prefix;
+                    var response = await message.channel.awaitMessages(message2 => message2.content > 0 && message2.content <= 10 && message.author == message2.author || message2.content.toLowerCase().startsWith(`${prefix}play -s`) || message2.content.toLowerCase() == 'cancel', {
+                        max: 1,
+                        time: 20000,
+                        errors: ['time']
+                    });
+                } catch (e) {
+                    if (!e) {
+                        m.delete();
+                        this.client.manager.leave(player.id);
+                        return message.channel.send("No response provided.");
+                    }
+                }
+                if (response.first().content.toLowerCase() == `${prefix}play -s`) return;
+                else if (response.first().content.toLowerCase() == 'cancel') {
+                    m.delete();
+                    this.client.manager.leave(player.id);
+                    return message.channel.send("Cancelled!");
+                }
+                var r = response.first().content - 1;
+            }
             if (res.playlistInfo.name) {
                 await this.play(message, res.tracks[0], res);
                 res.tracks.forEach(c => player.songs.push(c));
@@ -66,32 +99,81 @@ class Music {
                         .addField('Loaded Playlist', `${Util.escapeMarkdown(res.playlistInfo.name)}`)
                 );
             }
-            await this.play(message, res.tracks[0], res);
-            player.songs.push(res.tracks[0]);
+            await this.play(message, res.tracks[r || 0], res, (r || 0));
+            player.songs.push(res.tracks[r || 0]);
             ++player.settings.next;
             player.position = player.settings.next;
+            if (Math.random() > .3) message.channel.send(
+                new MessageEmbed()
+                    .setDescription('If you are enjoying Earth-chan, make sure to vote [here](https://top.gg/bot/628802763123589160/vote)')
+            );
             return message.channel.send(
                 new MessageEmbed()
                     .setColor(this.client.color)
                     .setTitle('Now Playing')
-                    .setThumbnail(`https://img.youtube.com/vi/${res.tracks[0].info.identifier}/maxresdefault.jpg`)
-                    .setDescription(`[**${res.tracks[0].info.isStream ? 'Live Stream' : this.client.util.duration(res.tracks[0].info.length, { days: true })}**] [${res.tracks[0].info.title}](${res.tracks[0].info.uri})`)
+                    .setThumbnail(`https://img.youtube.com/vi/${res.tracks[r || 0].info.identifier}/maxresdefault.jpg`)
+                    .setDescription(`[**${res.tracks[r || 0].info.isStream ? 'Live Stream' : this.client.util.duration(res.tracks[r || 0].info.length, { days: true })}**] [${res.tracks[r || 0].info.title}](${res.tracks[r || 0].info.uri})`)
             );
         } else {
-            player.songs.push(res.tracks[0]);
+            if (search === true) {
+                let i = 0;
+                res.tracks.length = 10;
+                const em1 = new MessageEmbed()
+                    .setTitle('Pick a song!')
+                    .setDescription(res.tracks.map(t => `**${++i}** - ${Util.escapeMarkdown(t.info.title)} by ${Util.escapeMarkdown(t.info.author)}`).join('\n'))
+                    .setFooter('Say "cancel" to cancel the selection!');
+                const m = await message.channel.send(em1)
+                try {
+                    var prefix = (await message.guild.settings()).prefix;
+                    var response = await message.channel.awaitMessages(message2 => message2.content > 0 && message2.content <= 10 && message.author == message2.author || message2.content.toLowerCase().startsWith(`${prefix}play -s`) || message2.content.toLowerCase() == 'cancel', {
+                        max: 1,
+                        time: 20000,
+                        errors: ['time']
+                    });
+                } catch (e) {
+                    if (!e) {
+                        m.delete();
+                        this.client.manager.leave(player.id);
+                        return message.channel.send("No response provided.");
+                    }
+                }
+                if (response.first().content.toLowerCase() == `${prefix}play -s`) return;
+                else if (response.first().content.toLowerCase() == 'cancel') {
+                    m.delete();
+                    this.client.manager.leave(player.id);
+                    return message.channel.send("Cancelled!");
+                }
+                var r = response.first().content - 1;
+            }
+            if (res.playlistInfo.name) {
+                res.tracks.forEach(c => player.songs.push(c));
+                if (Math.random() > .3) message.channel.send(
+                    new MessageEmbed()
+                        .setDescription('If you are enjoying Earth-chan, make sure to vote [here](https://top.gg/bot/628802763123589160/vote)')
+                );    
+                return message.channel.send(
+                    new MessageEmbed()
+                        .setColor(this.client.color)
+                        .addField('Loaded Playlist', `${Util.escapeMarkdown(res.playlistInfo.name)}`)
+                );
+            }
+            player.songs.push(res.tracks[r || 0]);
+            if (Math.random() > .3) message.channel.send(
+                new MessageEmbed()
+                    .setDescription('If you are enjoying Earth-chan, make sure to vote [here](https://top.gg/bot/628802763123589160/vote)')
+            );
             return message.channel.send(
                 new MessageEmbed()
                     .setColor(this.client.color)
                     .setTitle('Added To Queue')
-                    .setThumbnail(`https://img.youtube.com/vi/${res.tracks[0].info.identifier}/maxresdefault.jpg`)
-                    .setDescription(`[**${res.tracks[0].info.isStream ? 'Live Stream' : this.client.util.duration(res.tracks[0].info.length, { days: true })}**] [${res.tracks[0].info.title}](${res.tracks[0].info.uri})`)
+                    .setThumbnail(`https://img.youtube.com/vi/${res.tracks[r || 0].info.identifier}/maxresdefault.jpg`)
+                    .setDescription(`[**${res.tracks[r || 0].info.isStream ? 'Live Stream' : this.client.util.duration(res.tracks[r || 0].info.length, { days: true })}**] [${res.tracks[r || 0].info.title}](${res.tracks[r || 0].info.uri})`)
             );
         }
     }
-    async play(message, track, res) {
+    async play(message, track, res, r) {
         try {
             const player = await this.client.manager.players.get(message.guild.id);
-            player.play(track.track);
             player.once('end', async () => {
                 if (player.settings.loop === 'none') player.songs.shift();
                 if (player.settings.loop === 'queue') {
@@ -112,7 +194,7 @@ class Music {
                                 .setColor(this.client.color)
                                 .setTitle('Now Playing')
                                 .setThumbnail(`https://img.youtube.com/vi/${player.songs[player.settings.next].info.identifier}/maxresdefault.jpg`)
-                                .setDescription(`[**${res.tracks[0].info.isStream ? 'Live Stream' : this.client.util.duration(player.songs[player.settings.next].info.length, { days: true })}**] [${player.songs[player.settings.next].info.title}](${player.songs[player.settings.next].info.uri})`)
+                                .setDescription(`[**${player.songs[player.settings.next].info.isStream ? 'Live Stream' : this.client.util.duration(player.songs[player.settings.next].info.length, { days: true })}**] [${player.songs[player.settings.next].info.title}](${player.songs[player.settings.next].info.uri})`)
                         );
                     } else if (!(player.settings.next > player.songs.length - 1)) {
                         player.position = player.settings.next;
@@ -123,22 +205,21 @@ class Music {
                                 .setColor(this.client.color)
                                 .setTitle('Now Playing')
                                 .setThumbnail(`https://img.youtube.com/vi/${player.songs[player.settings.next].info.identifier}/maxresdefault.jpg`)
-                                .setDescription(`[**${res.tracks[0].info.isStream ? 'Live Stream' : this.client.util.duration(player.songs[player.settings.next].info.length, { days: true })}**] [${player.songs[player.settings.next].info.title}](${player.songs[player.settings.next].info.uri})`)
+                                .setDescription(`[**${player.songs[player.settings.next].info.isStream ? 'Live Stream' : this.client.util.duration(player.songs[player.settings.next].info.length, { days: true })}**] [${player.songs[player.settings.next].info.title}](${player.songs[player.settings.next].info.uri})`)
                         );
                     }
                 } else if (player.settings.loop === 'single') {
-                    player.settings.voteSkips = [];
-                    player.position = 0;
-                    await this.play(message, player.songs[0]);
+                    await this.play(message, player.songs[player.position]);
                     if (!player.settings.notifications) return;
                     return message.channel.send(
                         new MessageEmbed()
                             .setColor(this.client.color)
                             .setTitle('Now Playing')
-                            .setThumbnail(`https://img.youtube.com/vi/${player.songs[0].info.identifier}/maxresdefault.jpg`)
-                            .setDescription(`[**${res.tracks[0].info.isStream ? 'Live Stream' : this.client.util.duration(player.songs[0].info.length, { days: true })}**] [${player.songs[0].info.title}](${player.songs[0].info.uri})`)
+                            .setThumbnail(`https://img.youtube.com/vi/${player.songs[player.position].info.identifier}/maxresdefault.jpg`)
+                            .setDescription(`[**${player.songs[player.position].info.isStream ? 'Live Stream' : this.client.util.duration(player.songs[player.position].info.length, { days: true })}**] [${player.songs[player.position].info.title}](${player.songs[player.position].info.uri})`)
                     );
                 } else if (player.settings.loop === 'none') if (!player.songs.length) return this.finish(message);
+                player.songs = player.songs.slice(player.position, player.length)
                 player.position = 0;
                 await this.play(message, player.songs[0]);
                 if (!player.settings.notifications) return;
@@ -156,7 +237,7 @@ class Music {
     }
     async finish(message) {
         this.client.manager.leave(message.guild.id);
-        this.client.logger.info(`player despawned in ${message.guild.id}`);
+        this.client.logger.info(`Player despawned in ${message.guild.id}`);
         return message.channel.send('Looks like I ran out of songs to vibe to...');
     }
 }

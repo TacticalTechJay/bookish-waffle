@@ -9,6 +9,10 @@ module.exports = {
             type: 'simple-json',
             default: {}
         },
+        blacklist: {
+            type: 'boolean',
+            default: false
+        },
         premium: {
             type: 'simple-json',
             default: {

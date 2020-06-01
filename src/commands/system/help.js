@@ -54,7 +54,7 @@ module.exports = class Help extends Command {
 🏘️ -  **Return here**
 ⚒️ - **System**
 🎵 - **Music**
-📱 - **Image**
+📷 - **Image**
 🔧 - **Image Manipulation**${message.channel.nsfw ? '\n🔞 - **NSFW**' : ''}
 ❌ - **Stop and delete this help menu**
 `)
@@ -64,8 +64,8 @@ module.exports = class Help extends Command {
         await msg.react('🎵');
         await msg.react('📷');
         await msg.react('🔧');
-        await msg.react('❌');
         if (message.channel.nsfw) await msg.react('🔞');
+        await msg.react('❌');
         const collector = msg.createReactionCollector((r, u) => u.id === message.author.id, {
             time: 60000 * 5
         });

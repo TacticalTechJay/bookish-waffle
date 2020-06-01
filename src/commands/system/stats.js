@@ -25,11 +25,12 @@ module.exports = class Stats extends Command {
 **Memory:** \`${(process.memoryUsage().heapUsed / 1024 / 1024).toFixed(2)}/${(require('os').totalmem() / 1024 / 1024).toFixed(2)} MB\`
 **Platform:** ${require('os').platform().toProperCase()} (${require('os').release().toProperCase()})
 **Uptime:** ${require('ms')(this.client.uptime)}
+**Music Players:** ${this.client.manager.players.size}
 `, true).addField('Useful Links', `
 📲 [Want Support?](https://discord.gg/PMbESdB)
 ☁ [Hosted by Contabo](https://contabo.org)
-💵 [Donate via KoFi](https://www.ko-fi.com/earthchandiscord) 
-💵 [Join Patreon](https://www.patreon.com/earthchandiscord)
+💵 [Donate via KoFi](https://www.ko-fi.com/WorldChan) 
+💵 [Join Patreon](https://www.patreon.com/WorldChan)
 🖥️ [Source Code](https://github.com/TacticalTechJay/bookish-waffle)
 ✅ [Invite Bot](https://discordapp.com/oauth2/authorize?client_id=${this.client.user.id}&scope=bot&permissions=3435782)
 `, true)

@@ -90,7 +90,7 @@ class Music {
                 player.songs.push(res.tracks[r]);
                 ++player.settings.next;
                 player.position = player.settings.next;
-                if (Math.random() > .3) message.channel.send(
+                if (Math.random() > .3 && !(await message.author.data()).premium.voter) message.channel.send(
                     new MessageEmbed()
                         .setDescription('If you are enjoying Earth-chan, make sure to vote [here](https://top.gg/bot/628802763123589160/vote)')
                 );
@@ -112,7 +112,6 @@ class Music {
                         .addField('Loaded Playlist', `${Util.escapeMarkdown(res.playlistInfo.name)}`)
                 );
             } else {
-                console.log("Checkpoint!");
                 await this.play(message, res.tracks[0], res);
                 player.songs.push(res.tracks[0]);
                 ++player.settings.next;

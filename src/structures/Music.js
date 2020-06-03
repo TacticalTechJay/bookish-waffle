@@ -25,7 +25,7 @@ class Music {
         };
         const json = await get(query, 0);
         if (!json) return { error: 'Looks like there was no response' };
-        if (json.tracks.length < 0) return { error: 'There were no tracks found...' };
+        if (json.tracks?.length < 0 || !json.tracks) return { error: 'There were no tracks found...' };
         return json;
     }
 

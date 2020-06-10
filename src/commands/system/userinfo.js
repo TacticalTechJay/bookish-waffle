@@ -38,7 +38,7 @@ module.exports = class UserInfo extends Command {
             .addField('User Information', `
 **Username:** **${Util.escapeMarkdown(member.user.username)}**#${member.user.discriminator}
 **Discriminator:** ${member.user.discriminator}
-**Badges:** ${member.user.flags.toArray().length > 0 ? this.client.util.userFlagsToEmoji(member.user.flags.toArray()).join(' ') : 'No badges'}
+**Badges:** ${member.user.flags?.toArray().length > 0 ? this.client.util.userFlagsToEmoji(member.user.flags.toArray()).join(' ') : 'No badges'}
 **Nickname:** ${member.nickname ? Util.escapeMarkdown(member.nickname) : 'None'}
 **Bot?:** ${member.user.bot ? 'Yes' : 'No'}
 **Status:** ${presenceStatus[member.user.presence.status]}

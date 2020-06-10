@@ -10,6 +10,7 @@ module.exports = class Message extends Event {
     async exec(message) {
         if (message.author.bot || !message.guild) return;
         const guild = await message.guild.settings();
+        const user = await message.author.data();
         const { content, flags } = this.client.util.parseFlags(message.content);
         message.content = content;
         message.flags = flags;
@@ -19,6 +20,7 @@ module.exports = class Message extends Event {
         const cmd = this.client.handler.commands.get(command) || this.client.handler.commands.get(this.client.handler.aliases.get(command));
         if (!cmd) return;
         if (cmd.devOnly && !this.client.devs.includes(message.author.id)) return;
+        if (user.blacklist && !this.client.devs.includes(message.author.id)) return message.channel.send(`You are blacklisted from using ${this.client.user.username}`);
         try {
             this.client.logger.info(`command "${cmd.name}" executed in ${message.guild.id}`);
             return cmd.exec(message, args);

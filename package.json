@@ -23,7 +23,8 @@
     "typeorm": "^0.2.24",
     "utf-8": "^2.0.0",
     "winston": "^3.2.1",
-    "zlib": "^1.0.5"
+    "zlib": "^1.0.5",
+    "zws": "^0.1.0"
   },
   "devDependencies": {},
   "scripts": {

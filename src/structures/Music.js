@@ -158,8 +158,6 @@ class Music {
                 }
                 const r = response.first().content - 1;
                 player.songs.push(res.tracks[r]);
-                ++player.settings.next;
-                player.position = player.settings.next;
                 if (Math.random() > .3) message.channel.send(
                     new MessageEmbed()
                         .setDescription('If you are enjoying Earth-chan, make sure to vote [here](https://top.gg/bot/628802763123589160/vote)')

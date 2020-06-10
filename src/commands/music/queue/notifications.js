@@ -5,7 +5,8 @@ module.exports = class notifications extends Command {
         super(client, {
             name: 'notifications',
             description: 'Toggle the now playing notifications.',
-            aliases: ['notifs', 'n']
+            aliases: ['notifs', 'n'],
+            category: 'music'
         });
     }
 

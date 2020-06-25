@@ -5,7 +5,7 @@ module.exports = class ListQueue extends Command {
     constructor(client) {
         super(client, {
             name: 'listqueues',
-            aliases: ['ls', 'lsq', 'queuelist', 'ql'],
+            aliases: ['ls', 'lsq', 'queuelist', 'ql', 'playlist', 'playlists'],
             category: 'music',
             description: 'List all of your queues, or every song in a queue!',
             usage: '[Name?]'

@@ -15,7 +15,8 @@ module.exports = class LoadQueue extends Command {
 
     async exec(message, args) {
         if (!args[0]) return message.channel.send('You didn\'t supply any arguments...');
-        const user = await this.client.util.user(message.author.id);
+        if (!message.member.voice.channel) return message.channel.send('You are not in a voice channel.');
+        const user = await message.author.data();
         if (!user.queues[args.join(' ')]) return message.channel.send('Looks like that queue isnt saved...');
         let player = this.client.manager.players.get(message.guild.id);
         if (player) return message.channel.send('The queue must be **empty** before loading a queue');

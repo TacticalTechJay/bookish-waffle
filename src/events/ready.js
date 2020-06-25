@@ -18,7 +18,9 @@ module.exports = class Ready extends Event {
         });
         await this.client.manager.connect();
         this.client.logger.info(`initialized lavalink nodes ${config.lavalinkNodes.map(c => c.id).join(', ')}`);
-        this.client.user.setActivity('people type "plana help"', { type: 'WATCHING' });
+        this.client.interval = setInterval(() => {
+            this.client.user.setActivity(`people type "${process.env.DEVELOPMENT ? config.prefixes.dev : config.prefixes.prod}help" in ${this.client.guilds.cache.size} servers.`, { type: 'WATCHING' });
+        }, 30000);
         new Server(this.client, process.env.DEVELOPMENT ? config.port.dev : config.port.prod, () => {
             this.client.logger.info(`initialized api ${process.env.DEVELOPMENT ? config.port.dev : config.port.prod}`);
         });

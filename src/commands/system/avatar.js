@@ -12,7 +12,7 @@ module.exports = class Avatar extends Command {
     }
 
     async exec(message, args) {
-        var member = null;
+        var member;
         if (!args[0]) member = message.member;
         else {
             const members = this.client.util.users.findMember(args[0], message.guild.members.cache, { multiple: true });

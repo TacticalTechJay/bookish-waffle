@@ -28,7 +28,7 @@ module.exports = class Stats extends Command {
 **Music Players:** ${this.client.manager.players.size}
 `, true).addField('Useful Links', `
 📲 [Want Support?](https://discord.gg/PMbESdB)
-☁ [Hosted by Contabo](https://contabo.org)
+☁ [Hosted by Contabo](https://contabo.com)
 💵 [Donate via KoFi](https://www.ko-fi.com/WorldChan) 
 💵 [Join Patreon](https://www.patreon.com/WorldChan)
 🖥️ [Source Code](https://github.com/TacticalTechJay/bookish-waffle)

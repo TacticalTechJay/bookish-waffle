@@ -53,7 +53,7 @@ class Handler {
         this.client.nekosUnSafe = nekosLife.nsfw;
         const actions = ['tickle', 'poke', 'feed', 'cuddle', 'hug', 'pat'];
         const images = ['lizard', 'meow', 'smug', 'baka', 'woof', 'neko'];
-        const excludes = ['foxGirl', '8ball', 'why', 'catText', 'OwOify', 'fact', 'chat', 'nekoGif', 'spoiler'];
+        const excludes = ['8ball', 'why', 'catText', 'OwOify', 'fact', 'chat', 'nekoGif', 'spoiler'];
         delete this.client.nekosUnSafe.neko;
         delete this.client.nekosUnSafe.avatar;
 

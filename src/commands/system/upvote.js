@@ -16,8 +16,8 @@ module.exports = class UpVote extends Command {
                 .setTitle('Thank you for choosing to vote!')
                 .setColor(this.client.color)
                 .setDescription('You can vote for me at either of these bot lists below.')
-                .addField('(Primary) DBL', `[Here! 🎉](https://discordbotlist.com/bots/${this.client.user.id}/upvote)`)
-                .addField('Discord Bot List', `[Here! 🎉](https://top.gg/bot/${this.client.user.id}/vote)`)
+                .addField('(Primary) DBL', `[Here! 🎉](https://top.gg/bot/${this.client.user.id}/vote)`)
+                .addField('Discord Bot List', `[Here! 🎉](https://discordbotlist.com/bots/${this.client.user.id}/upvote)`)
                 .addField('Abstract Discord List', `[Here! 🎉](https://abstractlist.net/bot/${this.client.user.id}/vote)`)
                 .addField('Discord Labs Bot List', `[Here! 🎉](https://bots.discordlabs.org/bot/${this.client.user.id}/vote)`)
         );

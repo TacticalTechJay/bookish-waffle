@@ -13,6 +13,7 @@ class Command {
         this.description = options.description || null;
         this.usage = options.usage ? `${this.name} ${options.usage}` : this.name;
         this.category = options.category || 'system';
+        this.superPremium = false;
         this.devOnly = options.devOnly;
     }
 }

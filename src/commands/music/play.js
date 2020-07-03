@@ -7,7 +7,7 @@ module.exports = class Play extends Command {
             aliases: ['p'],
             category: 'music',
             description: 'Play a song from various sources!',
-            usage: '[Query]'
+            usage: '[--search] <Query>'
         });
     }
 
@@ -16,7 +16,8 @@ module.exports = class Play extends Command {
         if (!message.guild.player)
             if (!args[0]) return message.channel.send('No query provided.');
         if (!args[0]) return message.channel.send('No query provided.');
-        if (message.flags.S || message.flags.s) {
+        console.log(message.flags);
+        if (message.flags.Search || message.flags.search) {
             if (args.join(' ').startsWith('http')) return message.channel.send('You can\'t search URLs.');
             return await this.client.util.music.tracksPrompt(`ytsearch:${encodeURIComponent(args.join(' '))}`, message, true);
         }

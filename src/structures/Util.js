@@ -42,8 +42,8 @@ class Util {
         return guild;
     }
     parseFlags(str) {
-        const flags = {}; let
-            value;
+        const flags = {};
+        let value;
 
         const withQuotes = /--(\w{2,})=("(\\"|[^"])*"|'(\\'|[^'])*')/gi;
         while ((value = withQuotes.exec(str))) {
@@ -56,10 +56,6 @@ class Util {
         const withoutQuotes = /--(\w{2,})(?:=(\S+))?/gi;
         while ((value = withoutQuotes.exec(str))) flags[value[1]] = value[2] || true;
         str = str.replace(withoutQuotes, '');
-
-        const shortReg = /-([a-z]+)/gi;
-        while ((value = shortReg.exec(str))) for (value of value[1]) flags[value] = true;
-        str = str.replace(shortReg, '');
 
         return { flags, content: str };
     }

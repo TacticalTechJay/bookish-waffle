@@ -8,17 +8,17 @@ module.exports = class Flip extends Command {
             name: 'flip',
             category: 'imgmanip',
             description: 'Flip a users image horizontally or vertically!',
-            usage: '[-h/v] [User?]'
+            usage: '[--horizontal/vertical] [User?]'
         });
     }
 
     async exec(message, args) {
         let member = null;
-        if (!message.flags.v && !message.flags.h) return message.channel.send('Specify which direction you want to flip using flags -v or -h.');
+        if ((!message.flags.vertical && !message.flags.horizontal)) return message.channel.send('Specify which direction you want to flip using flags -v or -h.');
         if (!args[0]) member = message.member;
         else if (message.embeds.filter(e => e.type == 'image')[0]) {
             const read = await Jimp.read(message.embeds.filter(e => e.type == 'image')[0].url);
-            return read.flip(message.flags.h || false, message.flags.v || false).getBuffer(Jimp.MIME_PNG, (e, b) => {
+            return read.flip(message.flags.horizontal || false, message.flags.vertical || false).getBuffer(Jimp.MIME_PNG, (e, b) => {
                 if (e) return message.channel.send(':/ I wasn\'t able to process the image...');
                 return message.channel.send(
                     new MessageEmbed()
@@ -53,7 +53,7 @@ module.exports = class Flip extends Command {
         }
         if (!member) return message.channel.send('Bummer, looks like that user doesn\'t exist.');
         const read = await Jimp.read(member.user.displayAvatarURL({ format: 'png', size: 2048 }));
-        read.flip(message.flags.h || false, message.flags.v || false).getBuffer(Jimp.MIME_PNG, (e, b) => {
+        read.flip(message.flags.horizontal || false, message.flags.vertical || false).getBuffer(Jimp.MIME_PNG, (e, b) => {
             if (e) return message.channel.send(':/ I wasn\'t able to process the image..');
             return message.channel.send(
                 new MessageEmbed()

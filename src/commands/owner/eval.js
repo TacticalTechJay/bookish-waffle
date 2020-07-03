@@ -23,7 +23,7 @@ module.exports = class Evaluation extends Command {
         }
         try {
             let evaled;
-            if (message.flags.a || message.flags.async) {
+            if (message.flags.async) {
                 evaled = await eval(`(async() => { ${input} })()`);
             } else {
                 evaled = await eval(input);

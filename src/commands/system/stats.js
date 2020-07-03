@@ -20,10 +20,9 @@ module.exports = class Stats extends Command {
                 .setThumbnail(this.client.user.displayAvatarURL({ size: 2048 }))
                 .addField('⚒️ System', `
 **Guilds:** ${this.client.guilds.cache.size}
-**Users:** ${this.client.users.cache.size}
+**Users:** ${this.client.users.cache.size} (**Active:** ${(await this.client.orm.repos.user.find()).length})
 **Version:** ${version}
 **Memory:** \`${(process.memoryUsage().heapUsed / 1024 / 1024).toFixed(2)}/${(require('os').totalmem() / 1024 / 1024).toFixed(2)} MB\`
-**Platform:** ${require('os').platform().toProperCase()} (${require('os').release().toProperCase()})
 **Uptime:** ${require('ms')(this.client.uptime)}
 **Music Players:** ${this.client.manager.players.size}
 `, true).addField('Useful Links', `

@@ -23,6 +23,7 @@ module.exports = class Message extends Event {
         if (user.blacklist && !this.client.devs.includes(message.author.id)) return message.channel.send(`You are blacklisted from using ${this.client.user.username}`);
         if (cmd.superPremium && !user.premium.donator) return message.channel.send('Sorry to poop on your party but, this command is reserved for donators.\nIf you\'d like to use this command, be sure to donate on Patreon.');
         try {
+            await this.client.statcord.postCommand(cmd.name, message.author.id);
             this.client.logger.info(`command "${cmd.name}" executed in ${message.guild.id}`);
             return cmd.exec(message, args);
         } catch (e) {

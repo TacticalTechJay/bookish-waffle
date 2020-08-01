@@ -2,6 +2,8 @@ const Handler = require('./Handler');
 const Util = require('./Util');
 const winston = require('winston');
 const { Client } = require('discord.js');
+const Statcord = require('statcord.js');
+const config = require('../../config.json');
 
 class EarthClient extends Client {
     constructor(token, options) {
@@ -11,6 +13,8 @@ class EarthClient extends Client {
         this.devs = ['328983966650728448', '127888387364487168'];
         this.manager = null;
         this.color = 'RANDOM';
+
+        this.statcord = new Statcord.Client(config.statCord, this);
 
         this.handler = new Handler(this);
         this.util = new Util(this);

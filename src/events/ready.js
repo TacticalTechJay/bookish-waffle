@@ -11,6 +11,12 @@ module.exports = class Ready extends Event {
         });
     }
     async exec() {
+        let initalPost = await this.client.statcord.autopost();
+
+        if (initalPost) {
+            console.error(initalPost);
+            process.exit();
+        }
         this.client.logger.info(`started as ${this.client.user.username} at ${moment(this.client.readyAt).format('LLL')}`);
         this.client.manager = new Manager(this.client, config.lavalinkNodes, {
             user: this.client.user.id,

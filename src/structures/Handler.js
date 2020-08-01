@@ -61,7 +61,8 @@ class Handler {
             const cmd = new Command(this.client, {
                 name: x[0].toLowerCase(),
                 description: 'Just your average lewd',
-                category: 'nsfw'
+                category: 'nsfw',
+                superPremium: Math.random() < 0.35
             });
             cmd.exec = async function(message) {
                 if (!message.channel.nsfw) return message.channel.send('Nope. It\'s lewd. (Use the command in an nsfw channel.)');
@@ -85,7 +86,8 @@ class Handler {
             const cmd = new Command(this.client, {
                 name: x[0].toLowerCase(),
                 description: 'Your everyday images',
-                category: 'image'
+                category: 'image',
+                superPremium: Math.random() < 0.35
             });
             cmd.exec = async function(message) {
                 message.channel.send(new (require('discord.js').MessageEmbed)().setColor(this.client.color).setImage((await x[1]()).url));
